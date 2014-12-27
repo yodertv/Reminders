@@ -1,5 +1,5 @@
 // Read Me
-// Todos v1.2
+// Todos v1.3
 
 Objective: Replace the weekly task list that I keep on paper.
 
@@ -16,29 +16,33 @@ Objective: Replace the weekly task list that I keep on paper.
 - Host the service on the web so I can use it at work. (yodertv.com)
 - Tested on nook browser, iTouch, Safari, chrome on Mac, chrome on widows, and IE (fails because it requires CORS). Worked once on Nook.
 - Depends on bootstrap, angular, and jQuerry.
-- Has a custom icon.
+- Has a custom favicon.
 - 
 
-// Bugs fixed
-- History list is invalid date because of date constructer defect in non-chrome browsers.
-- Date constructor with "-" (dashes) only works on Chrome. History display has invalid date.
-- Free site only allows three pages. Removed list.html and reused todos.html with multiple controllers.
-- Save - Save's list replacing the existing list on the server. No longer needed because each edit is saved.
+// Bugs fixed in this release
+- (Bug#3) Fixed error completing or deleting a newly entered text by getting the return object from the POST.
+
+// Enhancements made in this release
+- Handle screen widths better.
+- Uses tables for better looking list displays.
+- Use pills for navigation istead of buttons.
+- Moved remaining count to bottom by the add new task input.
+- Removed the "Add" button. Enter key causes submit.
+- Added forward button takes you to the next older archive. Use back arrow to return to the previous archive. Button disappears when display the last archive.
 
 // Known bugs
 
-- Archive has the annoying affect of forgetting all the tasks that were completed and archived that day. This should be fixed by merging any new tasks into the current archive for the same day if it exists.
-- Doesn't work on IE or Nook, likely due to lack of CORS support.
+- (Bug#1) Archive has the annoying affect of forgetting all the tasks that were completed and archived that day. This should be fixed by merging any new tasks into the current archive for the same day if it exists.
+- (Bug#2)Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements.
+- (Bug#3)Deleting a task immediately after entering it doesn't work, because the OID isn't retrived from the DB after it has been entered. The work around is to delete it again after refreshing the list. Now it has the OID so the delete function works. Presumably marking a task completed will also fail. Fixed in this release
 
 // Future enhancements
 
-- Set width when in browser so the date isn't so far to the right on a large screen
+- Set width when in browser so the date isn't so far to the right on a large screen. Decided to remove the date instead.
 - Support Nook.
-- Remove Save button. Items are now saved as they are changed.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.
 - Support authentication.
 - Support multiple users.
 - Support addvertisments.
-- Fix archive bug: Such that tasks completed since archiving on the same day will be added to the current archive without deleting the existing completed items

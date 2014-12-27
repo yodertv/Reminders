@@ -1,23 +1,36 @@
 <!-- Todo.html -->	 
-<Legend> <img src="http://yodertv.com/favicon.ico"></img> Tasks <small>(<span>{{remaining()}}/{{todos.length}}</span>)</small><p class="pull-right">{{label}}</p></Legend>
-
-<strong class="lead">
-[<a class="show-{{edit}}" href="" ng-click="editClick()">Done</a><a class="show-{{notEdit}}" href="" ng-click="editClick()">Edit</a>]
-[<a href="" ng-click="archive()">Archive</a>]
-[<a href="#/history">History</a>]
-</strong>
-
-<ul class="unstyled">
-  <li ng-repeat="todo in todos">
-  	<a class="show-{{edit}}" href="" ng-click="delete()"> <i class="icon-trash"></i></a>
-    <input class="show-{{notEdit}}" ng-click="update()" type="checkbox" ng-model="todo.done"> </input>
-    <span class="done-{{todo.done}}">{{todo.text}} </span>
-  </li>
+<div class="container">  
+<div class="row">
+<div class="span6">
+<ul class="nav nav-pills">  
+<li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
+<li class="{{activeHistory}}"><a href="#/history">History</a></li>
+<li class="{{activeList}}"><a href="">{{label}}</a></li>
+<li class="{{showNext}}"><a href="#/list/:{{nextArchiveName}}" ng-click="nextClick()"><i class="icon-forward"></i></a></li>
 </ul>
+</div>
+</div>
+</div>
 
-<form class="lead" ng-submit="addTodo()">
-	<fieldset class="show-{{notEdit}}" >
-    <input type="text" ng-model="todoText"  size="30" placeholder="add new task here">
-    <input class="btn-primary" type="submit" value="add">
-  </fieldset>
+<table class="table table-striped">  
+	<tbody>  
+    <tr ng-repeat="todo in todos">
+      <td>
+      <span> 
+  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash"></i></a>
+    		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done"></input>
+     		<span class="done-{{todo.done}}">{{todo.text}}</span>
+      </span>
+      </td>
+    </tr>
+    <tr>
+      <td>({{remaining()}}/{{todos.length}}) <span class="show-{{!showList}}"> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">Done</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">Edit</a> ]</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<form ng-submit="addTodo()">
+  <span class="show-{{showNewTask}}" >
+    <input type="text" ng-model="todoText" size=30 placeholder="Add new task here."></input>
+  </span>
 </form>
