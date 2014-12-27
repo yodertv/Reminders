@@ -1,0 +1,6 @@
+#Build directory. Everything here is generated from source
+build
+#Lib directory. Everything here is from a package maintained else where.
+lib
+#Log from the webserver
+log

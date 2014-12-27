@@ -1,0 +1,12 @@
+/* todo css stylesheet */
+
+.done-true {
+  text-decoration: line-through;
+  color: grey	;
+}
+
+body {
+	padding-top:1%;
+	padding-left:3%;
+	padding-right:3%;
+}

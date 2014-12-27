@@ -1,0 +1,21 @@
+<!-- List.html -->	 
+<Legend>Tasks <p class="pull-right">{{label}}</p></Legend>
+
+<span><large>{{remaining()}} of {{todos.length}} remaining</span>
+[<a href="" ng-click="archive()"><strong>Archive</strong></a>]
+[<a href="" ng-click="saveTodos()"><strong>Save</strong></a>]
+</large>
+
+<ul class="lead">
+  <li ng-repeat="todo in todos">
+    <input type="checkbox" ng-model="todo.done">
+    <span class="done-{{todo.done}}">{{todo.text}}</span>
+  </li>
+</ul>
+
+<form ng-submit="addTodo()">
+	<fieldset>
+    <input type="text" ng-model="todoText"  size="30" placeholder="add new task here">
+    <input class="btn-primary" type="submit" value="add">
+  </fieldset>
+</form>
