@@ -4,3 +4,6 @@ build
 lib
 #Log from the webserver
 log
+css
+js
+img

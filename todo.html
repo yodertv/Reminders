@@ -1,0 +1,23 @@
+<!-- Todo.html -->	 
+<Legend> <img src="http://yodertv.com/favicon.ico"></img> Tasks <small>(<span>{{remaining()}}/{{todos.length}}</span>)</small><p class="pull-right">{{label}}</p></Legend>
+
+<strong class="lead">
+[<a class="show-{{edit}}" href="" ng-click="editClick()">Done</a><a class="show-{{notEdit}}" href="" ng-click="editClick()">Edit</a>]
+[<a href="" ng-click="archive()">Archive</a>]
+[<a href="#/history">History</a>]
+</strong>
+
+<ul class="unstyled">
+  <li ng-repeat="todo in todos">
+  	<a class="show-{{edit}}" href="" ng-click="delete()"> <i class="icon-trash"></i></a>
+    <input class="show-{{notEdit}}" ng-click="update()" type="checkbox" ng-model="todo.done"> </input>
+    <span class="done-{{todo.done}}">{{todo.text}} </span>
+  </li>
+</ul>
+
+<form class="lead" ng-submit="addTodo()">
+	<fieldset class="show-{{notEdit}}" >
+    <input type="text" ng-model="todoText"  size="30" placeholder="add new task here">
+    <input class="btn-primary" type="submit" value="add">
+  </fieldset>
+</form>

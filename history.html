@@ -1,0 +1,15 @@
+<!-- History.html -->	 
+<Legend> 
+	<img src="http://yodertv.com/favicon.ico"></img> History <small>({{archives.length}})</small>	
+</Legend>
+
+<strong class="lead">
+[<a href="#/">Done</a>]
+<!-- [<a href="#/">Print</a>] /!-->
+</strong>
+
+<ul class="lead">
+  <li ng-repeat="item in archives">
+  	<a href="#/list/:{{item.archiveName}}"> {{item.displayName}} </a>	
+  </li>
+</ul>

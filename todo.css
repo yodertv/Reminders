@@ -5,6 +5,14 @@
   color: grey	;
 }
 
+.show-false {
+	display: none;
+}
+
+.show-true {
+	display: inline;
+}
+
 body {
 	padding-top:1%;
 	padding-left:3%;
