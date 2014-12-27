@@ -4,7 +4,7 @@
 <div class="span6">  
 <ul class="nav nav-pills">  
 <li><a href="#">Today</a></li>
-<li class="active"><a href="#/history">History</a></li>
+<li class="active"><a href="#/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
 <li> <a href="#/list/:{{nextArchiveName}}"><i class="icon-forward"></i></a></li>
 </ul>  
 </div>  
@@ -13,8 +13,8 @@
 <table class="table table-striped">  
   <tbody>  
     <tr ng-repeat="item in archives">
-    	<td><span><a href=""<i class="icon-trash"></i></a>
-      <a href="#/list/:{{item.archiveName}}">[ {{item.displayName}}   ]</a></a></span>
+    	<td><span><a href="" ng-click="delete()"><i class="icon-trash"></i>&nbsp;&nbsp;</a>
+      <a href="#/list/:{{item.archiveName}}">&nbsp;{{item.displayName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
     </td>  
     </tr> 
   </tbody>  

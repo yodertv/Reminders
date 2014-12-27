@@ -1,0 +1,11 @@
+{
+  "name": "Todos-v1.4",
+  "subdomain": "yodertv.Todos-v1.4",
+  "scripts": {
+    "start": "StaticServer.js"
+  },
+  "version": "0.0.0",
+  "engines": {
+    "node": "0.8.x"
+  }
+}

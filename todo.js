@@ -1,4 +1,4 @@
-/* Todos.js v1.3
+/* Todos.js /*
 /* Controllers */
 'use strict';
 
@@ -8,114 +8,79 @@ angular.module('todo', ['mongolab']).config(function($routeProvider) {
   	  when('/list/:archiveName', {controller:ListCtrl, templateUrl:'todo.html'}).
       when('/history', {controller:HistoryCtrl, templateUrl:'history.html'}).
       otherwise({redirectTo:'/'});
-  });
+});
 
-function excludeHash(key, value) {
-    if (key === "$$hashKey") {
-    	return undefined
-    }
-    return value;
+function buildArchiveList(data, scope, name) { 
+
+    // Builds the sorted list of $scope.archives, sets nextArchiveName and showNext view element 
+    // from the set of collections in DBString that start with "todo" for the scope passed in and the current name.
+    // When no name is included set nextArchiveName to the first archive. Intended to be used in the callback 
+    // function for getArchiveList();
+
+	var today = new Date();
+	var d = new Date(); 		// Does putting this constructor out of the loop below have any benefit?
+	var currArchive = {};
+
+	// The data has all collections in the DB. So we filter for only the collections that start w/ todo using regex.
+	var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
+
+	scope.archives=[]; // Zero out the current array of archives in scope.
+
+	for (var i=0;i<archs.length;i++) {
+		var archstr = archs[i].replace("todo", ""); 
+
+		// Only Chrome grocks dashes in date constructor. E.g. Sun-3-dec-2012 fails in most other browsers.
+		d = new Date(archstr.replace(/-/," ")); 
+
+		scope.archives[i] = {
+		  "archiveName" : archs[i],
+		  "displayName" : d.toDateString().replace(today.getFullYear(), ""),
+		  "date" : d
+		};
+		if (name===archs[i]) { currArchive = scope.archives[i]}; // Find the one we're listing. Name may be undefined.
+	}
+	// Sort by reverse date
+	scope.archives.sort( function(a,b){return b.date - a.date} );
+
+	var nextIndex = scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
+
+	if (nextIndex >= scope.archives.length) {
+		scope.showNext="show-false" // Hide the next button on the last archive
+	} 
+	else {
+		scope.nextArchiveName = scope.archives[nextIndex].archiveName;
+		scope.showNext="show-true";
+	};
 }
 
-function HistoryCtrl($scope, $http) {  
-	// Uses hitory.html.
-	var today = new Date();
+function HistoryCtrl($scope, Todo) {  
+	// Uses history.html.
 
-	$scope.getArchives = function() {
-  	$http.get('https://api.mongolab.com/api/1/databases' +
-		'/yodertvtodo/collections/' +
-		'?apiKey=50a2a0e3e4b0cd0bfc12435d').success(function(data) {
-		
-			// filter for only the collections that start w/ todo using regex.
-			var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
-			$scope.archives = [];
-			var d = new Date();
-			for (var i=0;i<archs.length;i++) {
-				var archstr = archs[i].replace("todo", ""); 
-
-				// Only Chrome grocks dashes in date constructor. E.g. Sun-3-dec-2012 fails.
-				d = new Date(archstr.replace(/-/," ")); 
-				$scope.archives[i] = {
-					"archiveName" : archs[i],
-					"displayName" : d.toDateString().replace(today.getFullYear(), ""),
-					"date" : d
-				};
-			}
-
-			// Sort by reverse date
-			$scope.archives.sort( function(a,b){return b.date - a.date} );
-			$scope.nextArchiveName = $scope.archives[0].archiveName;
-		});
-  }
-	$scope.activeList = "show-false";
-	$scope.getArchives();
+  	$scope.delete = function() {
+  		// Delete this archive.
+  		console.log("In HistoryCtrl delete method. Deleting:", this.item.archiveName);
+  	}  	
+  	Todo.getArchiveList(function(data) {
+  		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
+	});
 }
 
-function ListCtrl($scope, $location, $routeParams, $http) {  
-	//console.log("Entering ListCntrl");
-	var today = new Date();
-	$scope.getArchives = function(name) {
-  	$http.get('https://api.mongolab.com/api/1/databases' +
-		'/yodertvtodo/collections/' +
-		'?apiKey=50a2a0e3e4b0cd0bfc12435d').success(function(data) {
-					// filter for only the collections that start w/ todo using regex.
-			var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
-			$scope.archives=[];
-			var d = new Date();
-			var currArchive = {};
+function ListCtrl($scope, $location, $routeParams, Todo) {  
+	// Uses todo.html
 
-			for (var i=0;i<archs.length;i++) {
-				var archstr = archs[i].replace("todo", ""); 
+ 	$scope.getList = function(name) {
+ 		if(name == null) { return name; };
+ 		$scope.todos = Todo.getList(name);
+ 		$scope.archiveName = name;
+		var d = new Date(name.replace(/todo/,"").replace(/-/," "));
+		$scope.label = d.toDateString().replace(d.getFullYear(), "");
+	}
 
-				// Only Chrome grocks dashes in date constructor. E.g. Sun-3-dec-2012 fails.
-				d = new Date(archstr.replace(/-/," ")); 
-
-
-				$scope.archives[i] = {
-					"archiveName" : archs[i],
-					"displayName" : d.toDateString().replace(today.getFullYear(), ""),
-					"date" : d
-				};
-				if (name===archs[i]) { currArchive = $scope.archives[i]}; // find the one we're listing.
-			}
-			// Sort by reverse date
-			$scope.archives.sort( function(a,b){return b.date - a.date} );
-			
-			var nextIndex = $scope.archives.indexOf(currArchive) + 1;
-
-			if (nextIndex >= $scope.archives.length) {
-				$scope.showNext="show-false" 
-			} 
-			else {
-				$scope.nextArchiveName = $scope.archives[nextIndex].archiveName;
-				$scope.showNext="show-true";
-			};
-		});
-  }
-
-  $scope.getList = function(name) {
-  	if(name == null) { return name; };
-  		$http.get('https://api.mongolab.com/api/1/databases' +
-			'/yodertvtodo/collections/' + name + '/' +
-			'?apiKey=50a2a0e3e4b0cd0bfc12435d').success(function(data){
-			$scope.todos = data; 
-			$scope.archiveName = name;
-			var d = new Date(name.replace(/todo/,"").replace(/-/," "));
-			$scope.label = d.toDateString().replace(d.getFullYear(), "");
-		});
-  }
-
-  var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
-	$scope.getList(name);
-	$scope.getArchives(name);
-
-	$scope.showDelete = true; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
-	$scope.showList = true;
-	$scope.activeHome = ""; 
-	$scope.activeList = "active";
-	$scope.activeHistory = "show-false";
-	$scope.showNewTask = false;
-
+	$scope.delete = function() {
+		var index = $scope.todos.indexOf(this.todo);
+		$scope.todos.splice(index,1);
+		Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
+	};
 
 	$scope.remaining = function() {
 		var count = 0;
@@ -128,88 +93,47 @@ function ListCtrl($scope, $location, $routeParams, $http) {
 	$scope.homeClick = function() {
 		$location.path('/');
 	};
+
+  	var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
+	
+	$scope.getList(name);
+
+	// $scope.getArchives(name);
+	Todo.getArchiveList(function(data) {
+		buildArchiveList(data, $scope, name);
+	});
+
+	$scope.showDelete = true; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
+	$scope.showList = true;
+	$scope.activeHome = ""; 
+	$scope.activeList = "active";
+	$scope.activeHistory = "show-false";
+	$scope.showNewTask = false;
 }
 
-function TodoCtrl($scope, $http, Todo) {  
+function TodoCtrl($scope, Todo) {
+	// Uses todo.html
 	// This is the home page. Show current Todos. Hide other stuff	
-	var today = new Date();
-
-	$scope.getTodos = function() {
-		$scope.todos = Todo.query();
-  }
-
-	$scope.getArchives = function() {
-  	$http.get('https://api.mongolab.com/api/1/databases' +
-		'/yodertvtodo/collections/' +
-		'?apiKey=50a2a0e3e4b0cd0bfc12435d').success(function(data) {
-		
-			// filter for only the collections that start w/ todo using regex.
-			var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
-			$scope.archives=[];
-			var d = new Date();
-			var currArchive = {};
-			for (var i=0;i<archs.length;i++) {
-				var archstr = archs[i].replace("todo", ""); 
-
-				// Only Chrome grocks dashes in date constructor. E.g. Sun-3-dec-2012 fails.
-				d = new Date(archstr.replace(/-/," ")); 
-
-
-				$scope.archives[i] = {
-					"archiveName" : archs[i],
-					"displayName" : d.toDateString().replace(today.getFullYear(), ""),
-					"date" : d
-				};
-				if (name===archs[i]) { currArch = archives[i]}; // find the one we're listing.
-			}
-			// Sort by reverse date
-			$scope.archives.sort( function(a,b){return b.date - a.date} );
-			var currIndex = $scope.archives.indexOf(currArchive);
-			$scope.nextArchiveName = $scope.archives[currIndex + 1].archiveName;
-			if ($scope.nextArchiveName==undefined) { $scope.showNext="show-false" } else {
-					$scope.showNext="show-true";
-			};
-		});
-  }
-
-	$scope.activeList = "show-false";
-	$scope.activeHome = "active";
-	$scope.showNewTask = true;
-  $scope.showDelete = false;
-
-  $scope.getTodos();
-  $scope.getArchives(); // to support the next button.
-
-
-	$scope.saveTodos = function(name) {
-	 	if(name == null) { name = 'todo'; }; 	  	
-	  $http.put('https://api.mongolab.com/api/1/databases' +
-		'/yodertvtodo/collections/' + name + '/' +
-		'?apiKey=50a2a0e3e4b0cd0bfc12435d', JSON.stringify($scope.todos, excludeHash)).success(function(data){
-			$scope.putresult=data;
-		});
-	}
 
 	$scope.addTodo = function() {
 		var obj = {text:$scope.todoText, done:false};
-
 		$scope.todoText = '';
-		Todo.save(obj,  function(returnObj) {
+		Todo.save({todo:"todo"}, obj,  function(returnObj) {
 			$scope.todos.push(returnObj);
-    });
+    	});
 	};
 		
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
-	//	console.log(index)
+		//	console.log(index)
 		$scope.todos.splice(index,1);
-		Todo.remove({id: this.todo._id.$oid});
+		Todo.remove({todo: "todo", id: this.todo._id.$oid});
 	};
 
 	$scope.update = function() {
 		console.log("Update", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-		Todo.update({id: this.todo._id.$oid}, angular.extend({}, this.todo, {_id:undefined}));
+		Todo.update({todo: "todo", 	id: this.todo._id.$oid}, angular.extend({}, this.todo, {_id:undefined}));
 	};
 
 	$scope.editClick = function() {
@@ -239,23 +163,47 @@ function TodoCtrl($scope, $http, Todo) {
  
 	$scope.archive = function() {  	
  		var today = new Date();  
- 		var archiveName = "todo" + today.toDateString().replace(/ /g, "-");
+ 		var archiveName = "todo" + today.toDateString().replace(/ /g, "-"); // Build an archive name from today's date.
 		var oldTodos = $scope.todos;
-		var d = new Date(archiveName.replace("todo",""));
-		console.log(d);
-			
-		$scope.saveTodos(archiveName);
+
+		if ($scope.nextArchiveName == archiveName) { // Today's archive already exists.
+			//merge done items into nextArchive;
+			angular.forEach(oldTodos, function(todo) {
+	      		if (todo.done) {
+	      			// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
+					Todo.update({todo: archiveName, id: todo._id.$oid}, angular.extend({}, todo, {_id:undefined}));
+	      		}
+	      	})
+      	}
+		else {  // Create a new archive.
+
+			Todo.saveTodos($scope.todos, archiveName);
+			$scope.archives.unshift({
+				"archiveName" : archiveName,
+				"displayName" : today.toDateString().replace(today.getFullYear(), ""),
+				"date" : today
+			})
+		}	
 		
-		// Remove the completed items
+		// Remove the completed tasks by erasing the list of todos and copying only the not done tasks from oldTodos.
     	
-    $scope.todos = [];
-    angular.forEach(oldTodos, function(todo) {
-      if (!todo.done) $scope.todos.push(todo);
-    });
+    	$scope.todos = [];
+    	angular.forEach(oldTodos, function(todo) {
+      		if (!todo.done) $scope.todos.push(todo);
+    	});
 
-    // Here's where I'll add back in the default times.
+    	// Here's where I'll add back in the default times.
 		
-		$scope.saveTodos();		
-  } 
+		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
+  	} 
+	
+	$scope.activeList = "show-false";
+	$scope.activeHome = "active";
+	$scope.showNewTask = true;
+ 	$scope.showDelete = false;
+ 	$scope.todos = Todo.getList();
 
+	Todo.getArchiveList(function(data) {
+		buildArchiveList(data, $scope); // Needed to support the next button.
+	});
 }

@@ -1,48 +1,55 @@
 // Read Me
-// Todos v1.3
+// Todos v1.4
 
 Objective: Replace the weekly task list that I keep on paper.
 
 // Curent features
 
-- List of Todos.
-- Persist data in the cloud (mongolabs.com) using angular's $http service and mongolabs REST APIs.
-- Archive - Save's list after removing items where done:true. Saves at most one Archive per day based on the date. Has the annoying affect of forgetting all the taskes that were completed and archived that day.
+- Manages a list of Todos (aka tasks).
+- Persists Todo data in the cloud (mongolabs.com) using angular's $http service and mongolabs REST APIs.
+- Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
 - Add - Adds a new task to the list with done:false; Saves the new task to the DB.
-- Checkbox - When checked: done:true; Item's text is displayed as strike-through; Saves the item to the DB.
-- History - Is lets you review old items from the archive.
+- Checkbox - When checked: done:true; Item's text is displayed as strike-through; Saves the updated item to the DB.
+- History - Presents the list of archives and allows you to view them.
 - Delete icon - Deletes a task from the list. Delete icon and complete checkbox are hidden or shown based on (edit==true).
-- Hosted at http://192.168.1.11 with tinywed http server.
+- Displays total and remaing task counts.
+- Hosted at http://192.168.1.11 with node StaticServer http server.
 - Host the service on the web so I can use it at work. (yodertv.com)
-- Tested on nook browser, iTouch, Safari, chrome on Mac, chrome on widows, and IE (fails because it requires CORS). Worked once on Nook.
+- Tested on nook browser, iTouch, Safari, chrome on Mac, chrome on widows, and IE (fails because it requires CORS).
 - Depends on bootstrap, angular, and jQuerry.
 - Has a custom favicon.
-- 
+- Responsive to three device sizes.
+- Lists are displayed in tables.
+- Uses pills for navigation replaces href strings in earlier versions with buttons.
+- Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. Button disappears when displaying the last archive.
+- Deleting items in an archive is now supported.
+- yodertv.com now redirects to yodertv.jit.su.
 
-// Bugs fixed in this release
-- (Bug#3) Fixed error completing or deleting a newly entered text by getting the return object from the POST.
+// Work done in this release
 
-// Enhancements made in this release
-- Handle screen widths better.
-- Uses tables for better looking list displays.
-- Use pills for navigation istead of buttons.
-- Moved remaining count to bottom by the add new task input.
-- Removed the "Add" button. Enter key causes submit.
-- Added forward button takes you to the next older archive. Use back arrow to return to the previous archive. Button disappears when display the last archive.
+- Deleting tasks in archives now works
+- Hosted in node.js StaticServer.js @ http://desk-pc
+- Refactored getArchiveList into it's own function and moved into service, mongolab.js.
+- buildArchiveList used three times so it's now a function shared by three controllers.
+- Refactor all DB access into the mongolab module.
+- (Bug#1) Archive has been fixed by merging any newly completed tasks into the archive for the same day if it exists.
+- Tweaked html views with some &nbsp; to make the view a little nicer.
 
 // Known bugs
 
-- (Bug#1) Archive has the annoying affect of forgetting all the tasks that were completed and archived that day. This should be fixed by merging any new tasks into the current archive for the same day if it exists.
 - (Bug#2)Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements.
-- (Bug#3)Deleting a task immediately after entering it doesn't work, because the OID isn't retrived from the DB after it has been entered. The work around is to delete it again after refreshing the list. Now it has the OID so the delete function works. Presumably marking a task completed will also fail. Fixed in this release
 
 // Future enhancements
 
-- Set width when in browser so the date isn't so far to the right on a large screen. Decided to remove the date instead.
+- Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
+- Remove archives from the archive list. I can empty a collection w/ MonogRest api but not delete it.
+- Add unit testing.
 - Support Nook.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.
+- Minimize trips to server. Keep data cached between pages.
+- Work off-line better.
 - Support authentication.
 - Support multiple users.
 - Support addvertisments.

@@ -4,7 +4,7 @@
 <div class="span6">
 <ul class="nav nav-pills">  
 <li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
-<li class="{{activeHistory}}"><a href="#/history">History</a></li>
+<li class="{{activeHistory}}"><a href="#/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
 <li class="{{activeList}}"><a href="">{{label}}</a></li>
 <li class="{{showNext}}"><a href="#/list/:{{nextArchiveName}}" ng-click="nextClick()"><i class="icon-forward"></i></a></li>
 </ul>
@@ -17,14 +17,14 @@
     <tr ng-repeat="todo in todos">
       <td>
       <span> 
-  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash"></i></a>
-    		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done"></input>
-     		<span class="done-{{todo.done}}">{{todo.text}}</span>
+  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash">&nbsp;</i></a>
+    		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done">&nbsp;&nbsp;</input>
+     		<span class="done-{{todo.done}}">&nbsp;{{todo.text}}&nbsp;</span>
       </span>
       </td>
     </tr>
     <tr>
-      <td>({{remaining()}}/{{todos.length}}) <span class="show-{{!showList}}"> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">Done</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">Edit</a> ]</span></td>
+      <td>({{remaining()}}/{{todos.length}}) <span class="show-{{!showList}}"> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr>
   </tbody>
 </table>
