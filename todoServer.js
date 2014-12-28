@@ -1,4 +1,5 @@
-// TodoServer.js 2.0
+// TodoServer.js 2.1
+//
 'use strict';
 
 var http = require("http"),
@@ -11,18 +12,22 @@ var http = require("http"),
     nStatic = require('node-static'),
     mongojs = require("mongojs");
 
+var dblist = {'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
+              'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
+              'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
+              'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'}
+
 var port = process.argv[2] || 80,
     restUrl = "/api/1/databases/",
     restHost = "api.mongolab.com",
     restPort = 443,
-    DBKey = "50a2a0e3e4b0cd0bfc12435d",
-    dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", // "username:password@example.com/mydb"
-    db = mongojs.connect(dbUrl);
-
+    DBKey = "50a2a0e3e4b0cd0bfc12435d";
+ 
 http.createServer(/* httpsOptions, */ function(req, response) {
-  var reqUrl = url.parse(req.url),
+  var reqUrl = url.parse(req.url, true), // true parses the query string.
       uri = reqUrl.pathname,
       fileServer = new nStatic.Server();
+  
   function respHandler(res) {
     if (res.statusCode == 302) { // redirected by who?
       var u = url.parse(res.headers.location);
@@ -45,7 +50,9 @@ http.createServer(/* httpsOptions, */ function(req, response) {
   }
   
   console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
+  
   // console.log(reqUrl);
+
   if (uri.indexOf(restUrl) >= 0) { // Proxy API calls to Mongolab
     var options = {
       hostname: restHost,
@@ -67,10 +74,26 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       proxy.end();
     });
   } 
-  else if (req.method == 'DELETE') { // Delete archive collection using mongojs.
-    var name = uri.substr(1, uri.length);
-    var toDelete = db.collection(name);
-    toDelete.drop(); 
+  else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
+    // dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
+    // E.g. "username:password@example.com/mydb"
+    
+    //var dbUrl = dblist['bobstodos'];
+    var dbUrl = dblist[reqUrl.query['mongoDB']];
+    var name = uri.substr(1, uri.length-2);
+    console.log("dbUrl=", dbUrl, "name=", name);
+
+    var db = mongojs(dbUrl, [name]);
+    
+    // var toDelete = db.collection(name);
+   
+    //toDelete.drop(); 
+    db[name].drop( function(err) {
+      if (err != null) {
+        console.log("DB_DROP_ERR:", err);
+      }
+    });
+
     req.on('end', function() {
       // empty 200 OK response for now
       response.writeHead(200, "OK", {'Content-Type': 'text/html'});

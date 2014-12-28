@@ -1,5 +1,6 @@
 // Read Me
 // Todos v2.1
+// Released 2.2.13 to http://yodertv.jit.su/
 
 Objective: Replace the weekly task list that I keep on paper.
 
@@ -24,6 +25,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. Button disappears when displaying the last archive.
 - Deleting items in an archive is now supported.
 - Deleting archives is now supported in the nodejs server version.
+- All deployment knowledge is in mongolab.js.
 
 // Work done in previous releases
 1.4
@@ -59,14 +61,17 @@ Objective: Replace the weekly task list that I keep on paper.
 - Load css files before scripts fixed BB bug. Found with Chrome audit feature.
 - (Bug#4-Fixed) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
 - Move DB key back to server and off the client.
+- Client sets DB. Query string for archive delete method to pass in the DB name.
+- (Bug#5-Fixed) Still failing on IE 9. IE dev tools don't help with this security error, but google did. Found the trick was to start the app w/ the /#/ version of the URL.
 
-// Known bugs next Bug#6
-(Bug#5) Still failing on IE 9.
+// Known bugs next Bug#7
+(Bug#6) Invalid date on history page in IE9.
 
 // Future enhancements
 
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
 - Add unit testing.
+- Use package.json file for my two configuration items, 
 - Support Nook and other CORS defective browsers.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
