@@ -2,11 +2,19 @@
 'use strict';
 
 // Test DB connect info
-var DBString = "https://api.mongolab.com/api/1/databases/test-todo/collections/",
-    nodeString = "http://192.168.1.10:80/"
+// var nodeURL = window.location.href.replace(/#\//,""),  // Take #/ off the end of my URL
+var nodeURL = document.getElementById ('home-root').href,
+    // nodeURL = "http://192.168.1.10/";
+    // resURL = "http://192.168.1.10/api/1/databases/test-todo/collections/",
+    resURL = nodeURL + "api/1/databases/test-todo/collections/";
+
+  // console.log("Mongolabjs: window href ", window.location.href);
+  // console.log("Mongolabjs: nodeURL ", nodeURL);
+  // console.log("Mongolabjs: resURL ", resURL);
 
 // Prod DB connect info (comment out the unchoosen.)
-// var DBString = "https://api.mongolab.com/api/1/databases/yodertvtodo/collections/";
+
+// var resourceURL = "https://api.mongolab.com/api/1/databases/test-todo/collections/";
 
 // The key is account wide
 var DBKey = "50a2a0e3e4b0cd0bfc12435d";
@@ -21,11 +29,20 @@ function excludeHash(key, value) {
 }
 
 myMod.factory('Todo', function($resource, $http) {
-    var Todo = $resource(DBString + ':todo/:id',
+    console.log("Mongolabjs: ", nodeURL, resURL);
+    var Todo = $resource(resURL + ':todo/:id',
       { apiKey: DBKey }, {
         update: { method: 'PUT' }
       }
     );
+    
+    // console.log("Mongolabjs: ", window.location.href);
+    /* These methods come from $resource.
+    Todo.remove = function(){};
+    Todo.save = function(){};
+    Todo.update = function(){};
+    Todo.query = function(){};
+    */
 
     Todo.getList = function(name) {
       // console.log("query", name)
@@ -36,17 +53,17 @@ myMod.factory('Todo', function($resource, $http) {
     Todo.saveTodos = function(todos, name) {
       if(name == null) { name = 'todo'; };      
       // console.log(todos);
-      $http.put(DBString + name + '/?apiKey=' + DBKey, JSON.stringify(todos, excludeHash)).error(function(data){
+      $http.put(resURL + name + '/?apiKey=' + DBKey, JSON.stringify(todos, excludeHash)).error(function(data){
           console.log("Save error:", data);
       });
     }
 
     Todo.getArchiveList = function(cb) {
-      $http.get(DBString + '?apiKey=' + DBKey).success(cb);
+      $http.get(resURL + '?apiKey=' + DBKey).success(cb);
     }
 
     Todo.dropArchive = function(name, cb) {
-      $http.delete(nodeString + name).success(cb);
+      $http.delete(nodeURL + name).success(cb);
     }
 
   return Todo;

@@ -1,5 +1,5 @@
 // Read Me
-// Todos v1.5
+// Todos v2.0 
 
 Objective: Replace the weekly task list that I keep on paper.
 
@@ -25,8 +25,8 @@ Objective: Replace the weekly task list that I keep on paper.
 - Deleting items in an archive is now supported.
 - Deleting archives is now supported in the nodejs server version.
 
-// Work done in previous release
-
+// Work done in previous releases
+1.4
 - Deleting tasks in archives now works
 - Hosted in node.js StaticServer.js @ http://desk-pc
 - Refactored getArchiveList into it's own function and moved into service, mongolab.js.
@@ -34,24 +34,35 @@ Objective: Replace the weekly task list that I keep on paper.
 - Refactor all DB access into the mongolab module.
 - (Bug#1) Archive has been fixed by merging any newly completed tasks into the archive for the same day if it exists.
 - Tweaked html views with some &nbsp; to make the view a little nicer.
-
-// Work done in this release
-
+1.5
 - Merge Node v0.4 MongoApp drop collection code into StaticServer and rename as todoServer
 - Change mongolab.js to add a dropArchive function.
 - (Bug#3) When archive creates a new file the forward button still points to the previous archive. Should be updated on the save.
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
-- 
 
-// Known bugs next Bug#4
+// Work done in this release
 
-- (Bug#2)Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements.
+- Enhanced todoServer.js to proxy mongo's REST api and allow non-CORS compliant browsers to access the data. Still need a place to host todoServer.js on Node. ie 9 can view the data, but it still broken from a style sheet prespective.
+- (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements. Implemented with a nodejs proxy so there is only a single origin as var as the browser is concerned.
+- Enhanced ro remove archives from the archive list. I delete collections with mongojs.
+- Discovered the Puffin browser for nook. Works with Todos 1.4. Now only IE fails. I don't think I care.
+- Deployed to nodjitsu to some success. Proxy bug sent me a erant re-direct.
+- Mongolab support fixed thier proxy bug.
+- Adding https before deploying nodejitsu. Here's how:
+	- openssl genrsa -out privatekey.pem 1024 
+	- openssl req -new -key privatekey.pem -out certrequest.csr 
+	- openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+- Nodejitsu handles the SSL in their proxy. No need to deploy the above. So it works locally, not in the cloud.
+- Deployed using jitsu deploy. jitsu list, and jitsu logs.
+
+// Known bugs next Bug#5
+(Bug#4) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
+(Bug#5) Still failing on IE 9.
 
 // Future enhancements
 
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
-- Remove archives from the archive list. I can empty a collection w/ MonogRest api but not delete it.
 - Add unit testing.
 - Support Nook and other CORS defective browsers.
 - Print a digest from the History page.

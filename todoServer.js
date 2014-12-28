@@ -1,79 +1,115 @@
+// TodoServer.js 2.0
+'use strict';
+
 var http = require("http"),
+    https = require("https"),
     url = require("url"),
     path = require("path"),
-    fs = require("fs")
-    port = process.argv[2] || 443;
+    fs = require("fs"),
+    os = require("os"),
+    sys  = require('sys'),
+    // crypto = require('crypto'),
+    mongojs = require("mongojs");
 
-// from MongoApp.js
-var databaseUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", // "username:password@example.com/mydb"
-    // collections = ["todo"],
-    // collections = [],
-    mongojs = require("mongojs"),
-    db = mongojs.connect(databaseUrl);
+var port = process.argv[2] || 8000,
+    restUrl = "/api/1/databases/",
+    restHost = "api.mongolab.com",
+    restPort = 443,
+    dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", // "username:password@example.com/mydb"
+    db = mongojs.connect(dbUrl);
 
-// console.log(db);
+// var privateKey = fs.readFileSync('privatekey.pem').toString();
+// var certificate = fs.readFileSync('certificate.pem').toString();
 
-http.createServer(function(req, response) {
-
-  var urlObj = url.parse(req.url);
-  var uri = urlObj.pathname;
-  var filename = path.join(process.cwd(), uri);
-
- switch(req.method) {
-    case 'DELETE':
-
-      var name = uri.substr(1, uri.length);
-      var toDelete = db.collection(name);
 /*
-      // example of get all documents from the collection.
-      toDelete.find({}, function(err, todos) {
-        console.log('find() returned.')
-        if( err || !todos ) console.log("No todos found", "err=", err);
-        else todos.forEach( function(each) {
-          console.log(each);
-        } );
-      });
+var httpsOptions = {
+  key: fs.readFileSync('privatekey.pem'),
+  cert: fs.readFileSync('certificate.pem')
+}
 */
-      toDelete.drop();
 
-      req.on('end', function() {
-        // empty 200 OK response for now
-        response.writeHead(200, "OK", {'Content-Type': 'text/html'});
+// console.log(httpsOptions);
+
+http.createServer(/* httpsOptions, */ function(req, response) {
+  var reqUrl = url.parse(req.url),
+      uri = reqUrl.pathname;
+
+  function respHandler(res) {
+    if (res.statusCode == 302) { // redirected by who?
+      var u = url.parse(res.headers.location);
+      console.log('STATUS: ' + res.statusCode);
+      console.log('HEADERS: ' + JSON.stringify(res.headers));
+      console.log(u);
+    }
+    proxy.on('error', function(e) {
+        console.log("Error:", e);
+    });
+    res.on('data', function(chunk) {
+      // sys.log(chunk);
+      response.write(chunk, 'binary');
+    });
+    res.on('end', function() {
+      // sys.log("End");
+      response.end();
+    });
+    response.writeHead(res.statusCode, res.headers);
+  }
+  console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
+  // console.log(reqUrl);
+  if (uri.indexOf(restUrl) >= 0) { // Proxy API calls to Mongolab
+    var options = {
+      hostname: restHost,
+      port: reqUrl.port || restPort,
+      path: req.url,
+      method: req.method,
+      //"Content-Type": req.Content-Type
+
+      headers: req.headers,
+    };
+    
+    var proxy = https.request( options, respHandler);
+
+    req.on('data', function(chunk) {
+      proxy.write(chunk, 'binary');
+    });
+    req.on('end', function() {
+      // sys.log('Proxy end')
+      proxy.end();
+    });
+  } 
+  else if (req.method == 'DELETE') { // Delete archive collection using mongojs.
+    var name = uri.substr(1, uri.length);
+    var toDelete = db.collection(name);
+    toDelete.drop(); 
+    req.on('end', function() {
+      // empty 200 OK response for now
+      response.writeHead(200, "OK", {'Content-Type': 'text/html'});
+      response.end();
+    });
+    console.log(req.method +" to " + name);
+  } 
+  else {  // default static file server for html and script files.
+    var filename = path.join(process.cwd(), uri);      
+    fs.exists(filename, function(exists) {
+      if(!exists) {
+        response.writeHead(404, {"Content-Type": "text/plain"});
+        response.write("404 Not Found\n");
+        response.end();
+        return;
+      }
+      if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+      fs.readFile(filename, "binary", function(err, file) {
+        if(err) {        
+          response.writeHead(500, {"Content-Type": "text/plain"});
+          response.write(err + "\n");
+          response.end();
+          return;
+        }
+        response.writeHead(200);
+        response.write(file, "binary");
         response.end();
       });
-      
-      console.log(req.method +" to " + name);
-      
-      break;
-
-      default: // Static file server
-
-      //    console.log(urlObj);
-      
-        fs.exists(filename, function(exists) {
-          if(!exists) {
-            response.writeHead(404, {"Content-Type": "text/plain"});
-            response.write("404 Not Found\n");
-            response.end();
-            return;
-        }
-
-        if (fs.statSync(filename).isDirectory()) filename += '/index.html';
-
-        fs.readFile(filename, "binary", function(err, file) {
-          if(err) {        
-            response.writeHead(500, {"Content-Type": "text/plain"});
-            response.write(err + "\n");
-            response.end();
-            return;
-          }
-
-          response.writeHead(200);
-          response.write(file, "binary");
-          response.end();
-        });
-      });
-    }
+    });
+  }
 }).listen(parseInt(port, 10));
-
-console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log("todo Server running at https://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");

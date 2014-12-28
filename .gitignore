@@ -1,9 +1,11 @@
-#Build directory. Everything here is generated from source
+# Build directory. Everything here is generated from source
 build
-#Lib directory. Everything here is from a package maintained else where.
+# Lib directory. Everything here is from a package maintained else where.
 lib
-#Log from the webserver
+# Log from the webserver
 log
 css
 js
 img
+# SSL keys
+*.pem

@@ -1,11 +1,14 @@
 {
-  "name": "Todos-v1.4",
-  "subdomain": "yodertv.Todos-v1.4",
+  "name": "Todos",
   "scripts": {
-    "start": "StaticServer.js"
+    "start": "todoServer.js"
   },
-  "version": "0.0.0",
+  "version": "0.0.0-1",
   "engines": {
     "node": "0.8.x"
-  }
+  },
+  "dependencies": {
+    "mongojs": "0.4.6"
+  },
+  "subdomain": "yodertv"
 }

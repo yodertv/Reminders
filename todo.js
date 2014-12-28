@@ -1,4 +1,4 @@
-/* Todos.js /*
+/* Todos.js 2.0 /*
 /* Controllers */
 'use strict';
 
@@ -6,7 +6,7 @@ angular.module('todo', ['mongolab']).config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:TodoCtrl, templateUrl:'todo.html'}).
   	  when('/list/:archiveName', {controller:ListCtrl, templateUrl:'todo.html'}).
-      when('/history', {controller:HistoryCtrl, templateUrl:'history.html'}).
+      when('/history/', {controller:HistoryCtrl, templateUrl:'history.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -74,7 +74,7 @@ function HistoryCtrl($scope, Todo) {
   			}
   		}
   	}
-
+	$scope.showNext="show-false";
   	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
@@ -146,7 +146,7 @@ function TodoCtrl($scope, Todo) {
 	};
 
 	$scope.update = function() {
-		console.log("Update", this.todo);
+		// console.log("Update", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
 		Todo.update({todo: "todo", 	id: this.todo._id.$oid}, angular.extend({}, this.todo, {_id:undefined}));
 	};
@@ -219,6 +219,7 @@ function TodoCtrl($scope, Todo) {
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
  	$scope.todos = Todo.getList();
+ 	$scope.showNext="show-false";
 
 	Todo.getArchiveList(function(data) {
 		buildArchiveList(data, $scope); // Needed to support the next button.
