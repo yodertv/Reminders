@@ -1,5 +1,5 @@
 // Read Me
-// Todos v2.0 
+// Todos v2.1
 
 Objective: Replace the weekly task list that I keep on paper.
 
@@ -40,9 +40,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - (Bug#3) When archive creates a new file the forward button still points to the previous archive. Should be updated on the save.
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
-
-// Work done in this release
-
+2.0
 - Enhanced todoServer.js to proxy mongo's REST api and allow non-CORS compliant browsers to access the data. Still need a place to host todoServer.js on Node. ie 9 can view the data, but it still broken from a style sheet prespective.
 - (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements. Implemented with a nodejs proxy so there is only a single origin as var as the browser is concerned.
 - Enhanced ro remove archives from the archive list. I delete collections with mongojs.
@@ -56,8 +54,13 @@ Objective: Replace the weekly task list that I keep on paper.
 - Nodejitsu handles the SSL in their proxy. No need to deploy the above. So it works locally, not in the cloud.
 - Deployed using jitsu deploy. jitsu list, and jitsu logs.
 
-// Known bugs next Bug#5
-(Bug#4) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
+// Work done in this release
+- Use node-static to serve up my static files.
+- Load css files before scripts fixed BB bug. Found with Chrome audit feature.
+- (Bug#4-Fixed) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
+- Move DB key back to server and off the client.
+
+// Known bugs next Bug#6
 (Bug#5) Still failing on IE 9.
 
 // Future enhancements

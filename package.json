@@ -3,12 +3,13 @@
   "scripts": {
     "start": "todoServer.js"
   },
-  "version": "0.0.0-1",
+  "version": "0.2.0-7",
   "engines": {
     "node": "0.8.x"
   },
   "dependencies": {
-    "mongojs": "0.4.6"
+    "mongojs": "0.4.6",
+    "node-static": "0.6.7"
   },
   "subdomain": "yodertv"
 }
