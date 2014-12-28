@@ -1,5 +1,5 @@
 // Read Me
-// Todos v1.4
+// Todos v1.5
 
 Objective: Replace the weekly task list that I keep on paper.
 
@@ -23,9 +23,9 @@ Objective: Replace the weekly task list that I keep on paper.
 - Uses pills for navigation replaces href strings in earlier versions with buttons.
 - Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. Button disappears when displaying the last archive.
 - Deleting items in an archive is now supported.
-- yodertv.com now redirects to yodertv.jit.su.
+- Deleting archives is now supported in the nodejs server version.
 
-// Work done in this release
+// Work done in previous release
 
 - Deleting tasks in archives now works
 - Hosted in node.js StaticServer.js @ http://desk-pc
@@ -35,7 +35,16 @@ Objective: Replace the weekly task list that I keep on paper.
 - (Bug#1) Archive has been fixed by merging any newly completed tasks into the archive for the same day if it exists.
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
-// Known bugs
+// Work done in this release
+
+- Merge Node v0.4 MongoApp drop collection code into StaticServer and rename as todoServer
+- Change mongolab.js to add a dropArchive function.
+- (Bug#3) When archive creates a new file the forward button still points to the previous archive. Should be updated on the save.
+- This release can't go to production because I need a place to host my node drop function.
+- StaticServer is deco'd
+- 
+
+// Known bugs next Bug#4
 
 - (Bug#2)Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements.
 
@@ -44,7 +53,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
 - Remove archives from the archive list. I can empty a collection w/ MonogRest api but not delete it.
 - Add unit testing.
-- Support Nook.
+- Support Nook and other CORS defective browsers.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.

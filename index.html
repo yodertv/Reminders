@@ -1,9 +1,23 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html ng-app="todo" lang="en">
   <head>
-    <title>Your Page Title</title>
-    <meta http-equiv="REFRESH" content="0;url=http://yodertv.jit.su">
+    <link rel="Shortcut Icon" href="http://192.168.1.10/favicon.ico" type="image/x-icon" ><link>
+    <!-- <link rel="icon" href="http://192.168.1.10/favicon.ico" type="image/x-icon" /> -->
+    <title>ToDos v1.5</title>
+    <!-- Angular -->
+    <script src="js/angular.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="todo.js"></script>
+    <script src="mongolab.js"></script>
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen"></link>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
+    <link href="todo.css" rel="stylesheet">
   </head>
-  <body> 
+  <body>
+    <div ng-view></div>
+    <script src="js/jquery-latest.js"></script>
+    <script src="js/bootstrap.js"></script> 
   </body>
 </html>

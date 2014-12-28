@@ -1,7 +1,14 @@
 // This is a module for cloud persistance in mongolab - https://mongolab.com
 'use strict';
 
-var DBString = "https://api.mongolab.com/api/1/databases/yodertvtodo/collections/";
+// Test DB connect info
+var DBString = "https://api.mongolab.com/api/1/databases/test-todo/collections/",
+    nodeString = "http://192.168.1.10:80/"
+
+// Prod DB connect info (comment out the unchoosen.)
+// var DBString = "https://api.mongolab.com/api/1/databases/yodertvtodo/collections/";
+
+// The key is account wide
 var DBKey = "50a2a0e3e4b0cd0bfc12435d";
 
 var myMod = new angular.module('mongolab', ['ngResource']);
@@ -36,6 +43,10 @@ myMod.factory('Todo', function($resource, $http) {
 
     Todo.getArchiveList = function(cb) {
       $http.get(DBString + '?apiKey=' + DBKey).success(cb);
+    }
+
+    Todo.dropArchive = function(name, cb) {
+      $http.delete(nodeString + name).success(cb);
     }
 
   return Todo;

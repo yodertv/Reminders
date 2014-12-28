@@ -58,8 +58,23 @@ function HistoryCtrl($scope, Todo) {
 
   	$scope.delete = function() {
   		// Delete this archive.
-  		console.log("In HistoryCtrl delete method. Deleting:", this.item.archiveName);
-  	}  	
+  		var index = $scope.archives.indexOf(this.item);
+  		var arch = this.item.archiveName;
+  		console.log("In HistoryCtrl delete method. Deleting:", arch);
+  		$scope.archives.splice(index,1); // Remove it from the model.
+  		Todo.dropArchive(arch, function() {
+  			// console.log("dropArchive returned");
+  		}); // Remove it from the DB
+  		if ( index == 0 ) { // We deleted the one our next pointer was pointing too.
+  			if ($scope.archives.length > 0) {
+	  			$scope.nextArchiveName = $scope.archives[0].archiveName;
+  			} else { 
+  			    $scope.nextArchiveName == undefined;
+  				$scope.showNext="show-false";
+  			}
+  		}
+  	}
+
   	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
@@ -183,6 +198,8 @@ function TodoCtrl($scope, Todo) {
 				"displayName" : today.toDateString().replace(today.getFullYear(), ""),
 				"date" : today
 			})
+			$scope.nextArchiveName = archiveName; // Update nextArchiveName to be this new one.
+			$scope.showNext = "show-true"; // Force on the next button.
 		}	
 		
 		// Remove the completed tasks by erasing the list of todos and copying only the not done tasks from oldTodos.
