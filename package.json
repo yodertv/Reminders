@@ -11,5 +11,9 @@
     "mongojs": "0.4.6",
     "node-static": "0.6.7"
   },
-  "subdomain": "yodertv"
+  "subdomain": "yodertv",
+  "#1_comment" : "Local build variables.",
+  "build.dir" : "../build",
+  "lib.dir" : "../lib",
+  "src.dir" : "."
 }

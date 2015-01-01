@@ -5,71 +5,113 @@
  */
 
 var program = require('commander');
-var DIST_PATH = 'awsum.js';
 // shelljs is great! use it!
-var shell = require('shelljs');
-var _fs = require('fs');
+var _shell = require('shelljs');
+// var _fs = require('fs');
+var _pkg = require('./package.json');
+
+/**
+* Module variables
+*
+*/
+
+var DIST_PATH = 'awsum.js';
+var _props = undefined;
+var _validCmd = false;
 
 // Global options
 program
-  .version('0.0.1')
-  .option('--silent', 'suppress log messages.');
-
+  .version('0.0.2')
+  .description('A program to build and deploy.')
+  .option('--silent', 'Suppress log messages.');
 
 // commands
 program
-    .command('deploy')
-    .description('Optimize site for deploy.')
-    .action(deploy);
+    .command('build [env]')
+    .description('Build all installation files for environment [env=localhost].')
+    .action(build);
 
 program
-    .command('purge')
-    .description('Delete old files from dist folder.')
-    .action(purgeDeploy);
+    .command('clean')
+    .description('Clean all build produced files.')
+    .action(clean);
+
+program
+    .command('install [env]')
+    .description('Run install command for environment [env=localhost].')
+    .action(install);
 
 // must be before .parse() since
 // node's emit() is immediate
 program.on('--help', function(){
-  console.log('  Examples:');
-  console.log('');
-  console.log('    $ custom-help --help');
-  console.log('    $ custom-help -h');
-  console.log('');
+	console.log('  Examples:');
+	console.log('');
+	console.log('    $ %s --help', program.name());
+	console.log('    $ %s --silent deploy jitsu', program.name());
+	console.log('    $ %s install localnet', program.name());
+	console.log('    $ %s clean', program.name());
+	console.log('');
+	console.log('  Valid Environments:');
+	console.log('');
+	console.log('    $ %s [command] localnet', program.name());
+	console.log('    $ %s [command] localhost', program.name());
+	console.log('    $ %s [command] jitsu', program.name());
+	console.log('');
 });
 
+// console.log(process.argv.length);
+
 program.parse(process.argv);
+console.log(program.args.length);
+console.log(program.args);
 
-function deploy() {
-    purgeDeploy();
-    build();
-}
+// if (program.args.length != 2) { program.help() }; // exit with help message if there are unexpected args.
+// if (process.argv.length <= 2) { program.help() }; // exit with help message if no arguments are presented.
+// if (process.argv.length >= 5) { program.help() }; // exit with help message if too many arguments are presented.
 
-function purgeDeploy(){
-    _fs.unlinkSync(DIST_PATH);
+// Globally executed (except with --help and --version options)
+if (!_validCmd) { program.help() };
+
+// Command definitions
+function clean(){
+	_validCmd = true;
+    _shell.rm(DIST_PATH);
     if (! program.silent) {
-        console.log(' Deleted deploy files!');
+        console.log('Cleaned outputfiles files!');
     }
 }
 
-function build(){
+function install(env) {
+	_validCmd = true;
+	env = env || 'localhost';
+	var prop_file_name = "./build_props." + env + ".json";
+	_props = require(prop_file_name);
+    clean();
+    build(env);
+}
+
+function build(env){
     // concat files here or do anything that generates the dist files
-	
-    console.log(' In Build!');
-	shell.cp('build.js', DIST_PATH);
-	var err = shell.error();
+	_validCmd = true;
+	env = env || 'localhost';
+	console.log('Building for env=%s.', env);	
+    console.log('Building package:');
+    console.log(_pkg);
+    console.log('Using properties:');
+    console.log(_props);
+	_shell.cp('make.js', DIST_PATH);
+	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
-//    _fs.linkSync(DIST_PATH, 'Test file', function (err) {
- //	 	if (err) { console.log(err); throw err};
-  //		console.log('It\'s saved!');
+	//    _fs.linkSync(DIST_PATH, 'Test file', function (err) {
+ 	//	 	if (err) { console.log(err); throw err};
+  	//		console.log('It\'s saved!');
 	//});
+
     if (! program.silent) {
-        console.log(' Built!');
+        console.log('Built %s!', env);
     }
 }
-
-// Globally executed (except with --help option)
-console.log('stuff');
 
 /*
 * Original ant config. Remaining functions to implement.
