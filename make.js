@@ -25,16 +25,17 @@ program
   .description('A program to build and deploy.')
   .option('--silent', 'Suppress log messages.');
 
-// commands
-program
-    .command('build [env]')
-    .description('Build all installation files for environment [env=localhost].')
-    .action(build);
+// commands are report -> validate -> install -> build -> compile -> bake -> clean. Arrow shows dependancy.
 
 program
     .command('clean')
     .description('Clean all build produced files.')
     .action(clean);
+
+program
+    .command('build [env]')
+    .description('Build all installation files for environment [env=localhost].')
+    .action(build);
 
 program
     .command('install [env]')
@@ -73,6 +74,7 @@ console.log(program.args);
 if (!_validCmd) { program.help() };
 
 // Command definitions
+
 function clean(){
 	_validCmd = true;
     _shell.rm(DIST_PATH);
