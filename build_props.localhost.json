@@ -1,0 +1,18 @@
+{
+	"#0_comment" : "Build poperties for localhost deployment and testing.",
+	
+	"name" : "localhost",
+	"ENV" : "DEV",
+	"version" : "3.x",
+
+	"#1_comment" : "Should server log date?",
+	"logDate" : "true",
+
+	"#2__comment" : "When using the local network, auth must be disabled because google auth will only accept 127.0.0.1 or a routable address.",
+	"disableAuth" : "true",
+	
+	"#3_comment" : "Deployment details. Local area network node address.",
+	"nodeURL" : "http://192.168.0.13/",
+	"newDB" : "mongodb://nodejitsu_yodertv:jek2pjencj2qh8bu97duuemb87@ds059887.mongolab.com:59887/nodejitsu_yodertv_nodejitsudb2315353469"
+}
+
