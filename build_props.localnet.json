@@ -1,5 +1,5 @@
 {
-	"#_comment" : "Build poperties for localnet deployment and testing.",
+	"#0_comment" : "Build poperties for localnet deployment and testing.",
 	
 	"name" : "localnet",
 	"ENV" : "DEV",

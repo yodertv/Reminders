@@ -11,35 +11,41 @@ var _shell = require('shelljs');
 var _pkg = require('./package.json');
 
 /**
-* Module variables
+* Module global variables
 *
 */
 
 var DIST_PATH = 'awsum.js';
 var _props = undefined;
 var _validCmd = false;
+var _env = undefined;
 
 // Global options
 program
   .version('0.0.2')
-  .description('A program to build and deploy.')
+  .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'Suppress log messages.');
 
-// commands are report -> validate -> install -> build -> compile -> bake -> clean. Arrow shows dependancy.
+// In this version commands are install -> build -> bake -> clean. Arrow shows dependancy.
 
 program
     .command('clean')
-    .description('Clean all build produced files.')
+    .description(' Clean (purge) all make produced files.')
     .action(clean);
 
 program
+    .command('bake [env]')
+    .description(' Bake all source files for environment [env=localhost]. Calls clean first.')
+    .action(bake);
+
+program
     .command('build [env]')
-    .description('Build all installation files for environment [env=localhost].')
+    .description(' Build distribution files for environment [env=localhost]. Calls bake first.')
     .action(build);
 
 program
     .command('install [env]')
-    .description('Run install command for environment [env=localhost].')
+    .description(' Install distribution for environment [env=localhost]. Calls build first.')
     .action(install);
 
 // must be before .parse() since
@@ -48,7 +54,7 @@ program.on('--help', function(){
 	console.log('  Examples:');
 	console.log('');
 	console.log('    $ %s --help', program.name());
-	console.log('    $ %s --silent deploy jitsu', program.name());
+	console.log('    $ %s --silent build jitsu', program.name());
 	console.log('    $ %s install localnet', program.name());
 	console.log('    $ %s clean', program.name());
 	console.log('');
@@ -63,8 +69,8 @@ program.on('--help', function(){
 // console.log(process.argv.length);
 
 program.parse(process.argv);
-console.log(program.args.length);
-console.log(program.args);
+// console.log(program.args.length);
+// console.log(program.args);
 
 // if (program.args.length != 2) { program.help() }; // exit with help message if there are unexpected args.
 // if (process.argv.length <= 2) { program.help() }; // exit with help message if no arguments are presented.
@@ -74,44 +80,61 @@ console.log(program.args);
 if (!_validCmd) { program.help() };
 
 // Command definitions
+// commands are install -> build -> bake -> clean. Arrow shows dependancy.
+
+function initEnv(env){
+	if (!_props) {
+		_validCmd = true;
+		_env = env || 'localhost';
+		var prop_file_name = "./build_props." + _env + ".json";
+		_props = require(prop_file_name);
+		console.log(' Target environment=%s.', _env);	
+	    console.log(' Using package:');
+	    console.log(_pkg);
+	    console.log(' Using properties:');
+	    console.log(_props);
+	}
+}
 
 function clean(){
 	_validCmd = true;
     _shell.rm(DIST_PATH);
     if (! program.silent) {
-        console.log('Cleaned outputfiles files!');
+        console.log(' Cleaned output files!');
     }
 }
-
-function install(env) {
-	_validCmd = true;
-	env = env || 'localhost';
-	var prop_file_name = "./build_props." + env + ".json";
-	_props = require(prop_file_name);
+function bake(env){
+	initEnv(env);
     clean();
-    build(env);
+    if (! program.silent) {
+        console.log(' Baking %s output files!', _env);
+    }
+    // use sed to perform global replace 
 }
 
 function build(env){
+	initEnv(env);
+	bake(_env);
+
     // concat files here or do anything that generates the dist files
-	_validCmd = true;
-	env = env || 'localhost';
-	console.log('Building for env=%s.', env);	
-    console.log('Building package:');
-    console.log(_pkg);
-    console.log('Using properties:');
-    console.log(_props);
-	_shell.cp('make.js', DIST_PATH);
+
+	if (! program.silent) {
+        console.log(' Building %s!', _env);
+    }
+	
+	_shell.cp('make.js', DIST_PATH); // My build
+
 	var err = _shell.error();
+
 	if (!err===null) { console.log(err) }
 
-	//    _fs.linkSync(DIST_PATH, 'Test file', function (err) {
- 	//	 	if (err) { console.log(err); throw err};
-  	//		console.log('It\'s saved!');
-	//});
+}
 
+function install(env) {
+	initEnv(env);
+	build(_env);
     if (! program.silent) {
-        console.log('Built %s!', env);
+        console.log(' Installing %s!', _env);
     }
 }
 

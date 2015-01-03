@@ -1,0 +1,18 @@
+{
+	"#0_comment" : "Build poperties for Nodejitsu (jitsu) deployment and validation.",
+	
+	"name" : "jitsu",
+	"ENV" : "PROD",
+	"version" : "2.0",
+
+	"#1_comment" : "Should server log date? On Nodejitsu dates are logged by the application environment.",
+	"logDate" : "false",
+
+	"#2__comment" : "When using the local network, auth must be disabled because google auth will only accept 127.0.0.1 or a routable address.",
+	"disableAuth" : "false",
+	
+	"#3_comment" : "Deployment details.",
+	"nodeURL" : "http://yodertv.jit.su/",
+	"newDB" : "mongodb://nodejitsu_yodertv:jek2pjencj2qh8bu97duuemb87@ds059887.mongolab.com:59887/nodejitsu_yodertv_nodejitsudb2315353469"
+}
+
