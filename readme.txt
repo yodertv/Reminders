@@ -64,6 +64,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - Client sets DB. Query string for archive delete method to pass in the DB name.
 - (Bug#5-Fixed) Still failing on IE 9. IE dev tools don't help with this security error, but google did. Found the trick was to start the app w/ the /#/ version of the URL.
 - Explored using node as build script. Using commander and shelljs.
+- Created clean, bake, build, install commands framework. See DevNotes for more info.
 
 // Known bugs next Bug#7
 (Bug#6) Invalid date on history page in IE9.

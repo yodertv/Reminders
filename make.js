@@ -20,32 +20,42 @@ var _props = undefined;
 var _validCmd = false;
 var _env = undefined;
 
+/**
+* Setting up new environments:
+* 1) Copy existing build_props.<environment name>.json file and change the <environment name> to the new environment.
+* 2) Add <environment name> to the validEnvs array below.
+* 3) Edit the values as needed,
+* 4) Create new install commmands as required.
+*/
+
+var validEnvs = ['localnet','localhost','jitsu'];
+
 // Global options
 program
-  .version('0.0.2')
+  .version('0.0.3')
   .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
-  .option('--silent', 'Suppress log messages.');
+  .option('--silent', 'suppress log messages');
 
 // In this version commands are install -> build -> bake -> clean. Arrow shows dependancy.
 
 program
     .command('clean')
-    .description(' Clean (purge) all make produced files.')
+    .description(' Clean (purge) all make produced files')
     .action(clean);
 
 program
     .command('bake [env]')
-    .description(' Bake all source files for environment [env=localhost]. Calls clean first.')
+    .description(' Clean then Bake all source files for environment [env=localhost]')
     .action(bake);
 
 program
     .command('build [env]')
-    .description(' Build distribution files for environment [env=localhost]. Calls bake first.')
+    .description(' Bake then Build distribution files for environment [env=localhost]')
     .action(build);
 
 program
     .command('install [env]')
-    .description(' Install distribution for environment [env=localhost]. Calls build first.')
+    .description(' Build then Install distribution to environment [env=localhost]')
     .action(install);
 
 // must be before .parse() since
@@ -60,9 +70,7 @@ program.on('--help', function(){
 	console.log('');
 	console.log('  Valid Environments:');
 	console.log('');
-	console.log('    $ %s [command] localnet', program.name());
-	console.log('    $ %s [command] localhost', program.name());
-	console.log('    $ %s [command] jitsu', program.name());
+	console.log('   ', validEnvs);
 	console.log('');
 });
 
@@ -86,6 +94,10 @@ function initEnv(env){
 	if (!_props) {
 		_validCmd = true;
 		_env = env || 'localhost';
+		if (validEnvs.indexOf(_env) == -1) { // No such environment
+			console.log('\n  No such environment, %s.', _env);
+			program.help();
+		}; 
 		var prop_file_name = "./build_props." + _env + ".json";
 		_props = require(prop_file_name);
 		console.log(' Target environment=%s.', _env);	
