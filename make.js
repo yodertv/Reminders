@@ -100,7 +100,7 @@ if (!_validCmd) { program.help() };
 // commands are install -> build -> bake -> clean. Arrow shows dependancy.
 
 function initEnv(env){
-	if (!_props) {
+	if (!_props) { // Only initialize once.
 		_validCmd = true;
 		_env = env || 'localhost';
 		if (validEnvs.indexOf(_env) == -1) { // No such environment
@@ -111,17 +111,18 @@ function initEnv(env){
 		_props = require(prop_file_name);
 
 		var build_date = new Date();
-		build_manifest = program.name +
-		build_date.toString() + '\n' +
-//							build_date.toTimeString() + '\n' +
+		var build_manifest = '\n ' + program.name() + ' started with "' + process.argv + '"\n' +
+							'\n ' + build_date.toString() + '\n' +  // Includes time.
+							// build_date.toTimeString() + '\n' +
 							'\n Target environment=' + _env + '\n' +	
 	    					'\n Using package:' + '\n' +
 	    					JSON.stringify(_pkg, null, " ") + '\n' +
 	    					'\n Using properties:' + '\n' +
-	    					JSON.stringify(_props, null, " ") + '\n';
+	    					JSON.stringify(_props, null, " ");
 	    if (! program.silent) {
  	       console.log(build_manifest);
     	}
+    	var build_manifest_file = DIST_PATH + '/' + "build_manifest";
 	}
 }
 
@@ -129,7 +130,7 @@ function clean(){
 	_validCmd = true; // No initEnv here because environment is irrelevent to cleaning.
     _shell.rm('-rf', DIST_PATH);
     if (! program.silent) {
-        console.log(' Cleaned output files!');
+        console.log('\n Cleaned output files!');
     }
 }
 function bake(env){
@@ -145,7 +146,7 @@ function bake(env){
 	// if (!err===null) { console.log(err) }
 
     if (! program.silent) {
-        console.log(' Baking %s output files!', _env);
+        console.log('\n Baking %s output files!', _env);
     }
     // use sed to perform global replace
 }
@@ -157,7 +158,7 @@ function build(env){
     // concat and minify files here or do anything that modifies the baked dist files for the target environment.
 
 	if (! program.silent) {
-        console.log(' Building %s!', _env);
+        console.log('\n Building %s!', _env);
     }
 	
 }
@@ -167,7 +168,7 @@ function install(env) {
 	build(_env);
 	// Execute the steps to depoy the distribution to the selected run-time environment.
     if (! program.silent) {
-        console.log(' Installing %s!', _env);
+        console.log('\n Installing %s!', _env);
     }
 }
 
