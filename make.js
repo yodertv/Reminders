@@ -15,7 +15,8 @@ var _pkg = require('./package.json');
 *
 */
 
-var DIST_PATH = 'awsum.js';
+var DIST_PATH = _pkg.build_dir;
+var SRC_PATH = _pkg.src_dir;
 var _props = undefined;
 var _validCmd = false;
 var _env = undefined;
@@ -24,11 +25,19 @@ var _env = undefined;
 * Setting up new environments:
 * 1) Copy existing build_props.<environment name>.json file and change the <environment name> to the new environment.
 * 2) Add <environment name> to the validEnvs array below.
-* 3) Edit the values as needed,
+* 3) Edit the values as needed in the new build file,
 * 4) Create new install commmands as required.
+*
+*  To add new src files - Edit the SRC_FILE array.
 */
 
 var validEnvs = ['localnet','localhost','jitsu'];
+var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'readme.txt', 
+					'todo.css', 'todo.html', 'todo.js', 'todoServer.js'];
+
+var build_manifest = "";
+
+_shell.config.fatal = true;
 
 // Global options
 program
@@ -100,17 +109,25 @@ function initEnv(env){
 		}; 
 		var prop_file_name = "./build_props." + _env + ".json";
 		_props = require(prop_file_name);
-		console.log(' Target environment=%s.', _env);	
-	    console.log(' Using package:');
-	    console.log(_pkg);
-	    console.log(' Using properties:');
-	    console.log(_props);
+
+		var build_date = new Date();
+		build_manifest = program.name +
+		build_date.toString() + '\n' +
+//							build_date.toTimeString() + '\n' +
+							'\n Target environment=' + _env + '\n' +	
+	    					'\n Using package:' + '\n' +
+	    					JSON.stringify(_pkg, null, " ") + '\n' +
+	    					'\n Using properties:' + '\n' +
+	    					JSON.stringify(_props, null, " ") + '\n';
+	    if (! program.silent) {
+ 	       console.log(build_manifest);
+    	}
 	}
 }
 
 function clean(){
-	_validCmd = true;
-    _shell.rm(DIST_PATH);
+	_validCmd = true; // No initEnv here because environment is irrelevent to cleaning.
+    _shell.rm('-rf', DIST_PATH);
     if (! program.silent) {
         console.log(' Cleaned output files!');
     }
@@ -118,33 +135,37 @@ function clean(){
 function bake(env){
 	initEnv(env);
     clean();
+    // Prepare the distribution directory
+    _shell.mkdir(DIST_PATH);
+    _shell.cp(SRC_FILES, DIST_PATH); // My build is to copy the distribution files to the DIST_PATH.
+
+
+	// var err = _shell.error();
+
+	// if (!err===null) { console.log(err) }
+
     if (! program.silent) {
         console.log(' Baking %s output files!', _env);
     }
-    // use sed to perform global replace 
+    // use sed to perform global replace
 }
 
 function build(env){
 	initEnv(env);
 	bake(_env);
 
-    // concat files here or do anything that generates the dist files
+    // concat and minify files here or do anything that modifies the baked dist files for the target environment.
 
 	if (! program.silent) {
         console.log(' Building %s!', _env);
     }
 	
-	_shell.cp('make.js', DIST_PATH); // My build
-
-	var err = _shell.error();
-
-	if (!err===null) { console.log(err) }
-
 }
 
 function install(env) {
 	initEnv(env);
 	build(_env);
+	// Execute the steps to depoy the distribution to the selected run-time environment.
     if (! program.silent) {
         console.log(' Installing %s!', _env);
     }

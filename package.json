@@ -8,12 +8,12 @@
     "node": "0.8.x"
   },
   "dependencies": {
-    "mongojs": "0.4.6",
-    "node-static": "0.6.7"
+    "mongojs": "0.18.0",
+    "node-static": "0.7.6"
   },
   "subdomain": "yodertv",
-  "#1_comment" : "Local build variables.",
-  "build.dir" : "../build",
-  "lib.dir" : "../lib",
-  "src.dir" : "."
+  "#1_comment" : "Environment indepentant build variables.",
+  "build_dir" : "./build",
+  "#2_comment lib_dir" : "../lib",
+  "src_dir" : "."
 }

@@ -7,13 +7,13 @@
 
 'use strict';
 
-var nodeURL = "http://yodertv.jit.su/"; // Production site
+// var nodeURL = "http://yodertv.jit.su/"; // Production site
 // var nodeURL = "http://192.168.1.13/";  // desk-pc @ home.
-// var nodeURL = "http://127.0.0.1/";  // localhost.
+var nodeURL = "http://127.0.0.1/";  // localhost.
 
-// var mongoDB = "test-todo";
+var mongoDB = "test-todo";
 // var mongoDB = "bobstodos";
-var mongoDB = "yodertvtodo"; // Production DB
+// var mongoDB = "yodertvtodo"; // Production DB
 // var mongoDB = "frankstodos";
 
 var resURL = nodeURL + "api/1/databases/" + mongoDB + "/collections/";
