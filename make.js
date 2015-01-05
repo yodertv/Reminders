@@ -18,7 +18,7 @@ var _pkg = require('./package.json');
 
 var DIST_PATH = _pkg.build_dir;
 var SRC_PATH = _pkg.src_dir;
-var build_manifest = undefined;
+var build_manifest = "";
 var _props = undefined;
 var _validCmd = false;
 var _env = undefined;
@@ -37,9 +37,7 @@ var validEnvs = ['localnet','localhost','jitsu'];
 var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'readme.txt', 
 					'todo.css', 'todo.html', 'todo.js', 'todoServer.js'];
 
-var build_manifest = "";
-
-_shell.config.fatal = true;
+//_shell.config.fatal = true;
 
 // Global options
 program
@@ -47,7 +45,7 @@ program
   .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'suppress log messages');
 
-// In this version commands are install -> build -> bake -> clean. Arrow shows dependancy.
+// In this version commands are install -> build -> prep -> clean. Arrow shows dependancy.
 
 program
     .command('clean')
@@ -55,13 +53,13 @@ program
     .action(clean);
 
 program
-    .command('bake [env]')
-    .description(' Clean then Bake all source files for environment [env=localhost]')
-    .action(bake);
+    .command('prep [env]')
+    .description(' Clean then Prep all source files and dependancies for environment [env=localhost]')
+    .action(prep);
 
 program
     .command('build [env]')
-    .description(' Bake then Build distribution files for environment [env=localhost]')
+    .description(' Prep then Build distribution files for environment [env=localhost]')
     .action(build);
 
 program
@@ -99,7 +97,7 @@ program.parse(process.argv);
 if (!_validCmd) { program.help() };
 
 // Command definitions
-// commands are install -> build -> bake -> clean. Arrow shows dependancy.
+// commands are install -> build -> prep -> clean. Arrow shows dependancy.
 
 function initEnv(env){
 	if (!_props) { // Only initialize once.
@@ -141,17 +139,32 @@ function clean(){
     if (! program.silent) {
         console.log('\n Cleaning output files...');
     }
-	_validCmd = true; // No initEnv here because environment is irrelevent to cleaning.
+	_validCmd = true; 				// No initEnv here because environment is irrelevent to cleaning.
     _shell.rm('-rf', DIST_PATH);
 }
 
 
-function bake(env){
+function prep(env){
 	initEnv(env);
     clean();
     if (! program.silent) {
-        console.log('\n Baking %s output files...', _env);
+        console.log('\n Preping %s output files...', _env);
     }
+    
+    // Check executable dependancies
+    if (!_shell.which('npm')) {
+ 		console.log('\n Sorry, this script requires npm.\n');
+ 		program.help();
+ 	} 
+    
+    // Check node-module depenancies
+    var list_results = _shell.exec('npm list', {'silent':'true'});// non-zero exit code
+    if (list_results.code !== 0) {
+		console.log('\n Sorry, there are missing dependancies reported by npm list.\n');
+		console.log(' ', list_results.output);
+		console.log(' Exit code:', list_results.code);
+		program.help();
+	}
 
     // Prepare the distribution directory
     _shell.mkdir(DIST_PATH);
@@ -160,7 +173,7 @@ function bake(env){
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
-    _shell.cp(SRC_FILES, DIST_PATH); // My bake is to copy the distribution files to the DIST_PATH.
+    _shell.cp(SRC_FILES, DIST_PATH); // My Prep is to copy the distribution files to the DIST_PATH.
 
 	// var err = _shell.error();
 
@@ -172,13 +185,13 @@ function bake(env){
 function build(env){
 
 	initEnv(env);
-	bake(_env);
+	prep(_env);
 
 	if (! program.silent) {
         console.log('\n Building %s...', _env);
     }
 	
-    // concat and minify files here or do anything that modifies the baked dist files for the target environment.
+    // concat and minify files here or do anything that modifies the prep'd dist files for the target environment.
 
 }
 

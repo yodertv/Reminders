@@ -71,6 +71,8 @@ Objective: Replace the weekly task list that I keep on paper.
 
 // Future enhancements
 
+- Consider making the build manifest in JSON notation rather than string.
+- Build the node_modules dependancies.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
 - Add unit testing.
 - Use package.json file for my two configuration items, 
