@@ -3,13 +3,15 @@
   "scripts": {
     "start": "todoServer.js"
   },
-  "version": "0.2.1-2",
+  "version": "0.2.1",
   "engines": {
     "node": "0.8.x"
   },
   "dependencies": {
     "mongojs": "0.18.0",
-    "node-static": "0.7.6"
+    "node-static": "0.7.6",
+    "commander" : "2.6.0",
+    "shelljs" : "0.3.0"
   },
   "subdomain": "yodertv",
   "#1_comment" : "Environment indepentant build variables.",
