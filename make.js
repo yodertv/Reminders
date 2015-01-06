@@ -34,8 +34,9 @@ var _env = undefined;
 */
 
 var validEnvs = ['localnet','localhost','jitsu'];
-var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'readme.txt', 
-					'todo.css', 'todo.html', 'todo.js', 'todoServer.js'];
+var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'todo.css', 
+					'todo.html', 'todo.js', 'todoServer.js', 'history.html',
+					'list.html', 'index.html'];
 
 //_shell.config.fatal = true;
 
