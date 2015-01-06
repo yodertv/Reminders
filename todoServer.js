@@ -60,8 +60,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       path: req.url + '/?apiKey=' + DBKey,
       method: req.method,
       //"Content-Type": req.Content-Type
-
-      headers: req.headers,
+      rejectUnauthorized: false,
+      headers: req.headers
     };
     
     var proxy = https.request( options, respHandler);
@@ -105,4 +105,5 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     fileServer.serve(req, response);
   }
 }).listen(parseInt(port, 10));
-console.log("todo Server running at https://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
+console.log("todo Server running at http://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
+
