@@ -36,7 +36,7 @@ var _env = undefined;
 var validEnvs = ['localnet','localhost','jitsu'];
 var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'todo.css', 
 					'todo.html', 'todo.js', 'todoServer.js', 'history.html',
-					'list.html', 'index.html'];
+					'list.html', 'index.html', 'js', 'css', 'img'];
 
 //_shell.config.fatal = true;
 
@@ -174,7 +174,7 @@ function prep(env){
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
-    _shell.cp(SRC_FILES, DIST_PATH); // My Prep is to copy the distribution files to the DIST_PATH.
+    _shell.cp('-R', SRC_FILES, DIST_PATH); // My Prep is to copy the distribution files to the DIST_PATH.
 
 	// var err = _shell.error();
 
