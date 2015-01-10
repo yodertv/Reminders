@@ -2,7 +2,7 @@
 /* Controllers */
 'use strict';
 
-angular.module('todo', ['mongolab']).config(function($routeProvider) {
+angular.module('todo', ['ngRoute', 'mongolab']).config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:TodoCtrl, templateUrl:'todo.html'}).
   	  when('/list/:archiveName', {controller:ListCtrl, templateUrl:'todo.html'}).
@@ -132,17 +132,18 @@ function TodoCtrl($scope, Todo) {
 
 	$scope.addTodo = function() {
 		var obj = {text:$scope.todoText, done:false};
-		$scope.todoText = '';
-		Todo.save({todo:"todo"}, obj,  function(returnObj) {
-			$scope.todos.push(returnObj);
+		$scope.todoText = ''; // clear text field for next todo
+		Todo.save({todo:"todo"}, obj,  function(returnObj, httpHeader) {
+			// console.log(returnObj);		
+			$scope.todos.push({"text" : returnObj.text, "done" : returnObj.done, "_id" : returnObj._id});
     	});
-	};
+	};	
 		
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
 		//	console.log(index)
-		$scope.todos.splice(index,1);
-		Todo.remove({todo: "todo", id: this.todo._id.$oid});
+		$scope.todos.splice(index,1); // remove from memory
+		Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db
 	};
 
 	$scope.update = function() {
