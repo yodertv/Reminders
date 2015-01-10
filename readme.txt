@@ -67,7 +67,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - Created clean, prep, build, install commands framework. See DevNotes for more info.
 - Changed bake to prep and added node_module dependancy check.
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
-- 
+- Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.
 
 // Known bugs next Bug#7
 (Bug#6) Invalid date on history page in IE9.
