@@ -36,12 +36,14 @@ Objective: Replace the weekly task list that I keep on paper.
 - Refactor all DB access into the mongolab module.
 - (Bug#1) Archive has been fixed by merging any newly completed tasks into the archive for the same day if it exists.
 - Tweaked html views with some &nbsp; to make the view a little nicer.
+
 1.5
 - Merge Node v0.4 MongoApp drop collection code into StaticServer and rename as todoServer
 - Change mongolab.js to add a dropArchive function.
 - (Bug#3) When archive creates a new file the forward button still points to the previous archive. Should be updated on the save.
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
+
 2.0
 - Enhanced todoServer.js to proxy mongo's REST api and allow non-CORS compliant browsers to access the data. Still need a place to host todoServer.js on Node. ie 9 can view the data, but it still broken from a style sheet prespective.
 - (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements. Implemented with a nodejs proxy so there is only a single origin as var as the browser is concerned.
@@ -56,18 +58,26 @@ Objective: Replace the weekly task list that I keep on paper.
 - Nodejitsu handles the SSL in their proxy. No need to deploy the above. So it works locally, not in the cloud.
 - Deployed using jitsu deploy. jitsu list, and jitsu logs.
 
-// Work done in this release
+2.1
 - Use node-static to serve up my static files.
 - Load css files before scripts fixed BB bug. Found with Chrome audit feature.
 - (Bug#4-Fixed) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
 - Move DB key back to server and off the client.
 - Client sets DB. Query string for archive delete method to pass in the DB name.
 - (Bug#5-Fixed) Still failing on IE 9. IE dev tools don't help with this security error, but google did. Found the trick was to start the app w/ the /#/ version of the URL.
+
+2.1.1
 - Explored using node as build script. Using commander and shelljs.
 - Created clean, prep, build, install commands framework. See DevNotes for more info.
 - Changed bake to prep and added node_module dependancy check.
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
-- Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.
+- Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.	
+
+// Work done in this release
+- Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
+- Had this error https://docs.angularjs.org/error/$location/nobase
+
+
 
 // Known bugs next Bug#7
 (Bug#6) Invalid date on history page in IE9.

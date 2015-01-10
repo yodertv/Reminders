@@ -8,7 +8,7 @@ angular.module('todo', ['ngRoute', 'mongolab']).config(function($routeProvider) 
   	  when('/list/:archiveName', {controller:ListCtrl, templateUrl:'todo.html'}).
       when('/history/', {controller:HistoryCtrl, templateUrl:'history.html'}).
       otherwise({redirectTo:'/'});
-});
+}).config(function($locationProvider){ $locationProvider.html5Mode(true) });
 
 function buildArchiveList(data, scope, name) { 
 
