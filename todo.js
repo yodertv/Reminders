@@ -2,13 +2,32 @@
 /* Controllers */
 'use strict';
 
-angular.module('todo', ['ngRoute', 'mongolab']).config(function($routeProvider) {
-    $routeProvider.
-      when('/', {controller:TodoCtrl, templateUrl:'todo.html'}).
-  	  when('/list/:archiveName', {controller:ListCtrl, templateUrl:'todo.html'}).
-      when('/history/', {controller:HistoryCtrl, templateUrl:'history.html'}).
-      otherwise({redirectTo:'/'});
-}).config(function($locationProvider){ $locationProvider.html5Mode(true) });
+var todo = angular.module('todo', [
+	'ngRoute', 
+	'mongolab'
+]);	
+
+todo.config(['$routeProvider',
+	function($routeProvider) {
+    	$routeProvider.
+      		when('/', {
+				templateUrl: 'todo.html',
+      			controller: TodoCtrl
+      		}).
+  	  		when('/list/:archiveName', {
+  				templateUrl: 'todo.html',
+  	  			controller: ListCtrl
+  	  		}).
+      		when('/history/', {
+  				templateUrl: 'history.html',
+      			controller: HistoryCtrl
+      		}).
+      		otherwise({
+      			redirectTo: '/'
+      		});
+	}]);
+
+todo.config(function($locationProvider){ $locationProvider.html5Mode(true) });
 
 function buildArchiveList(data, scope, name) { 
 
