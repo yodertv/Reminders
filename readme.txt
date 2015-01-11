@@ -75,8 +75,10 @@ Objective: Replace the weekly task list that I keep on paper.
 
 // Work done in this release
 - Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
-- Had this error https://docs.angularjs.org/error/$location/nobase
-
+- Had this error https://docs.angularjs.org/error/$location/nobase and fixed it.
+- Refactored module comand for better readability following tutorial examples.
+- Removed extraneous ":" from URLs href'ed by history.html and todo.html.
+- Deployed as yodertst.nodejitsu.com with active snapshot: "0.2.1-7 Sunday, January 11, 2015 15:17:32"
 
 
 // Known bugs next Bug#7

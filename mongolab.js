@@ -7,10 +7,11 @@
 
 'use strict';
 
-// var nodeURL = "http://yodertv.jit.su/"; // Production site
+var nodeURL = "http://yodertst.nodejitsu.com/"; // Production site
+
 // var nodeURL = "http://192.168.0.4/";  // kitchen-mac @ home.
 // var nodeURL = "http://kitchen-mac.local/";  // kitchen-mac @ home.
-var nodeURL = "http://127.0.0.1:8080/";  // localhost.
+// var nodeURL = "http://127.0.0.1:8080/";  // localhost.
 
 var mongoDB = "test-todo";
 // var mongoDB = "bobstodos";

@@ -1,5 +1,5 @@
 {
-  "name": "Todos",
+  "name": "TodoTst",
   "scripts": {
     "start": "todoServer.js"
   },
@@ -13,7 +13,7 @@
     "commander" : "2.6.0",
     "shelljs" : "0.3.0"
   },
-  "subdomain": "yodertv",
+  "subdomain": "yodertst",
   "#1_comment" : "Environment indepentant build variables.",
   "build_dir" : "./build",
   "#2_comment lib_dir" : "../lib",
