@@ -73,7 +73,7 @@ Objective: Replace the weekly task list that I keep on paper.
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
 - Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.	
 
-// Work done in this release
+2.1.2
 - Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
 - Had this error https://docs.angularjs.org/error/$location/nobase and fixed it.
 - Refactored module comand for better readability following tutorial examples.
