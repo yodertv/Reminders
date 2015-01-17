@@ -13,6 +13,7 @@
 	
 	"#3_comment" : "Deployment details.",
 	"nodeURL" : "http://yodertv.jit.su/",
+	"mongoDB" : "test-todo",
 	"newDB" : "mongodb://nodejitsu_yodertv:jek2pjencj2qh8bu97duuemb87@ds059887.mongolab.com:59887/nodejitsu_yodertv_nodejitsudb2315353469"
 }
 

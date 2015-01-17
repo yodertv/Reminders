@@ -80,6 +80,9 @@ Objective: Replace the weekly task list that I keep on paper.
 - Removed extraneous ":" from URLs href'ed by history.html and todo.html.
 - Deployed as yodertst.nodejitsu.com with active snapshot: "0.2.1-7 Sunday, January 11, 2015 15:17:32"
 
+// Work in this release
+- Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
+
 
 // Known bugs next Bug#7
 (Bug#6) Invalid date on history page in IE9.

@@ -1,19 +1,22 @@
 // This is a module for cloud persistance in mongolab - https://mongolab.com
 //
-// Mongolab.js v2.1
+// Mongolab.js "@VERSION@"
 //
 // Deployment knowledge goes here URL and DB must be edited based on where it runs 
 // and what DB to use.
 
 'use strict';
 
-var nodeURL = "http://yodertst.nodejitsu.com/"; // Production site
+var nodeURL = "@NODEURL@";
 
+// var nodeURL = "http://yodertst.nodejitsu.com/"; // Production site
 // var nodeURL = "http://192.168.0.4/";  // kitchen-mac @ home.
 // var nodeURL = "http://kitchen-mac.local/";  // kitchen-mac @ home.
 // var nodeURL = "http://127.0.0.1:8080/";  // localhost.
 
-var mongoDB = "test-todo";
+var mongoDB = "@MONGODB@";
+
+// var mongoDB = "test-todo";
 // var mongoDB = "bobstodos";
 // var mongoDB = "yodertvtodo"; // Production DB
 // var mongoDB = "frankstodos";

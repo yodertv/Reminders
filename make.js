@@ -33,16 +33,28 @@ var _env = undefined;
 *  To add new src files - Edit the SRC_FILE array.
 */
 
+// Names of valid environments with definition property files defined
 var validEnvs = ['localnet','localhost','jitsu'];
+
+// Files and directoroes to copy to distribution
 var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'todo.css', 
 					'todo.html', 'todo.js', 'todoServer.js', 'history.html',
 					'list.html', 'index.html', 'js', 'css', 'img'];
+
+// Files into which to bake the @VERSION@
+var VER_FILES = ['index.html','package.json'];
+
+// Files into which to bake the @NODEURL@
+var URL_FILES = ['mongolab.js'];
+
+// Files into which to bake the @MONGODB@
+var DB_FILES = ['mongolab.js'];
 
 //_shell.config.fatal = true;
 
 // Global options
 program
-  .version('0.0.3')
+  .version('0.0.4')
   .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'suppress log messages');
 
@@ -176,11 +188,24 @@ function prep(env){
 
     _shell.cp('-R', SRC_FILES, DIST_PATH); // My Prep is to copy the distribution files to the DIST_PATH.
 
-	// var err = _shell.error();
+	var err = _shell.error();
 
-	// if (!err===null) { console.log(err) }
+	if (!err===null) { console.log(err) }
 
-    // use sed to perform global replace
+    // Use sed to perform global replace in the build directory
+
+	for (var i 	= VER_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', '@VERSION@', _props.version, DIST_PATH+'/'+VER_FILES[i]);	
+	};
+
+	for (var i 	= URL_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', '@NODEURL@', _props.nodeURL, DIST_PATH+'/'+URL_FILES[i]);	
+	};
+
+	for (var i 	= DB_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DIST_PATH+'/'+DB_FILES[i]);	
+	};
+
 }
 
 function build(env){
