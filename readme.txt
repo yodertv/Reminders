@@ -82,13 +82,17 @@ Objective: Replace the weekly task list that I keep on paper.
 
 // Work in this release
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
+- Newest bootstrap version 3.3.1. Didn't work. Went back.
+- Further testing found two bugs (8 and 9)
 
-
-// Known bugs next Bug#7
+// Known bugs next Bug#9
+(Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
+(Bug#7) With new angular and locationProvider fails to reload history page.
 (Bug#6) Invalid date on history page in IE9.
 
 // Future enhancements
 
+- Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
 - Build the node_modules dependancies.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.

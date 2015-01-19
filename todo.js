@@ -18,7 +18,7 @@ todo.config(['$routeProvider',
   				templateUrl: 'todo.html',
   	  			controller: ListCtrl
   	  		}).
-      		when('/history/', {
+      		when('/history', {
   				templateUrl: 'history.html',
       			controller: HistoryCtrl
       		}).
