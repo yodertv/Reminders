@@ -27,19 +27,28 @@
   <body>
     <div ng-view></div>
     
-    <!-- CDN locations. Use CDN for production on the internet-->
+    <!-- CDN locations. Use angular CDN for production on the internet
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular-resource.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular-route.min.js"></script>
-
+    -->
     <!-- local copy of v1.3.9
    
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angularjs/angular-route.min.js"></script>-->
+    <script src="bower_components/angularjs/angular-resource.min.js"></script>
+    <script src="bower_components/angularjs/angular-route.min.js"></script>
+    -->
 
-<!-- Local
+    <!-- Local Angular 
     <script src="js/angular.js"></script>
-    <script src="js/angular-resource.js"></script>-->
+    <script src="js/angular-resource.js"></script>
+    -->
+
+    <!-- Bakeable Angular -->
+
+    <script src="@ANGULARROOT@angular.min.js"></script>
+    <script src="@ANGULARROOT@angular-resource.min.js"></script>
+    <script src="@ANGULARROOT@angular-route.min.js"></script>
     
     <!-- My Code -->
     <script src="todo.js"></script>

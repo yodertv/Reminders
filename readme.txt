@@ -84,10 +84,12 @@ Objective: Replace the weekly task list that I keep on paper.
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
 - Newest bootstrap version 3.3.1. Didn't work. Went back.
 - Further testing found two bugs (8 and 9)
+- Got getCollectionMames() and collection.drop() working on local host. Curious about the number of collections opening. That must be the mongojs library. I added close() to the method I tested.
+- Objective to leave ngResource unchanged (i.e. reproduce the REST API)
 
 // Known bugs next Bug#9
 (Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
-(Bug#7) With new angular and locationProvider fails to reload history page.
+(Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirect to history.html.
 (Bug#6) Invalid date on history page in IE9.
 
 // Future enhancements

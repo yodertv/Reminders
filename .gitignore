@@ -6,3 +6,4 @@ lib
 log
 # SSL keys
 *.pem
+bower_components

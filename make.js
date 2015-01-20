@@ -50,6 +50,9 @@ var URL_FILES = ['mongolab.js'];
 // Files into which to bake the @MONGODB@
 var DB_FILES = ['mongolab.js'];
 
+// Files into which to bake the @MONGODB@
+var ANG_FILES = ["index.html"];
+
 //_shell.config.fatal = true;
 
 // Global options
@@ -206,6 +209,9 @@ function prep(env){
 		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DIST_PATH+'/'+DB_FILES[i]);	
 	};
 
+	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, DIST_PATH+'/'+ANG_FILES[i]);	
+	};
 }
 
 function build(env){
