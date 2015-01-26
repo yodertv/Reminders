@@ -12,6 +12,11 @@ var http = require("http"),
     nStatic = require('node-static'),
     mongojs = require("mongojs");
 
+    // dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
+    // E.g. "username:password@example.com/mydb"
+
+// This list should be baked by build depending on the environment.
+
 var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
               'test-todo' : 'localhost:27017/test-todo',
               'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
@@ -25,60 +30,13 @@ var port = process.argv[2] || 80,
     DBKey = "50a2a0e3e4b0cd0bfc12435d";
  
 http.createServer(/* httpsOptions, */ function(req, response) {
-  var reqUrl = url.parse(req.url, true), // true parses the query string.
-      uri = reqUrl.pathname,
-      fileServer = new nStatic.Server();
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var fileServer = new nStatic.Server();
   
-  /* Used by proxy rest API version 
-  function respHandler(res) {
-    if (res.statusCode == 302) { // redirected by who?
-      var u = url.parse(res.headers.location);
-      console.log('STATUS: ' + res.statusCode);
-      console.log('HEADERS: ' + JSON.stringify(res.headers));
-      console.log(u);
-    }
-    proxy.on('error', function(e) {
-        console.log("Error:", e);
-    });
-    res.on('data', function(chunk) {
-      // sys.log(chunk);
-      response.write(chunk, 'binary');
-    });
-    res.on('end', function() {
-      // sys.log("End");
-      response.end();
-    });
-    response.writeHead(res.statusCode, res.headers);
-  }
-  */
-
   console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
   
   // console.log(reqUrl);
-
-  /* This is proxy version ("/api/1/databases")
-  if (uri.indexOf(restUrl) >= 0) { // Proxy API calls to Mongolab's REST API
-    var options = {
-      hostname: restHost,
-      port: reqUrl.port || restPort,
-      path: req.url + '/?apiKey=' + DBKey,
-      method: req.method,
-      //"Content-Type": req.Content-Type
-      rejectUnauthorized: false,
-      headers: req.headers
-    };
-    
-    var proxy = https.request( options, respHandler);
-
-    req.on('data', function(chunk) {
-      proxy.write(chunk, 'binary');
-    });
-    req.on('end', function() {
-      // sys.log('Proxy end')
-      proxy.end();
-    });
-  } 
-  */
 
   /*
   { 'get':    {method:'GET'},
@@ -92,81 +50,159 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     response.writeHead(302, { 'location' : '/index.html' });
     response.end();
   }
-  if (uri.indexOf(restUrl) >= 0) { // /api/1/databases
+  else if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
+
+    var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+    var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+    var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
+    var objID = "";
+
+
+    if (match>0) {
+      objID = dbPart.slice(match);
+      dbPart = dbPart.slice(0, match-1); // Remove /objID 
+      console.log("match =", match, "\n objID =", objID);
+    }
+
+    var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+    var dbUrl = dblist[dbName];
+    var db = mongojs(dbUrl, [collectionName]);
+
+    req.on('end', function() {
+      // Is this supposed to be the catch-all?
+      // empty 200 OK response for now
+      console.log("In req.on(\'end\')");
+      response.writeHead(200, "OK via on end", {'Content-Type': 'text/html'});
+      response.end();
+    });
+
+    console.log("uri =", uri,
+      "\ndbPart =", dbPart, 
+      "\ndbName =", dbName,
+      "\ncollectionName =", collectionName,
+      "\nobjID = ", objID,
+      "\ndbUrl =", dbUrl
+    );
+
     if (req.method == 'GET') { // Query DB with mongolab style REST API
-
-      //var dbUrl = dblist[reqUrl.query['mongoDB']];
-      var dbUrl = dblist["test-todo"]
-      var name = "test-todo";
-      console.log("dbUrl=", dbUrl, "name=", name);
-
-      if(uri.search("collections/$")) {
+      if(collectionName == '') {
+        // No collection name in URI
         // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
         // Get archiveList 
 
-        var db = mongojs(dbUrl, [name]);
-        db.getCollectionNames( function( err, myDocs ){
+        console.log('GET COLLECTION NAMES: ', uri);
+
+
+        db.getCollectionNames( function( err, myColls ){
           if (err != null) {
             console.log("DB_GETCOLLECTIONNAMES_ERR:", err);
           }
           else {
             // console.log("myDocs:\n" +  JSON.stringify(myDocs));
             response.writeHead(200, "OK", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(myDocs))
+            response.write(JSON.stringify(myColls))
             response.end();
           }
           db.close();
         })
       }
-      else if (uri.search("collections/todo*$")) {
-        console.log('GET : ', uri);
-        response.writeHead(200, "OK for todo", {'Content-Type': 'text/html'});
-        response.end();
-        // Get documents from a specific collection 
+      else if (uri.search("/collections/todo*$")) {
+        // Get all documents from a specified collection
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
-        // Where todo is the collection name.
+        // Where todo* is the collection name.
+
+        console.log('GET DOCUMENTS FROM COLLECTION: ', uri);
+        
+        db[collectionName].find( function( err, myDocs ){
+          if (err != null) {
+            console.log("DB_FIND_ERR:", err);
+          }
+          else {
+            console.log("myDocs:\n" +  JSON.stringify(myDocs));
+            response.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(myDocs));
+            response.end();
+          }
+          db.close();
+        })
+
+//        response.writeHead(200, "OK for todo", {'Content-Type': 'text/html'});
+  //      response.end();
+      }
+      else if (objID) {
+      
+        // Get a single document by specific id
+        // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+        // Where todo* is the collection name.
+        // find a document using a native ObjectId
+      
+        db.mycollection.findOne({
+          _id:mongojs.ObjectId(objID)
+        }, function(err, doc) {
+          if (err != null) {
+            console.log("DB_FINDONE_ERR:", err);
+          }
+          else { 
+            // doc._id.toString() === '523209c4561c640000000001'
+            console.log("doc:\n" +  JSON.stringify(doc));
+            response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
       }
     }
 
-    else if (req.method == 'POST') {
-        console.log('POST : ', uri);
+    else if (req.method == 'PUT') {
+      console.log('PUT DATE : ', req.body);
       // Save/replace todos here
-    }
-    else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
+      /* if (objID) {
       
-      // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+        // Put a single document by specific id
+        // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+        // Where todo* is the collection name.
+        // find a document using a native ObjectId
+      
+        db.mycollection.update({
+          _id:mongojs.ObjectId(objID)
+        }, function(err, doc) {
+          if (err != null) {
+            console.log("DB_FINDONE_ERR:", err);
+          }
+          else { 
+            // doc._id.toString() === '523209c4561c640000000001'
+            console.log("doc:\n" +  JSON.stringify(doc));
+            response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
+      }*/ 
 
-      // dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
-      // E.g. "username:password@example.com/mydb"
-      
-      //var dbUrl = dblist['bobstodos'];
-      
-      var dbUrl = dblist[reqUrl.query['mongoDB']];
-      var name = uri.substr(1, uri.length-2); // Get collection name from URI
-      console.log("dbUrl=", dbUrl, "name=", name);
-
-      var db = mongojs(dbUrl, [name]);
-      
-      // var toDelete = db.collection(name);
-     
-      //toDelete.drop(); 
-      db[name].drop( function(err) {
-        if (err != null) {
-          console.log("DB_DROP_ERR:", err);
-          // Should write an error response here
-        }
-        else { // Send a success response.
-          response.writeHead(200, "OK", {'Content-Type': 'text/html'});
-          response.end();        
-        }
-      });
     }
-    req.on('end', function() {
-      // Is this supposed to be the catch-all?
-      // empty 200 OK response for now
-      console.log("In req.on(\'end\')");
-      response.writeHead(200, "OK", {'Content-Type': 'text/html'});
-      response.end();
+  }
+  else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
+    
+    // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+      
+    var dbUrl = dblist[reqUrl.query['mongoDB']];
+    var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
+    console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
+
+    var db = mongojs(dbUrl, [collectionName]);
+    
+    // var toDelete = db.collection(name);
+   
+    //toDelete.drop(); 
+    db[collectionName].drop( function(err) {
+      if (err != null) {
+        console.log("DB_DROP_ERR:", err);
+        // Should write an error response here
+      }
+      else { // Send a success response.
+        response.writeHead(200, "OK", {'Content-Type': 'text/html'});
+        response.end();        
+      }
     });
   }
   else {  // default static file server for html and script files.
