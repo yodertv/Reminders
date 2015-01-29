@@ -121,7 +121,8 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
 		$scope.todos.splice(index,1);
-		Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
+		// Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
+		Todo.remove({todo: $scope.archiveName, id: this.todo._id});
 	};
 
 	$scope.remaining = function() {
@@ -170,7 +171,8 @@ function TodoCtrl($scope, Todo) {
 		var index = $scope.todos.indexOf(this.todo);
 		//	console.log(index)
 		$scope.todos.splice(index,1); // remove from memory
-		Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db
+		// Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db line had to be changed.
+		Todo.remove({todo: "todo", id: this.todo._id}); // remove from db
 	};
 
 	$scope.update = function() {
@@ -214,8 +216,9 @@ function TodoCtrl($scope, Todo) {
 			angular.forEach(oldTodos, function(todo) {
 	      		if (todo.done) {
 	      			// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-					Todo.update({todo: archiveName, id: todo._id.$oid}, angular.extend({}, todo, {_id:undefined}));
-	      		}
+					// Todo.update({todo: archiveName, id: todo._id.$oid}, angular.extend({}, todo, {_id:undefined}));
+	      			Todo.update({todo: archiveName, id: todo._id}, angular.extend({}, todo, {_id:undefined}));
+      			}
 	      	})
       	}
 		else {  // Create a new archive.

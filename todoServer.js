@@ -45,28 +45,31 @@ http.createServer(/* httpsOptions, */ function(req, response) {
   'remove': {method:'DELETE'},
   'delete': {method:'DELETE'} };
   */
-
+/*
   if (uri == '/history') { // Handle the reloading of the history route. Still doesn't solve the reloading.
     response.writeHead(302, { 'location' : '/index.html' });
     response.end();
   }
-  else if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
+  else 
+*/
+  
+  if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
 
     var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
     var dbName = dbPart.slice(0,dbPart.indexOf('/'));
     var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
     var objID = "";
 
-
     if (match>0) {
       objID = dbPart.slice(match);
       dbPart = dbPart.slice(0, match-1); // Remove /objID 
-      console.log("match =", match, "\n objID =", objID);
+      // console.log("match =", match, "\n objID =", objID);
     }
 
     var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
     var dbUrl = dblist[dbName];
     var db = mongojs(dbUrl, [collectionName]);
+    
     /*
     req.on('end', function() {
       // Is this supposed to be the catch-all?
@@ -76,6 +79,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       response.end();
     });
     */
+    
     console.log("\nuri =", uri,
       "\ndbPart =", dbPart, 
       "\ndbName =", dbName,
@@ -84,21 +88,119 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       "\ndbUrl =", dbUrl
     );
 
-    if (req.method == 'GET') { // Query DB with mongolab style REST API
-      if(collectionName == '') {
+    if (objID) {  // Basic object REST. GET, PUT, DELETE
+
+      switch (req.method) {
+
+        case 'GET':
+          // Get a single document by specific id
+          // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+          // Where todo* is the collection name.
+          // find a document using a native ObjectId
+        
+          db[collectionName].findOne({
+            _id:mongojs.ObjectId(objID)
+          }, function(err, doc) {
+            if (err != null) {
+              var errString = err.toString();
+              console.log("DB_FINDONE_ERR:", errString);
+              response.writeHead(500, "DB_FINDONE_ERR", {'Content-Type': 'text/html'});
+              response.end(errString);
+              return;
+            }
+            else { 
+              console.log("doc:\n" +  JSON.stringify(doc));
+              response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
+              response.write(JSON.stringify(doc));
+              response.end();
+            }
+          });          
+        break;
+        
+        case 'PUT':      
+          console.log('PUT : ', uri);
+          // Save/replace todos here
+          var fullBody = '';
+          req.on('data', function(chunk) {
+
+            fullBody += chunk.toString();
+            // console.log("Received body data : ");
+            // console.log(chunk.toString());
+          });
+          req.on('end', function() {
+            console.log("Received : ", fullBody);
+            // Replace the document specified by id
+            // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+            // Where todo* is the collection name.
+          
+            db[collectionName].update({
+              _id:mongojs.ObjectId(objID)
+            }, JSON.parse(fullBody), function(err, doc) {
+              if (err != null) {
+                var errString = err.toString();
+                console.log("DB_UPDATE_ERR:", errString);
+                response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
+                response.end(errString);
+              }
+              else { 
+                // doc._id.toString() === '523209c4561c640000000001'
+                console.log("doc:\n" +  JSON.stringify(doc));
+                response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
+                response.write(JSON.stringify(doc));
+                response.end();
+              }
+            });
+          });   
+        break;
+
+        case 'POST':
+          // From 127.0.0.1: POST /api/1/databases/test-todo/collections/todo
+        break;
+          
+        case 'DELETE':              
+          // Delete object
+          db[collectionName].remove({
+            _id:mongojs.ObjectId(objID)
+          }, true, function(err, doc) {
+            if (err != null) {
+              var errString = err.toString();
+              console.log("DB_DELETE_ERR:", errString);
+              response.writeHead(500, "DB_DELET_ERR", {'Content-Type': 'text/html'});
+              response.end(errString);
+            }
+            else { 
+              // doc._id.toString() === '523209c4561c640000000001'
+              console.log("Deleted : " +  objID);
+              response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
+              response.write(JSON.stringify(doc));
+              response.end();
+              db.close();
+            }
+          });
+        break;
+        
+        default:
+          console.log("OBJ_ERR:", err);
+          response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
+          response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
+      }          
+    } // End if (ObjID)
+    else if (req.method == 'GET') {
+      if(collectionName == '') { // Get the collection names
         // No collection name in URI
         // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
         // Get archiveList 
 
         console.log('GET COLLECTION NAMES: ', uri);
 
-
         db.getCollectionNames( function( err, myColls ){
           if (err != null) {
-            console.log("DB_GETCOLLECTIONNAMES_ERR:", err);
+              var errString = err.toString();
+              console.log("DB_GETCOLLECTIONNAMES_ERR:", errString);
+              response.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
+              response.end(errString);
           }
           else {
-            // console.log("myDocs:\n" +  JSON.stringify(myDocs));
             response.writeHead(200, "OK", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(myColls))
             response.end();
@@ -106,7 +208,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
           db.close();
         })
       }
-      else if (uri.search("/collections/todo*$")) {
+      else {
         // Get all documents from a specified collection
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
         // Where todo* is the collection name.
@@ -125,80 +227,10 @@ http.createServer(/* httpsOptions, */ function(req, response) {
           }
           db.close();
         })
-
-//        response.writeHead(200, "OK for todo", {'Content-Type': 'text/html'});
-  //      response.end();
       }
-      else if (objID) {
-      
-        // Get a single document by specific id
-        // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
-        // Where todo* is the collection name.
-        // find a document using a native ObjectId
-      
-        db[collectionName].findOne({
-          _id:mongojs.ObjectId(objID)
-        }, function(err, doc) {
-          if (err != null) {
-            console.log("DB_FINDONE_ERR:", err);
-          }
-          else { 
-            // doc._id.toString() === '523209c4561c640000000001'
-            console.log("doc:\n" +  JSON.stringify(doc));
-            response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(doc));
-            response.end();
-          }
-        });
-      }
-    }
-
-    else if (req.method == 'PUT') {
-      
-      console.log('PUT : ', uri);
-      // Save/replace todos here
-      var fullBody = '';
-      //var doc2Update = undefined;
-
-      req.on('data', function(chunk) {
-
-        fullBody += chunk.toString();
-
-        // console.log("Received body data : ");
-        // console.log(chunk.toString());
-      });
-      
-      req.on('end', function() {
-        console.log("Received : ", fullBody);
-
-        if (objID) {
-        
-          // Replace the document specified by id
-          // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
-          // Where todo* is the collection name.
-        
-          db[collectionName].update({
-            _id:mongojs.ObjectId(objID)
-          }, JSON.parse(fullBody), function(err, doc) {
-            if (err != null) {
-              console.log("DB_UPDATE_ERR:", err);
-              response.writeHead(405, "Method not supported without object ID.", {'Content-Type': 'text/html'});
-              response.end('<html><head><title>405 - Method not supported without Object ID.</title></head><body><h1>Method not supported without object ID.</h1></body></html>');
-            }
-            else { 
-              // doc._id.toString() === '523209c4561c640000000001'
-              console.log("doc:\n" +  JSON.stringify(doc));
-              response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
-              response.write(JSON.stringify(doc));
-              response.end();
-            }
-          });
-        } else { 
-          console.log("[405] " + req.method + " to " + req.url);
-          response.writeHead(405, "Method not supported without object ID.", {'Content-Type': 'text/html'});
-          response.end('<html><head><title>405 - Method not supported without Object ID.</title></head><body><h1>Method not supported.</h1></body></html>');
-        }
-      }); 
+    } // End 'GET'
+    else if (req.method == 'POST') {
+      console.log('POST :', uri);
     }
   }
   else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
@@ -226,7 +258,9 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     });
   }
   else {  // default static file server for html and script files.
+    // console.log('fileServer :', uri);
     fileServer.serve(req, response);
   }
 }).listen(parseInt(port, 10));
 console.log("todo Server running at http://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
+
