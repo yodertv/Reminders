@@ -117,8 +117,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
           });          
         break;
         
-        case 'PUT':      
-          console.log('PUT : ', uri);
+        case 'PUT':
+          console.log('UPDATE DOC: ', uri);
           // Save/replace todos here
           var fullBody = '';
           req.on('data', function(chunk) {
@@ -154,7 +154,35 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         break;
 
         case 'POST':
+          console.log('POST DOC: ', uri);
           // From 127.0.0.1: POST /api/1/databases/test-todo/collections/todo
+          // URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todo
+          // Insert new todo here
+          var fullBody = '';
+          req.on('data', function(chunk) {  // Read uploaded data
+
+            fullBody += chunk.toString();
+            // console.log("Received body data : ");
+            // console.log(chunk.toString());
+          });
+          req.on('end', function() {
+            console.log("Received : ", fullBody);
+          
+            db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+              if (err != null) {
+                var errString = err.toString();
+                console.log("DB_INSERT_ERR:", errString);
+                response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+                response.end(errString);
+              }
+              else { 
+                console.log("docs:\n" +  JSON.stringify(doc));
+                response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+                response.write(JSON.stringify(doc));
+                response.end();
+              }
+            });   
+          });
         break;
           
         case 'DELETE':              
@@ -209,11 +237,11 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         })
       }
       else {
+        console.log('GET DOCS:', uri);
+
         // Get all documents from a specified collection
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
         // Where todo* is the collection name.
-
-        console.log('GET DOCUMENTS FROM COLLECTION: ', uri);
         
         db[collectionName].find( function( err, myDocs ){
           if (err != null) {
@@ -226,13 +254,79 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.end();
           }
           db.close();
-        })
+        });
       }
     } // End 'GET'
     else if (req.method == 'POST') {
-      console.log('POST :', uri);
+      console.log('POST NEW DOC:', uri);
+
+      // Insert and new doc into collection.
+
+      var fullBody = '';
+      req.on('data', function(chunk) {
+
+        fullBody += chunk.toString();
+        // console.log("Received body data : ");
+        // console.log(chunk.toString());
+      });
+      req.on('end', function() {
+        console.log("Received : ", fullBody);
+        // Replace the document specified by id
+        // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
+        // Where todo* is the collection name.
+      
+        db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+          if (err != null) {
+            var errString = err.toString();
+            console.log("DB_INSERT_ERR:", errString);
+            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+            response.end(errString);
+          }
+          else { 
+            console.log("docs:\n" +  JSON.stringify(doc));
+            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
+      });   
     }
-  }
+    else if (req.method == 'PUT') {
+      console.log('PUT NEW COLLECTION:', uri);
+
+      // Insert and entire array into collection.
+      // Makes a new collection if it doesn't exist.
+
+      var fullBody = '';
+      req.on('data', function(chunk) {
+
+        fullBody += chunk.toString();
+        // console.log("Received body data : ");
+        // console.log(chunk.toString());
+      });
+      req.on('end', function() {
+        console.log("Received : ", fullBody);
+        // Replace the document specified by id
+        // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
+        // Where todo* is the collection name.
+      
+        db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+          if (err != null) {
+            var errString = err.toString();
+            console.log("DB_INSERT_ERR:", errString);
+            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+            response.end(errString);
+          }
+          else { 
+            console.log("docs:\n" +  JSON.stringify(doc));
+            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
+      });
+    }       
+  } 
   else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
     
     // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
