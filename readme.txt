@@ -69,6 +69,7 @@ Objective: Replace the weekly task list that I keep on paper.
 2.1.1
 - Explored using node as build script. Using commander and shelljs.
 - Created clean, prep, build, install commands framework. See DevNotes for more info.
+- Use package.json file for my two configuration items, src_dir, build_dir and lib_dir
 - Changed bake to prep and added node_module dependancy check.
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
 - Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.	
@@ -84,11 +85,35 @@ Objective: Replace the weekly task list that I keep on paper.
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
 - Newest bootstrap version 3.3.1. Didn't work. Went back.
 - Further testing found two bugs (8 and 9)
+- Work off-line better with local mongodb.
 - Got getCollectionMames() and collection.drop() working on local host. Curious about the number of collections opening. That must be the mongojs library. I added close() to the method I tested.
 - Objective to leave ngResource unchanged (i.e. reproduce the REST API)
+- Fixed (Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
+- Fixed (Bug13) Inserting an array to a collection doesn't have the expected behavior of replacing the collection. Instead they are added back in. I depend on this in the archive to remove the completed items for the current list. Fixed by dropping the collection first.
+- Fixed(Bug#11) Server shows:
+	uri = /api/1/databases/test-todo/collections/todo/5179feafe4b0494c6ed82de2 
+	dbPart = test-todo/collections/todo 
+	dbName = test-todo 
+	collectionName = todo 
+	objID =  5179feafe4b0494c6ed82de2 
+	dbUrl = localhost:27017/test-todo
+	UPDATE DOC:  /api/1/databases/test-todo/collections/todo/5179feafe4b0494c6ed82de2
+	Received :  {"text":"iii","done":true}
+	doc:
+	{"ok":true,"n":0,"updatedExisting":true}
+	But doc in db is not changed:
+	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }
+Not Related to (Bug#10). Fixed by setting upsert option.
+-Fixed (Bug#15) The inserted data from the client doesn't preserve the mongo ObjectID. Corrected with a reObjectify function that cleans up the data during the JSON.parse().
+- FIxed (Bug#10) two _id forms in db:
+	{ "_id" : ObjectId("519992d7e4b0601363034fef"), "text" : "fasd", "done" : true }
+	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }
+	fixed by reObjectify() function as in (Bug#15).
+- Interesting behavoir with the new route, reloading doesn't get "routed".
 
-// Known bugs next Bug#9
-(Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
+// Known bugs next Bug#16
+(Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
+(Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
 (Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirect to history.html.
 (Bug#6) Invalid date on history page in IE9.
 
@@ -98,14 +123,15 @@ Objective: Replace the weekly task list that I keep on paper.
 - Consider making the build manifest in JSON notation rather than string.
 - Build the node_modules dependancies.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
-- Add unit testing.
-- Use package.json file for my two configuration items, 
+- Add unit testing. 
 - Support Nook and other CORS defective browsers.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.
 - Minimize trips to server. Keep data cached between pages.
-- Work off-line better.
 - Support authentication.
 - Support multiple users.
 - Support addvertisments.
+- Dynamically provision new users.
+
+

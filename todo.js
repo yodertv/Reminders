@@ -176,7 +176,7 @@ function TodoCtrl($scope, Todo) {
 	};
 
 	$scope.update = function() {
-		console.log("Update", this.todo);
+		// console.log("Update :", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
 		Todo.update({todo: "todo", 	id: this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
 	};
@@ -240,7 +240,7 @@ function TodoCtrl($scope, Todo) {
       		if (!todo.done) $scope.todos.push(todo);
     	});
 
-    	// Here's where I'll add back in the default times.
+    	// Here's where I'll add back in the default items.
 		
 		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
   	} 

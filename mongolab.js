@@ -59,7 +59,7 @@ myMod.factory('Todo', function($resource, $http) {
 
     Todo.saveTodos = function(todos, name) {
       if(name == null) { name = 'todo'; };      
-      // console.log(todos);
+      // console.log("saveTodo :\n", todos);
       $http.put(resURL + name, JSON.stringify(todos, excludeHash)).error(function(data){
           console.log("Save error:", data);
       });

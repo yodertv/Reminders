@@ -19,6 +19,7 @@ var http = require("http"),
 
 var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
               'test-todo' : 'localhost:27017/test-todo',
+              'todo_new_test' : 'localhost:27017/todo_new_test',
               'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
               'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
               'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'}
@@ -28,7 +29,15 @@ var port = process.argv[2] || 80,
     restHost = "api.mongolab.com",
     restPort = 443,
     DBKey = "50a2a0e3e4b0cd0bfc12435d";
- 
+
+var reObjectify = function (key, value) {
+
+  if ( key == "_id") {
+    return mongojs.ObjectId(value);
+  }
+  return value;
+}
+
 http.createServer(/* httpsOptions, */ function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -68,7 +77,22 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
     var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
     var dbUrl = dblist[dbName];
+
+    console.log("\nuri =", uri,
+      "\ndbPart =", dbPart, 
+      "\ndbName =", dbName,
+      "\ncollectionName =", collectionName,
+      "\nobjID = ", objID,
+      "\ndbUrl =", dbUrl
+    );
+
+
     var db = mongojs(dbUrl, [collectionName]);
+
+    db.on('error',function(err) {
+      console.log('database error', err);
+    });
+
     
     /*
     req.on('end', function() {
@@ -80,19 +104,12 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     });
     */
     
-    console.log("\nuri =", uri,
-      "\ndbPart =", dbPart, 
-      "\ndbName =", dbName,
-      "\ncollectionName =", collectionName,
-      "\nobjID = ", objID,
-      "\ndbUrl =", dbUrl
-    );
-
+    
     if (objID) {  // Basic object REST. GET, PUT, DELETE
 
       switch (req.method) {
 
-        case 'GET':
+        case 'GET':  // don't believe we use this path
           // Get a single document by specific id
           // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
           // Where todo* is the collection name.
@@ -109,7 +126,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               return;
             }
             else { 
-              console.log("doc:\n" +  JSON.stringify(doc));
+              console.log("GET doc:\n" +  JSON.stringify(doc));
               response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
               response.write(JSON.stringify(doc));
               response.end();
@@ -128,14 +145,14 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // console.log(chunk.toString());
           });
           req.on('end', function() {
-            console.log("Received : ", fullBody);
+            console.log("PUT Received : ", fullBody);
             // Replace the document specified by id
             // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
             // Where todo* is the collection name.
           
             db[collectionName].update({
               _id:mongojs.ObjectId(objID)
-            }, JSON.parse(fullBody), function(err, doc) {
+            }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
               if (err != null) {
                 var errString = err.toString();
                 console.log("DB_UPDATE_ERR:", errString);
@@ -144,7 +161,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               }
               else { 
                 // doc._id.toString() === '523209c4561c640000000001'
-                console.log("doc:\n" +  JSON.stringify(doc));
+                console.log("Updated doc:\n" +  JSON.stringify(doc));
                 response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
                 response.write(JSON.stringify(doc));
                 response.end();
@@ -152,8 +169,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             });
           });   
         break;
-
-        case 'POST':
+/*
+        case 'POST': // I don't think this ever happens.
           console.log('POST DOC: ', uri);
           // From 127.0.0.1: POST /api/1/databases/test-todo/collections/todo
           // URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todo
@@ -166,7 +183,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // console.log(chunk.toString());
           });
           req.on('end', function() {
-            console.log("Received : ", fullBody);
+            console.log("POST Received : ", fullBody);
           
             db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
               if (err != null) {
@@ -176,7 +193,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
                 response.end(errString);
               }
               else { 
-                console.log("docs:\n" +  JSON.stringify(doc));
+                console.log("Inserted doc:\n" +  JSON.stringify(doc));
                 response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
                 response.write(JSON.stringify(doc));
                 response.end();
@@ -184,7 +201,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             });   
           });
         break;
-          
+*/          
         case 'DELETE':              
           // Delete object
           db[collectionName].remove({
@@ -229,6 +246,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               response.end(errString);
           }
           else {
+            console.log("GET COLLECTIONS:\n", myColls);
             response.writeHead(200, "OK", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(myColls))
             response.end();
@@ -248,16 +266,17 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             console.log("DB_FIND_ERR:", err);
           }
           else {
-            console.log("myDocs:\n" +  JSON.stringify(myDocs));
+            console.log("GET DOCS:\n", myDocs);
             response.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(myDocs));
+            // response.write(myDocs);
             response.end();
           }
           db.close();
         });
       }
     } // End 'GET'
-    else if (req.method == 'POST') {
+    else if (req.method == 'POST') {     // Insert a new doc into collectionName
       console.log('POST NEW DOC:', uri);
 
       // Insert and new doc into collection.
@@ -270,7 +289,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // console.log(chunk.toString());
       });
       req.on('end', function() {
-        console.log("Received : ", fullBody);
+        console.log("POST NEW DOC Received : ", fullBody);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
@@ -283,7 +302,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.end(errString);
           }
           else { 
-            console.log("docs:\n" +  JSON.stringify(doc));
+            console.log("Inserted doc:\n", doc);
             response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -294,7 +313,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     else if (req.method == 'PUT') {
       console.log('PUT NEW COLLECTION:', uri);
 
-      // Insert and entire array into collection.
+      // Drop existing documents and replace with
+      // Insert of the entire array into collection.
       // Makes a new collection if it doesn't exist.
 
       var fullBody = '';
@@ -305,12 +325,12 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // console.log(chunk.toString());
       });
       req.on('end', function() {
-        console.log("Received : ", fullBody);
+        console.log("PUT Collection Received : ", fullBody);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
-      
-        db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+        db[collectionName].drop();
+        db[collectionName].insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
             var errString = err.toString();
             console.log("DB_INSERT_ERR:", errString);
