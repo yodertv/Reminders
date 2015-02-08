@@ -54,6 +54,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
   'remove': {method:'DELETE'},
   'delete': {method:'DELETE'} };
   */
+
 /*
   if (uri == '/history') { // Handle the reloading of the history route. Still doesn't solve the reloading.
     response.writeHead(302, { 'location' : '/index.html' });
@@ -78,6 +79,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
     var dbUrl = dblist[dbName];
 
+    /* 
     console.log("\nuri =", uri,
       "\ndbPart =", dbPart, 
       "\ndbName =", dbName,
@@ -85,25 +87,13 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       "\nobjID = ", objID,
       "\ndbUrl =", dbUrl
     );
-
+    */
 
     var db = mongojs(dbUrl, [collectionName]);
 
     db.on('error',function(err) {
       console.log('database error', err);
-    });
-
-    
-    /*
-    req.on('end', function() {
-      // Is this supposed to be the catch-all?
-      // empty 200 OK response for now
-      console.log("In req.on(\'end\')");
-      response.writeHead(200, "OK via on end", {'Content-Type': 'text/html'});
-      response.end();
-    });
-    */
-    
+    });    
     
     if (objID) {  // Basic object REST. GET, PUT, DELETE
 
@@ -126,7 +116,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               return;
             }
             else { 
-              console.log("GET doc:\n" +  JSON.stringify(doc));
+              // console.log("GET doc:\n" +  JSON.stringify(doc));
               response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
               response.write(JSON.stringify(doc));
               response.end();
@@ -135,7 +125,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         break;
         
         case 'PUT':
-          console.log('UPDATE DOC: ', uri);
+          // console.log('UPDATE DOC: ', uri);
           // Save/replace todos here
           var fullBody = '';
           req.on('data', function(chunk) {
@@ -145,7 +135,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // console.log(chunk.toString());
           });
           req.on('end', function() {
-            console.log("PUT Received : ", fullBody);
+            // console.log("PUT Received : ", fullBody);
             // Replace the document specified by id
             // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
             // Where todo* is the collection name.
@@ -160,8 +150,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
                 response.end(errString);
               }
               else { 
-                // doc._id.toString() === '523209c4561c640000000001'
-                console.log("Updated doc:\n" +  JSON.stringify(doc));
+                // console.log("Updated doc:\n" +  JSON.stringify(doc));
                 response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
                 response.write(JSON.stringify(doc));
                 response.end();
@@ -169,39 +158,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             });
           });   
         break;
-/*
-        case 'POST': // I don't think this ever happens.
-          console.log('POST DOC: ', uri);
-          // From 127.0.0.1: POST /api/1/databases/test-todo/collections/todo
-          // URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todo
-          // Insert new todo here
-          var fullBody = '';
-          req.on('data', function(chunk) {  // Read uploaded data
 
-            fullBody += chunk.toString();
-            // console.log("Received body data : ");
-            // console.log(chunk.toString());
-          });
-          req.on('end', function() {
-            console.log("POST Received : ", fullBody);
-          
-            db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
-              if (err != null) {
-                var errString = err.toString();
-                console.log("DB_INSERT_ERR:", errString);
-                response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-                response.end(errString);
-              }
-              else { 
-                console.log("Inserted doc:\n" +  JSON.stringify(doc));
-                response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-                response.write(JSON.stringify(doc));
-                response.end();
-              }
-            });   
-          });
-        break;
-*/          
         case 'DELETE':              
           // Delete object
           db[collectionName].remove({
@@ -214,8 +171,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               response.end(errString);
             }
             else { 
-              // doc._id.toString() === '523209c4561c640000000001'
-              console.log("Deleted : " +  objID);
+              // console.log("Deleted : " +  objID);
               response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
               response.write(JSON.stringify(doc));
               response.end();
@@ -236,7 +192,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
         // Get archiveList 
 
-        console.log('GET COLLECTION NAMES: ', uri);
+        // console.log('GET COLLECTION NAMES: ', uri);
 
         db.getCollectionNames( function( err, myColls ){
           if (err != null) {
@@ -246,7 +202,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               response.end(errString);
           }
           else {
-            console.log("GET COLLECTIONS:\n", myColls);
+            // console.log("GET COLLECTIONS:\n", myColls);
             response.writeHead(200, "OK", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(myColls))
             response.end();
@@ -255,7 +211,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         })
       }
       else {
-        console.log('GET DOCS:', uri);
+        // console.log('GET DOCS:', uri);
 
         // Get all documents from a specified collection
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
@@ -266,7 +222,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             console.log("DB_FIND_ERR:", err);
           }
           else {
-            console.log("GET DOCS:\n", myDocs);
+            // console.log("GET DOCS:\n", myDocs);
             response.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(myDocs));
             // response.write(myDocs);
@@ -277,8 +233,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       }
     } // End 'GET'
     else if (req.method == 'POST') {     // Insert a new doc into collectionName
-      console.log('POST NEW DOC:', uri);
-
+      // console.log('POST NEW DOC:', uri);
       // Insert and new doc into collection.
 
       var fullBody = '';
@@ -289,7 +244,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // console.log(chunk.toString());
       });
       req.on('end', function() {
-        console.log("POST NEW DOC Received : ", fullBody);
+        // console.log("POST NEW DOC Received : ", fullBody);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
@@ -302,7 +257,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.end(errString);
           }
           else { 
-            console.log("Inserted doc:\n", doc);
+            // console.log("Inserted doc:\n", doc);
             response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -311,7 +266,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       });   
     }
     else if (req.method == 'PUT') {
-      console.log('PUT NEW COLLECTION:', uri);
+      // console.log('PUT NEW COLLECTION:', uri);
 
       // Drop existing documents and replace with
       // Insert of the entire array into collection.
@@ -325,7 +280,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // console.log(chunk.toString());
       });
       req.on('end', function() {
-        console.log("PUT Collection Received : ", fullBody);
+        // console.log("PUT Collection Received : ", fullBody);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
@@ -338,7 +293,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.end(errString);
           }
           else { 
-            console.log("docs:\n" +  JSON.stringify(doc));
+            // console.log("docs:\n" +  JSON.stringify(doc));
             response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -353,13 +308,10 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       
     var dbUrl = dblist[reqUrl.query['mongoDB']];
     var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
-    console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
+    // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
 
     var db = mongojs(dbUrl, [collectionName]);
     
-    // var toDelete = db.collection(name);
-   
-    //toDelete.drop(); 
     db[collectionName].drop( function(err) {
       if (err != null) {
         console.log("DB_DROP_ERR:", err);
@@ -377,4 +329,3 @@ http.createServer(/* httpsOptions, */ function(req, response) {
   }
 }).listen(parseInt(port, 10));
 console.log("todo Server running at http://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
-
