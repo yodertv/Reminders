@@ -115,8 +115,10 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 - Merged with original 2.2 which added full editing mode in the history.
 
 // Work in this release
+- Fixed update of existing todos in history list
 
 // Known bugs next Bug#16
+(Bug#16) Marking a task done in a historical list fails to communicate w/ the server.
 (Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
 (Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
 (Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirect to history.html.

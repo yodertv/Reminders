@@ -158,6 +158,12 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 		return count;
 	};
 
+	$scope.update = function() {
+		// console.log("Update", this.todo);
+		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
+		Todo.update({todo: $scope.archiveName, 	id: this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
+	};
+
 	$scope.homeClick = function() {
 		$location.path('/');
 	};
