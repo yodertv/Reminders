@@ -97,6 +97,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
     db.on('error',function(err) {
       console.log('database error', err);
+      throw err;
     });    
     
     if (objID) {  // Basic object REST. GET, PUT, DELETE
