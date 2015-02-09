@@ -16,6 +16,6 @@
   "subdomain": "yodertst",
   "#1_comment" : "Environment indepentant build variables.",
   "build_dir" : "./build",
-  "#2_comment lib_dir" : "../lib",
-  "src_dir" : "."
+  "lib_dir" : "./lib",
+  "src_dir" : "./src"
 }

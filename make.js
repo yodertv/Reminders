@@ -17,7 +17,9 @@ var _pkg = require('./package.json');
 */
 
 var DIST_PATH = _pkg.build_dir;
+var DIST_STATIC = DIST_PATH + '/static';
 var SRC_PATH = _pkg.src_dir;
+var LIB_PATH = _pkg.lib_dir;
 var build_manifest = "";
 var _props = undefined;
 var _validCmd = false;
@@ -36,28 +38,48 @@ var _env = undefined;
 // Names of valid environments with definition property files defined
 var validEnvs = ['localnet','localhost','jitsu'];
 
-// Files and directoroes to copy to distribution
-var SRC_FILES = ['mongolab.js', 'favicon.ico', 'package.json', 'todo.css', 
-					'todo.html', 'todo.js', 'todoServer.js', 'history.html',
-					'list.html', 'index.html', 'js', 'css', 'img'];
+// Client source and lib files to copy to static directory
+var SRC_FILES_NAMES = ['mongolab.js', 'todo.html', 'todo.js', 'history.html',
+				 'list.html', 'index.html', 'todo.css'];
+var SRC_FILES = [];
+for (var i = 0; i < SRC_FILES_NAMES.length; i++) {
+ 	SRC_FILES.push(SRC_PATH + '/' + SRC_FILES_NAMES[i]);
+}; 
+
+// Client lib files to copy to static directory
+var LIB_FILES_NAMES = ['js', 'css', 'img'];
+var LIB_FILES = [];
+for (var i = 0; i < LIB_FILES_NAMES.length; i++) {
+ 	LIB_FILES.push(LIB_PATH + '/' + LIB_FILES_NAMES[i]);
+}; 
+
+// Server source files to copy to root directory.
+var SRV_FILES_NAMES = ['todoServer.js'];
+var SRV_FILES = [];
+for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
+ 	SRV_FILES.push(SRC_PATH + '/' + SRV_FILES_NAMES[i]);
+};
+
+// Build files to copy to root directory.
+var BLD_FILES = ['package.json'];
 
 // Files into which to bake the @VERSION@
-var VER_FILES = ['index.html','package.json'];
+var VER_FILES = [DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'package.json'];
 
 // Files into which to bake the @NODEURL@
-var URL_FILES = ['mongolab.js'];
+var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
 
 // Files into which to bake the @MONGODB@
-var DB_FILES = ['mongolab.js'];
+var DB_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
 
-// Files into which to bake the @MONGODB@
-var ANG_FILES = ["index.html"];
+// Files into which to bake the @ANGULARROOT@
+var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
 
-//_shell.config.fatal = true;
+_shell.config.fatal = true;
 
 // Global options
 program
-  .version('0.0.4')
+  .version('0.0.5')
   .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'suppress log messages');
 
@@ -128,6 +150,7 @@ function initEnv(env){
 
 		var prop_file_name = "./build_props." + _env + ".json";
 		_props = require(prop_file_name);
+		BLD_FILES.push(prop_file_name);
 
 		var build_date = new Date();
 
@@ -182,35 +205,49 @@ function prep(env){
 		program.help();
 	}
 
-    // Prepare the distribution directory
-    _shell.mkdir(DIST_PATH);
+    // Prepare the distribution directories
+    _shell.mkdir('-p', DIST_STATIC);
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
 
     // Stamp it with the build manifest.
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
-    _shell.cp('-R', SRC_FILES, DIST_PATH); // My Prep is to copy the distribution files to the DIST_PATH.
+	// My Prep is to copy the distribution files to the DIST_PATH and DIST_STATIC.
 
+    _shell.cp(SRC_FILES, DIST_STATIC); 
 	var err = _shell.error();
+	if (!err===null) { console.log(err) }
 
+    _shell.cp('-R', LIB_FILES, DIST_STATIC); 
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
+
+    _shell.cp(SRV_FILES, DIST_PATH); 
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
+
+    _shell.cp(BLD_FILES, DIST_PATH); 
+	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
     // Use sed to perform global replace in the build directory
 
 	for (var i 	= VER_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@VERSION@', _props.version, DIST_PATH+'/'+VER_FILES[i]);	
+		_shell.sed('-i', '@VERSION@', _props.version, VER_FILES[i]);	
 	};
 
 	for (var i 	= URL_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@NODEURL@', _props.nodeURL, DIST_PATH+'/'+URL_FILES[i]);	
+		_shell.sed('-i', '@NODEURL@', _props.nodeURL, URL_FILES[i]);	
 	};
 
 	for (var i 	= DB_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DIST_PATH+'/'+DB_FILES[i]);	
+		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DB_FILES[i]);	
 	};
 
 	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, DIST_PATH+'/'+ANG_FILES[i]);	
+		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, ANG_FILES[i]);	
 	};
 }
 

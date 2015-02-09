@@ -114,8 +114,11 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 2.2
 - Merged with original 2.2 which added full editing mode in the history.
 
-// Work in this release
+// Work in this release (2.3)
 - Fixed update of existing todos in history list
+- Limit file server to only static files. Static server does NOT serve up the server files or the package.json file.
+- Enhanced make.js to support the new file structure.
+
 
 // Known bugs next Bug#16
 (Bug#16) Marking a task done in a historical list fails to communicate w/ the server.
@@ -126,7 +129,6 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 
 // Future enhancements
 
-- Static server should NOT serve up the server files.
 - Add a print feature.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.

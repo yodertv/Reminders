@@ -44,8 +44,8 @@ var reObjectify = function (key, value) {
 http.createServer(/* httpsOptions, */ function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-//  var fileServer = new nStatic.Server('./static');
-  var fileServer = new nStatic.Server();
+  var fileServer = new nStatic.Server('./static');
+  // var fileServer = new nStatic.Server();
   
   console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
   
