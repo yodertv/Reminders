@@ -1,21 +1,35 @@
 <!-- List.html -->	 
-<Legend>Tasks <p class="pull-right">{{label}}</p></Legend>
-
-<span><large>{{remaining()}} of {{todos.length}} remaining</span>
-[<a href="" ng-click="archive()"><strong>Archive</strong></a>]
-[<a href="" ng-click="saveTodos()"><strong>Save</strong></a>]
-</large>
-
-<ul class="lead">
-  <li ng-repeat="todo in todos">
-    <input type="checkbox" ng-model="todo.done">
-    <span class="done-{{todo.done}}">{{todo.text}}</span>
-  </li>
+<div class="container">  
+<div class="row">
+<div class="span6">
+<ul class="nav nav-pills">  
+<li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
+<li class="{{activeHistory}}"><a href="/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
+<li class="{{activeList}}"><a href="">{{label}}</a></li>
+<li class="{{showNext}}"><a href="/list/{{nextArchiveName}}" ng-click="nextClick()"><i class="icon-forward"></i></a></li>
 </ul>
+</div>
+</div>
+</div>
+
+<table class="table table-striped">  
+	<tbody>  
+    <tr ng-repeat="todo in todos">
+      <td>
+      <span> 
+  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash">&nbsp;</i></a>
+    		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done">&nbsp;&nbsp;</input>
+     		<span class="done-{{todo.done}}">&nbsp;{{todo.text}}&nbsp;</span>
+      </span>
+      </td>
+    </tr>
+    <tr>
+      <td>({{remaining()}}/{{todos.length}}) <span> [ <a href="" ng-click="print()">Print</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+    </tr>
+  </tbody>
+</table>
 
 <form ng-submit="addTodo()">
-	<fieldset>
-    <input type="text" ng-model="todoText"  size="30" placeholder="add new task here">
-    <input class="btn-primary" type="submit" value="add">
-  </fieldset>
-</form>
+  <span class="show-{{showNewTask}}" >
+    <input type="text" ng-model="todoText" size=30 placeholder="Add new task here."></input>
+  </span>

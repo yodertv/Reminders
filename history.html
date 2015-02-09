@@ -2,8 +2,8 @@
 <div background="#dcdcdc" class="container">  
 <div class="row">  
 <div class="span6">  
-<ul class="nav nav-pills">  
-<li><a href="/">Today</a></li>
+<ul class="nav nav-pills">
+<li><a href="" ng-click="homeClick()">Today</a></li>
 <li class="active"><a href="history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
 <li class="{{showNext}}"><a href="list/{{nextArchiveName}}"><i class="icon-forward"></i></a></li>
 </ul>  
@@ -13,9 +13,12 @@
 <table class="table table-striped">  
   <tbody>  
     <tr ng-repeat="item in archives">
-    	<td><span><a href="" ng-click="delete()"><i class="icon-trash"></i>&nbsp;&nbsp;</a>
-      <a href="list/{{item.archiveName}}">&nbsp;{{item.displayName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+    	<td><span><a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash"></i>&nbsp;&nbsp;</a>
+      <a href="/list/{{item.archiveName}}">&nbsp;{{item.displayName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
     </td>  
+    </tr>
+    <tr>
+      <td>({{archives.length}}) <span> [ <a href="" ng-click="print()">Print</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr> 
   </tbody>  
 </table>  

@@ -1,13 +1,13 @@
 // Read Me
-// Todos v2.1
-// Released 2.2.13 to http://yodertv.jit.su/
+// Todos v2.2
 
 Objective: Replace the weekly task list that I keep on paper.
 
 // Curent features
 
 - Manages a list of Todos (aka tasks).
-- Persists Todo data in the cloud (mongolabs.com) using angular's $http service and mongolabs REST APIs.
+- Persists Todo data mongodb using angular's ngResource, $http service and mongojs 
+- Implements a REST API.
 - Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
 - Add - Adds a new task to the list with done:false; Saves the new task to the DB.
 - Checkbox - When checked: done:true; Item's text is displayed as strike-through; Saves the updated item to the DB.
@@ -81,12 +81,13 @@ Objective: Replace the weekly task list that I keep on paper.
 - Removed extraneous ":" from URLs href'ed by history.html and todo.html.
 - Deployed as yodertst.nodejitsu.com with active snapshot: "0.2.1-7 Sunday, January 11, 2015 15:17:32"
 
-// Work in this release
+2.1.3
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
 - Newest bootstrap version 3.3.1. Didn't work. Went back.
 - Further testing found two bugs (8 and 9)
 - Work off-line better with local mongodb.
 - Got getCollectionMames() and collection.drop() working on local host. Curious about the number of collections opening. That must be the mongojs library. I added close() to the method I tested.
+- Interesting behavoir with the new route, reloading doesn't get "routed".
 - Objective to leave ngResource unchanged (i.e. reproduce the REST API)
 - Fixed (Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
 - Fixed (Bug13) Inserting an array to a collection doesn't have the expected behavior of replacing the collection. Instead they are added back in. I depend on this in the archive to remove the completed items for the current list. Fixed by dropping the collection first.
@@ -109,7 +110,11 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 	{ "_id" : ObjectId("519992d7e4b0601363034fef"), "text" : "fasd", "done" : true }
 	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }
 	fixed by reObjectify() function as in (Bug#15).
-- Interesting behavoir with the new route, reloading doesn't get "routed".
+
+2.2
+- Merged with original 2.2 which added full editing mode in the history.
+
+// Work in this release
 
 // Known bugs next Bug#16
 (Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
@@ -119,6 +124,8 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 
 // Future enhancements
 
+- Static server should NOT serve up the server files.
+- Add a print feature.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
 - Build the node_modules dependancies.
@@ -133,5 +140,3 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 - Support multiple users.
 - Support addvertisments.
 - Dynamically provision new users.
-
-

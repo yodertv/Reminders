@@ -23,7 +23,7 @@ todo.config(['$routeProvider',
       			controller: TodoCtrl
       		}).
   	  		when('/list/:archiveName', {
-  				templateUrl: 'todo.html',
+  				templateUrl: 'list.html',
   	  			controller: ListCtrl
   	  		}).
       		when('/history', {
@@ -80,10 +80,29 @@ function buildArchiveList(data, scope, name) {
 	};
 }
 
-function HistoryCtrl($scope, Todo) {  
+function HistoryCtrl($scope, $location, Todo) {  
 	// Uses history.html.
 
-  	$scope.delete = function() {
+	$scope.print = function() {
+  		// Print this archive list.
+  		console.log("Print called.")
+  	}
+	
+	$scope.homeClick = function() {
+		$location.path('/');
+	};
+
+	$scope.editClick = function() {
+		// Edit button toggles between edit and not.
+		if (!$scope.showDelete) { // If not in edit mode switch to it.
+			$scope.showDelete = true;
+		}
+		else {
+			$scope.showDelete = false;
+		}
+	};
+
+	$scope.delete = function() {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item.archiveName;
@@ -102,15 +121,21 @@ function HistoryCtrl($scope, Todo) {
   		}
   	}
 	$scope.showNext="show-false";
-  	Todo.getArchiveList(function(data) {
+	$scope.showDelete = false;
+	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
 }
 
 function ListCtrl($scope, $location, $routeParams, Todo) {  
-	// Uses todo.html
+	// Uses list.html
 
- 	$scope.getList = function(name) {
+ 	$scope.print = function() {
+  		// Print this archive list.
+  		console.log("Print called.")
+  	}
+	
+	$scope.getList = function(name) {
  		if(name == null) { return name; };
  		$scope.todos = Todo.getList(name);
  		$scope.archiveName = name;
@@ -137,6 +162,16 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 		$location.path('/');
 	};
 
+	$scope.editClick = function() {
+		// Edit button toggles between Home (Today) and edit.
+		if (!$scope.showDelete) { // If not in edit mode switch to it.
+			$scope.showDelete = true;
+		}
+		else {
+			$scope.showDelete = false; 
+		}
+	};
+
   	var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
 	
 	$scope.getList(name);
@@ -146,7 +181,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 		buildArchiveList(data, $scope, name);
 	});
 
-	$scope.showDelete = true; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
+	$scope.showDelete = false; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
 	$scope.showList = true;
 	$scope.activeHome = ""; 
 	$scope.activeList = "active";
