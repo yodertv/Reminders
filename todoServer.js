@@ -2,15 +2,18 @@
 //
 'use strict';
 
-var http = require("http"),
-    https = require("https"),
-    url = require("url"),
-    path = require("path"),
-    fs = require("fs"),
-    os = require("os"),
-    sys  = require('sys'),
-    nStatic = require('node-static'),
-    mongojs = require("mongojs");
+/*
+    https = require("https");
+    path = require("path");
+    fs = require("fs");
+    sys  = require('sys');
+*/
+
+var os = require("os");
+var url = require("url");
+var http = require("http");
+var nStatic = require('node-static');
+var mongojs = require("mongojs");
 
     // dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
     // E.g. "username:password@example.com/mydb"
@@ -41,6 +44,7 @@ var reObjectify = function (key, value) {
 http.createServer(/* httpsOptions, */ function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
+//  var fileServer = new nStatic.Server('./static');
   var fileServer = new nStatic.Server();
   
   console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
