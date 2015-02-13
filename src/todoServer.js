@@ -27,11 +27,12 @@ var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-t
               'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
               'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'}
 
-var port = process.argv[2] || 80,
-    restUrl = "/api/1/databases/",
-    restHost = "api.mongolab.com",
-    restPort = 443,
-    DBKey = "50a2a0e3e4b0cd0bfc12435d";
+var port = process.argv[2] || 80;
+var restUrl = "/api/1/databases/";
+var restHost = "api.mongolab.com";
+// var restPort = 443;
+var DBKey = "50a2a0e3e4b0cd0bfc12435d";
+var nodeURL = "@NODEURL@";
 
 var reObjectify = function (key, value) {
 
@@ -333,4 +334,6 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     fileServer.serve(req, response);
   }
 }).listen(parseInt(port, 10));
+
 console.log("todo Server running at http://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
+

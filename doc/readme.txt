@@ -114,14 +114,39 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 2.2
 - Merged with original 2.2 which added full editing mode in the history.
 
-// Work in this release (2.3)
-- Fixed update of existing todos in history list
+2.3
+- Fixed update of existing todos in history list -- (Bug#16) Marking a task done in a historical list fails to communicate w/ the server.
 - Limit file server to only static files. Static server does NOT serve up the server files or the package.json file.
 - Enhanced make.js to support the new file structure.
 
+// Work in this release (2.4)
+- Tested localnet build and run on kitchen-mac. Tested iPad, iTouch, IE 9 on windows, Chrome on windows, Chrome on Nook.
+- Enhanced server to start based on nodeURL for port
 
-// Known bugs next Bug#16
-(Bug#16) Marking a task done in a historical list fails to communicate w/ the server.
+// Known bugs next Bug#19
+
+
+(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
+ 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
+ 	Happend in old test-todo db.
+
+(Bug#17) Server crashes when on localnet with multiple clients: database error [Error: connection closed]
+	192.168.0.2: PUT /api/1/databases/test-todo/collections/todo
+	database error [Error: connection closed]
+
+	/usr/local/lib/node_modules/mongojs/node_modules/mongodb/lib/mongodb/mongo_client.js:409
+	          throw err
+	                ^
+	Error: connection closed
+	    at null.<anonymous> (/usr/local/lib/node_modules/mongojs/node_modules/mongodb/lib/mongodb/connection/server.js:601:24)
+	    at emit (events.js:92:17)
+	    at null.<anonymous> (/usr/local/lib/node_modules/mongojs/node_modules/mongodb/lib/mongodb/connection/connection_pool.js:165:15)
+	    at emit (events.js:98:17)
+	    at Socket.<anonymous> (/usr/local/lib/node_modules/mongojs/node_modules/mongodb/lib/mongodb/connection/connection.js:549:12)
+	    at Socket.emit (events.js:95:17)
+	    at TCP.close (net.js:465:12)
+	kitchen-mac:Todos kat$ 
+
 (Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
 (Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
 (Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirect to history.html.
