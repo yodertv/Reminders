@@ -119,15 +119,19 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 - Limit file server to only static files. Static server does NOT serve up the server files or the package.json file.
 - Enhanced make.js to support the new file structure.
 
-// Work in this release (2.4)
+2.4
 - Tested localnet build and run on kitchen-mac. Tested iPad, iTouch, IE 9 on windows, Chrome on windows, Chrome on Nook.
 - Enhanced server to start based on nodeURL for port. No longer takes port argument.
-- Server creates hundreds of connections. Looking into it. Made a global array. Working. 
-- Todo: add new collects as required.
-- 
+- Server creates hundreds of connections. Fixed by making a global array. Working.
+- Unable to duplicate the two DB bugs on local host in the car to WVA (2.13.15).
+- Changed local host build from 127.0.0.1 to localhost.
+
+// Work to do in this release (2.5)
+- Let's get some kind of test going
+- Let's do a nodejitsu deployment
+- Try Apigee
 
 // Known bugs next Bug#19
-
 
 (Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
  	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})

@@ -101,7 +101,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     */
 
     if (dbs[dbName] == undefined) {
-      dbs[dbName] = new mongojs(dbUrl, [collectionName]);
+      dbs[dbName] = new mongojs(dbUrl);
     }
 
     // var db = mongojs(dbUrl, [collectionName]);
@@ -127,7 +127,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
           // Where todo* is the collection name.
           // find a document using a native ObjectId
         
-          db[collectionName].findOne({
+          dbs[dbName].collection(collectionName).findOne({
             _id:mongojs.ObjectId(objID)
           }, function(err, doc) {
             if (err != null) {
@@ -162,7 +162,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
             // Where todo* is the collection name.
           
-            dbs[dbName][collectionName].update({
+            dbs[dbName].collection(collectionName).update({
               _id:mongojs.ObjectId(objID)
             }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
               if (err != null) {
@@ -183,7 +183,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
         case 'DELETE':              
           // Delete object
-          dbs[dbName][collectionName].remove({
+          dbs[dbName].collection(collectionName).remove({
             _id:mongojs.ObjectId(objID)
           }, true, function(err, doc) {
             if (err != null) {
@@ -229,7 +229,6 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.write(JSON.stringify(myColls))
             response.end();
           }
-          // db.close();
         })
       }
       else {
@@ -239,7 +238,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
         // Where todo* is the collection name.
         
-        dbs[dbName][collectionName].find( function( err, myDocs ){
+        dbs[dbName].collection(collectionName).find( function( err, myDocs ){
           if (err != null) {
             console.log("DB_FIND_ERR:", err);
           }
@@ -271,7 +270,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
       
-        dbs[dbName][collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
           if (err != null) {
             var errString = err.toString();
             console.log("DB_INSERT_ERR:", errString);
@@ -306,8 +305,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
-        dbs[dbName][collectionName].drop();
-        dbs[dbName][collectionName].insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+        dbs[dbName].collection(collectionName).drop();
+        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
             var errString = err.toString();
             console.log("DB_INSERT_ERR:", errString);
@@ -337,10 +336,12 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
     // var db = mongojs(dbUrl, [collectionName]);
     
-    dbs[dbName][collectionName].drop( function(err) {
+    dbs[dbName].collection(collectionName).drop( function(err) {
       if (err != null) {
-        console.log("DB_DROP_ERR:", err);
-        // Todo: write an error response here
+        var errString = err.toString();
+        console.log("DB_DROP_COLLECTION_ERR:", errString);
+        response.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+        response.end(errString);
       }
       else { // Send a success response.
         response.writeHead(200, "OK", {'Content-Type': 'text/html'});
@@ -356,5 +357,3 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
 console.log("Todo Server running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
-
-
