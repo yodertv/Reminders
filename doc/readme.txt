@@ -121,7 +121,10 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 
 // Work in this release (2.4)
 - Tested localnet build and run on kitchen-mac. Tested iPad, iTouch, IE 9 on windows, Chrome on windows, Chrome on Nook.
-- Enhanced server to start based on nodeURL for port
+- Enhanced server to start based on nodeURL for port. No longer takes port argument.
+- Server creates hundreds of connections. Looking into it. Made a global array. Working. 
+- Todo: add new collects as required.
+- 
 
 // Known bugs next Bug#19
 
@@ -154,13 +157,13 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 
 // Future enhancements
 
+- 
 - Add a print feature.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
 - Build the node_modules dependancies.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with $scope.
-- Add unit testing. 
-- Support Nook and other CORS defective browsers.
+- Add unit testing.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.

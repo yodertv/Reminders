@@ -27,12 +27,18 @@ var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-t
               'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
               'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'}
 
-var port = process.argv[2] || 80;
+var dbs = []; // Array of connections
+
+var nodeURL = "@NODEURL@";
+//var port = process.argv[2] || 80;
+
+var match = nodeURL.search('[0-9]{4}/$');
+var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
+
 var restUrl = "/api/1/databases/";
 var restHost = "api.mongolab.com";
 // var restPort = 443;
 var DBKey = "50a2a0e3e4b0cd0bfc12435d";
-var nodeURL = "@NODEURL@";
 
 var reObjectify = function (key, value) {
 
@@ -94,13 +100,23 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     );
     */
 
-    var db = mongojs(dbUrl, [collectionName]);
+    if (dbs[dbName] == undefined) {
+      dbs[dbName] = new mongojs(dbUrl, [collectionName]);
+    }
 
-    db.on('error',function(err) {
+    // var db = mongojs(dbUrl, [collectionName]);
+
+    dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
-    });    
+    });
     
+    /* Todo: Learn how to add collections.
+    if (dbs[dbName][collectionName] == undefined) {
+      dbs[dbName].Collection(collectionName);
+    }
+    */
+
     if (objID) {  // Basic object REST. GET, PUT, DELETE
 
       switch (req.method) {
@@ -146,7 +162,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
             // Where todo* is the collection name.
           
-            db[collectionName].update({
+            dbs[dbName][collectionName].update({
               _id:mongojs.ObjectId(objID)
             }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
               if (err != null) {
@@ -167,7 +183,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
         case 'DELETE':              
           // Delete object
-          db[collectionName].remove({
+          dbs[dbName][collectionName].remove({
             _id:mongojs.ObjectId(objID)
           }, true, function(err, doc) {
             if (err != null) {
@@ -181,7 +197,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
               response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
               response.write(JSON.stringify(doc));
               response.end();
-              db.close();
+             // db.close();
             }
           });
         break;
@@ -200,7 +216,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
 
         // console.log('GET COLLECTION NAMES: ', uri);
 
-        db.getCollectionNames( function( err, myColls ){
+        dbs[dbName].getCollectionNames( function( err, myColls ){
           if (err != null) {
               var errString = err.toString();
               console.log("DB_GETCOLLECTIONNAMES_ERR:", errString);
@@ -213,7 +229,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             response.write(JSON.stringify(myColls))
             response.end();
           }
-          db.close();
+          // db.close();
         })
       }
       else {
@@ -223,7 +239,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
         // Where todo* is the collection name.
         
-        db[collectionName].find( function( err, myDocs ){
+        dbs[dbName][collectionName].find( function( err, myDocs ){
           if (err != null) {
             console.log("DB_FIND_ERR:", err);
           }
@@ -234,7 +250,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
             // response.write(myDocs);
             response.end();
           }
-          db.close();
+          // db.close();
         });
       }
     } // End 'GET'
@@ -255,7 +271,7 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
       
-        db[collectionName].insert( JSON.parse(fullBody), function(err, doc) {
+        dbs[dbName][collectionName].insert( JSON.parse(fullBody), function(err, doc) {
           if (err != null) {
             var errString = err.toString();
             console.log("DB_INSERT_ERR:", errString);
@@ -290,8 +306,8 @@ http.createServer(/* httpsOptions, */ function(req, response) {
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
-        db[collectionName].drop();
-        db[collectionName].insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+        dbs[dbName][collectionName].drop();
+        dbs[dbName][collectionName].insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
             var errString = err.toString();
             console.log("DB_INSERT_ERR:", errString);
@@ -306,22 +322,25 @@ http.createServer(/* httpsOptions, */ function(req, response) {
           }
         });
       });
-    }       
-  } 
+    }
+  }
   else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
     
     // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
       
-    var dbUrl = dblist[reqUrl.query['mongoDB']];
+    var dbName = reqUrl.query['mongoDB'];
+    // var dbUrl = dblist[dbName];
+
+    // var dbUrl = dblist[reqUrl.query['mongoDB']];
     var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
     // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
 
-    var db = mongojs(dbUrl, [collectionName]);
+    // var db = mongojs(dbUrl, [collectionName]);
     
-    db[collectionName].drop( function(err) {
+    dbs[dbName][collectionName].drop( function(err) {
       if (err != null) {
         console.log("DB_DROP_ERR:", err);
-        // Should write an error response here
+        // Todo: write an error response here
       }
       else { // Send a success response.
         response.writeHead(200, "OK", {'Content-Type': 'text/html'});
@@ -329,11 +348,13 @@ http.createServer(/* httpsOptions, */ function(req, response) {
       }
     });
   }
-  else {  // default static file server for html and script files.
+  else {  // default static file server for html and script files in the ./static folder.
     // console.log('fileServer :', uri);
     fileServer.serve(req, response);
   }
 }).listen(parseInt(port, 10));
 
-console.log("todo Server running at http://" + os.hostname() + ":" + port + "/\nCTRL + C to shutdown");
+console.log("Todo Server running on " + os.hostname() + " at port " + port);
+console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
+
 

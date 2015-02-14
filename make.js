@@ -67,7 +67,7 @@ var BLD_FILES = ['package.json'];
 var VER_FILES = [DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'package.json'];
 
 // Files into which to bake the @NODEURL@
-var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
+var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServer.js'];
 
 // Files into which to bake the @MONGODB@
 var DB_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
