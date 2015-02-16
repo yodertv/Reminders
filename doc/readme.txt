@@ -126,10 +126,18 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 - Unable to duplicate the two DB bugs on local host in the car to WVA (2.13.15).
 - Changed local host build from 127.0.0.1 to localhost.
 
-// Work to do in this release (2.5)
+2.5
+- Tested quite a bit on Linda's local net. Did not encounter (Bug#17) did git dublicate ID (Bug#18) once.
+- Solved:
+	(Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
+	(Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirecting to /#history and /#list.
+
+
+// Work to do in this release
 - Let's get some kind of test going
 - Let's do a nodejitsu deployment
-- Try Apigee
+
+
 
 // Known bugs next Bug#19
 
@@ -155,8 +163,6 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 	kitchen-mac:Todos kat$ 
 
 (Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
-(Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
-(Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirect to history.html.
 (Bug#6) Invalid date on history page in IE9.
 
 // Future enhancements

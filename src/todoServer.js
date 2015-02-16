@@ -66,13 +66,18 @@ http.createServer(/* httpsOptions, */ function(req, response) {
   'delete': {method:'DELETE'} };
   */
 
-/*
-  if (uri == '/history') { // Handle the reloading of the history route. Still doesn't solve the reloading.
-    response.writeHead(302, { 'location' : '/index.html' });
+  if (uri == '/history') { // Redirect history route. Allows reload and sharing of history URL.
+    console.log("Redirect /history.")
+    response.writeHead(302, { 'location' : '/#history' });
     response.end();
   }
-  else 
-*/
+  else if (uri.indexOf('/list/') == 0) {
+    console.log("Redirect ", uri);
+    var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
+    response.writeHead(302, { 'location' : "/#list/" + collectionName });
+    response.end();
+  }
+
   
   if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
 
