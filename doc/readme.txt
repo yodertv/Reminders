@@ -130,14 +130,11 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 - Tested quite a bit on Linda's local net. Did not encounter (Bug#17) did git dublicate ID (Bug#18) once.
 - Solved:
 	(Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
-	(Bug#7) With new angular and locationProvider fails to reload history page. Not solved by redirecting to /#history and /#list.
-
+	(Bug#7) With new angular and locationProvider fails to reload history page. Solved by redirecting to /#history and /#list.
 
 // Work to do in this release
 - Let's get some kind of test going
 - Let's do a nodejitsu deployment
-
-
 
 // Known bugs next Bug#19
 
