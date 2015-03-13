@@ -14,9 +14,10 @@ var url = require("url");
 var http = require("http");
 var nStatic = require('node-static');
 var mongojs = require("mongojs");
+var express = require("express");
 
-    // dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
-    // E.g. "username:password@example.com/mydb"
+// dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
+// E.g. "username:password@example.com/mydb"
 
 // This list should be baked by build depending on the environment.
 
@@ -48,13 +49,27 @@ var reObjectify = function (key, value) {
   return value;
 }
 
-http.createServer(/* httpsOptions, */ function(req, response) {
+var app = express();
+// configure Express
+app.use(express.logger());
+app.use(express.cookieParser());
+// app.use(express.session({ secret: DBKey }));
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+app.use(express.static(__dirname + '/static'));
+
+//http.createServer(/* httpsOptions, */ function(req, response) {
+
+app.all('*', function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var fileServer = new nStatic.Server('./static');
+  // var fileServer = new nStatic.Server('./static');
   // var fileServer = new nStatic.Server();
   
-  console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
+  // console.log(req.connection.remoteAddress + ": " + req.method + " " + req.url);
   
   // console.log(reqUrl);
 
@@ -355,10 +370,17 @@ http.createServer(/* httpsOptions, */ function(req, response) {
     });
   }
   else {  // default static file server for html and script files in the ./static folder.
-    // console.log('fileServer :', uri);
-    fileServer.serve(req, response);
+    console.log("Unexpected request: " + req.connection.remoteAddress + ": " + req.method + " " + req.url);
+    response.redirect('/');
+
+    // used to handle files here. Replaced by express static.
+    //fileServer.serve(req, response);
   }
-}).listen(parseInt(port, 10));
+});
+
+//}).listen(parseInt(port, 10));
+
+http.createServer(app).listen(parseInt(port, 10));
 
 console.log("Todo Server running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");

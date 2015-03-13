@@ -133,6 +133,7 @@ Not Related to (Bug#10). Fixed by setting upsert option.
 	(Bug#7) With new angular and locationProvider fails to reload history page. Solved by redirecting to /#history and /#list.
 
 // Work to do in this release
+- Refactor to use express
 - Let's get some kind of test going
 - Let's do a nodejitsu deployment
 
