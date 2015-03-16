@@ -8,8 +8,8 @@
 	"#1_comment" : "Should server log date?",
 	"logDate" : "true",
 
-	"#2__comment" : "When using the local network, auth must be disabled because google auth will only accept 127.0.0.1 or a routable address.",
-	"disableAuth" : "true",
+	"#2__comment" : "When using 127.0.0.1 auth can be tested.",
+	"disableAuth" : "false",
 	
 	"#3_comment" : "Deployment details. Local area network node address.",
 	"nodeURL" : "http://localhost:8080/",

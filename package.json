@@ -9,11 +9,13 @@
   },
   "dependencies": {
     "mongojs": "0.18.0",
-    "node-static": "0.7.6",
+    "node-static": "0.7.6"
+  },
+  "build_dependencies": {
     "commander" : "2.6.0",
     "shelljs" : "0.3.0"
   },
-  "subdomain": "yodertst",
+  "subdomain": "yodertcode",
   "#1_comment" : "Environment indepentant build variables.",
   "build_dir" : "./build",
   "lib_dir" : "./lib",

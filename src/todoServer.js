@@ -63,7 +63,23 @@ app.use(express.static(__dirname + '/static'));
 
 //http.createServer(/* httpsOptions, */ function(req, response) {
 
-app.all('*', function(req, response) {
+app.get('/history', function(req, res)
+{ // Redirect history route. Allows reload and sharing of history URL.
+    console.log("Redirect /history.")
+    res.writeHead(302, { 'location' : '/#history' });
+    res.end();
+});
+
+app.get('/list/todo*', function(req, res)
+{ // Redirect list url to list route. Allows reload and sharing of history URL.
+    var reqUrl = url.parse(req.url, true); // true parses the query string.
+    var uri = reqUrl.pathname;
+    var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
+    res.writeHead(302, { 'location' : "/#list/" + collectionName });
+    res.end();
+});
+
+app.all('/api/1/databases/*', function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   // var fileServer = new nStatic.Server('./static');
@@ -81,17 +97,20 @@ app.all('*', function(req, response) {
   'delete': {method:'DELETE'} };
   */
 
+/* Moved to app.get()
   if (uri == '/history') { // Redirect history route. Allows reload and sharing of history URL.
     console.log("Redirect /history.")
     response.writeHead(302, { 'location' : '/#history' });
     response.end();
   }
-  else if (uri.indexOf('/list/') == 0) {
+  if (uri.indexOf('/list/') == 0) {
     console.log("Redirect ", uri);
     var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
     response.writeHead(302, { 'location' : "/#list/" + collectionName });
     response.end();
+    return;
   }
+*/
 
   
   if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
