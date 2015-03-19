@@ -72,6 +72,9 @@ var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServe
 // Files into which to bake the @MONGODB@
 var DB_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
 
+// Files into which to bake the @LOGDATE@
+var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
+
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
 
@@ -244,6 +247,10 @@ function prep(env){
 
 	for (var i 	= DB_FILES.length - 1; i >= 0; i--) {
 		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DB_FILES[i]);	
+	};
+
+	for (var i 	= LOG_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', /@LOGDATE@/g, _props.logDate, LOG_FILES[i]);	
 	};
 
 	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
