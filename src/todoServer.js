@@ -110,6 +110,137 @@ app.del('/todo*', function(req, res) {
   });
 });
 
+app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, response){
+  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
+  var objID = "";
+
+  if (match>0) {
+    objID = dbPart.slice(match);
+    dbPart = dbPart.slice(0, match-1); // Remove /objID 
+    // console.log("match =", match, "\n objID =", objID);
+  }
+
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var dbUrl = dblist[dbName];
+
+  console.log("\nuri =", uri,
+    "\ndbPart =", dbPart, 
+    "\ndbName =", dbName,
+    "\ncollectionName =", collectionName,
+    "\nobjID = ", objID,
+    "\ndbUrl =", dbUrl
+  );
+
+  // Open the mongjs connection to the db
+  if (dbs[dbName] == undefined) {
+    dbs[dbName] = new mongojs(dbUrl);
+    dbs[dbName].on('error',function(err) {
+      console.log('database error', err);
+      throw err;
+    });
+  }
+
+  switch (req.method) {
+
+    case 'GET':  // don't believe we use this API call in the current implementation. Which means it's not tested.
+      // Get a single document by specific id
+      // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+      // Where todo* is the collection name.
+      // find a document using a native ObjectId
+    
+      dbs[dbName].collection(collectionName).findOne({
+        _id:mongojs.ObjectId(objID)
+      }, function(err, doc) {
+        if (err != null) {
+          var errString = err.toString();
+          console.log("DB_FINDONE_ERR:", errString);
+          response.writeHead(500, "DB_FINDONE_ERR", {'Content-Type': 'text/html'});
+          response.end(errString);
+          return;
+        }
+        else { 
+          console.log("GET doc:\n" +  JSON.stringify(doc));
+          response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
+          response.write(JSON.stringify(doc));
+          response.end();
+        }
+      });          
+    break;
+    
+    case 'PUT':
+      // console.log('UPDATE DOC: ', uri);
+      // Save/replace todos here
+      var fullBody = '';
+      req.on('data', function(chunk) {
+
+        fullBody += chunk.toString();
+        // console.log("Received body data : ");
+        // console.log(chunk.toString());
+      });
+      req.on('end', function() {
+        // console.log("PUT Received : ", fullBody);
+        // Replace the document specified by id
+        // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+        // Where todo* is the collection name.
+      
+        dbs[dbName].collection(collectionName).update({
+          _id:mongojs.ObjectId(objID)
+        }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
+          if (err != null) {
+            var errString = err.toString();
+            console.log("DB_UPDATE_ERR:", errString);
+            response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
+            response.end(errString);
+          }
+          else { 
+            // console.log("Updated doc:\n" +  JSON.stringify(doc));
+            response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
+      });   
+    break;
+
+    case 'DELETE':              
+      // Delete object
+      dbs[dbName].collection(collectionName).remove({
+        _id:mongojs.ObjectId(objID)
+      }, true, function(err, doc) {
+        if (err != null) {
+          var errString = err.toString();
+          console.log("DB_DELETE_ERR:", errString);
+          response.writeHead(500, "DB_DELET_ERR", {'Content-Type': 'text/html'});
+          response.end(errString);
+        }
+        else { 
+          // console.log("Deleted : " +  objID);
+          response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
+          response.write(JSON.stringify(doc));
+          response.end();
+         // db.close();
+        }
+      });
+    break;
+    
+    default:
+      console.log("OBJ_ERR:", err);
+      response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
+      response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
+  }
+
+/*
+  res.writeHead(200, "OK-GET", {'Content-Type': 'text/html'});
+  res.end();
+*/
+
+});
+
 app.all('/api/1/databases/*', function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -181,7 +312,7 @@ app.all('/api/1/databases/*', function(req, response) {
 
     // var db = mongojs(dbUrl, [collectionName]);
 /*
-    moved inside undefined section to try and solve (Bug#20)
+    moved inside undefined section to try and solve (Bug#19)
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
@@ -194,10 +325,11 @@ app.all('/api/1/databases/*', function(req, response) {
     */
 
     if (objID) {  // Basic object REST. GET, PUT, DELETE
-
+      console.log("ERRRRRORRRRR!!!!");
+/*
       switch (req.method) {
 
-        case 'GET':  // don't believe we use this path
+        case 'GET':  // don't believe we use this API call in the current implementation. Which means it's not tested.
           // Get a single document by specific id
           // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
           // Where todo* is the collection name.
@@ -214,7 +346,7 @@ app.all('/api/1/databases/*', function(req, response) {
               return;
             }
             else { 
-              // console.log("GET doc:\n" +  JSON.stringify(doc));
+              console.log("GET doc:\n" +  JSON.stringify(doc));
               response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
               response.write(JSON.stringify(doc));
               response.end();
@@ -282,7 +414,9 @@ app.all('/api/1/databases/*', function(req, response) {
           console.log("OBJ_ERR:", err);
           response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
           response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
-      }          
+      }
+      */
+
     } // End if (ObjID)
     else if (req.method == 'GET') {
       if(collectionName == '') { // Get the collection names
@@ -382,7 +516,7 @@ app.all('/api/1/databases/*', function(req, response) {
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
         dbs[dbName].collection(collectionName).drop();
-        if (fullBody.length > 2) {
+        if (fullBody.length > 2) { // A stringified empty collection has "[]"
           dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
             if (err != null) {
               var errString = err.toString();
@@ -398,7 +532,7 @@ app.all('/api/1/databases/*', function(req, response) {
             }
           });
         }
-        else {
+        else { // Avoid the empty collection error from DB by skipping the insert above.
           response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
           response.end();          
         }
