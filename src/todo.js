@@ -247,7 +247,8 @@ function TodoCtrl($scope, Todo) {
 		return count;
 	};
  
-	$scope.archive = function() {  	
+	$scope.archive = function() {
+		if ($scope.todos.length == 0) return;  	
  		var today = new Date();  
  		var archiveName = "todo" + today.toDateString().replace(/ /g, "-"); // Build an archive name from today's date.
 		var oldTodos = $scope.todos;

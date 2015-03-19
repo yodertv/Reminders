@@ -30,7 +30,7 @@ var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-t
 
 var dbs = []; // Array of connections
 
-var logDate = @LOGDATE@; // true or false. Set by build props. In jitsu date is logged for us.
+var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
 
 var match = nodeURL.search('[0-9]{4}/$');
@@ -68,21 +68,46 @@ app.use(express.static(__dirname + '/static'));
 
 //http.createServer(/* httpsOptions, */ function(req, response) {
 
-app.get('/history', function(req, res)
-{ // Redirect history route. Allows reload and sharing of history URL.
-    console.log("Redirect /history.")
-    res.writeHead(302, { 'location' : '/#history' });
-    res.end();
+app.get('/history', function(req, res) { 
+  // Redirect history route. Allows reload and sharing of history URL.
+  console.log("Redirect /history.")
+  res.writeHead(302, { 'location' : '/#history' });
+  res.end();
 });
 
-app.get('/list/todo*', function(req, res)
-{ // Redirect list url to list route. Allows reload and sharing of history URL.
-    var reqUrl = url.parse(req.url, true); // true parses the query string.
-    var uri = reqUrl.pathname;
-    var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
-    console.log("Redirect ", uri);
-    res.writeHead(302, { 'location' : "/#list/" + collectionName });
-    res.end();
+app.get('/list/todo*', function(req, res) {
+  // Redirect list route. Allows reload and sharing of list URL.
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
+  console.log("Redirect ", uri);
+  res.writeHead(302, { 'location' : "/#list/" + collectionName });
+  res.end();
+});
+
+app.del('/todo*', function(req, res) {
+  // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+  // Delete archived collection using mongojs.
+  // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
+  // mongolab rest API didn't support delete.  
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbName = reqUrl.query['mongoDB'];
+  var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
+  // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
+
+  dbs[dbName].collection(collectionName).drop( function(err) {
+    if (err != null) {
+      var errString = err.toString();
+      console.log("DB_DROP_COLLECTION_ERR:", errString);
+      res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+      res.end(errString);
+    }
+    else { // Send a success response.
+      res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
+      res.end();        
+    }
+  });
 });
 
 app.all('/api/1/databases/*', function(req, response) {
@@ -96,6 +121,7 @@ app.all('/api/1/databases/*', function(req, response) {
   // console.log(reqUrl);
 
   /*
+  Angular resource mapping from docs:
   { 'get':    {method:'GET'},
   'save':   {method:'POST'},
   'query':  {method:'GET', isArray:true},
@@ -148,10 +174,9 @@ app.all('/api/1/databases/*', function(req, response) {
     if (dbs[dbName] == undefined) {
       dbs[dbName] = new mongojs(dbUrl);
       dbs[dbName].on('error',function(err) {
-      console.log('database error', err);
-      throw err;
-    });
-
+        console.log('database error', err);
+        throw err;
+      });
     }
 
     // var db = mongojs(dbUrl, [collectionName]);
@@ -336,7 +361,7 @@ app.all('/api/1/databases/*', function(req, response) {
           }
         });
       });   
-    }
+    } // End if POST
     else if (req.method == 'PUT') {
       // console.log('PUT NEW COLLECTION:', uri);
 
@@ -352,32 +377,40 @@ app.all('/api/1/databases/*', function(req, response) {
         // console.log(chunk.toString());
       });
       req.on('end', function() {
-        // console.log("PUT Collection Received : ", fullBody);
+        console.log("PUT Collection Received : ", fullBody.length);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
         // Where todo* is the collection name.
         dbs[dbName].collection(collectionName).drop();
-        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
-          if (err != null) {
-            var errString = err.toString();
-            console.log("DB_INSERT_ERR:", errString);
-            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-            response.end(errString);
-          }
-          else { 
-            // console.log("docs:\n" +  JSON.stringify(doc));
-            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(doc));
-            response.end();
-          }
-        });
+        if (fullBody.length > 2) {
+          dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+            if (err != null) {
+              var errString = err.toString();
+              console.log("DB_INSERT_ERR:", errString);
+              response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+              response.end(errString);
+            }
+            else { 
+              // console.log("docs:\n" +  JSON.stringify(doc));
+              response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+              response.write(JSON.stringify(doc));
+              response.end();
+            }
+          });
+        }
+        else {
+          response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+          response.end();          
+        }
       });
-    }
-  }
+    } // End if PUT
+  } // End if /api/1/databases/
+  /* Move to app.del()
   else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
     
     // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
-      
+    // Todo: Consider refactoring to match other API calls form. This got this way because the original 
+    // mongolab rest API didn't support delete.  
     var dbName = reqUrl.query['mongoDB'];
     // var dbUrl = dblist[dbName];
 
@@ -400,10 +433,10 @@ app.all('/api/1/databases/*', function(req, response) {
       }
     });
   }
-  else {  // default static file server for html and script files in the ./static folder.
+  */
+  else {
     console.log("Unexpected request: " + req.connection.remoteAddress + ": " + req.method + " " + req.url);
     response.redirect('/');
-
     // used to handle files here. Replaced by express static.
     //fileServer.serve(req, response);
   }

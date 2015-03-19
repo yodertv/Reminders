@@ -45,6 +45,13 @@ Replace the weekly task list that I keep on paper.
 #Work in progress
 - Refactored to use express with minimal changes.
 - Let's do a nodejitsu deployment
+- Documented and corrected (Bug#20)
+#####(Bug#20)
+```
+DB_INSERT_ERR: MongoError: Invalid Operation, No operations in bulk
+```
+	Not critical. The failure doesn't affect the expected behavior. Only shows in log. Could be better by not making the call.
+
 - Documented and corrected (Bug#19) 
 #####(Bug#19) Event emitter leak:
 ```
@@ -174,7 +181,7 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#20)
+Next: (Bug#21)
 
 #####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
