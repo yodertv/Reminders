@@ -26,11 +26,12 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in mongolab.js.
 
 #Future Enhancements (backlog)
+- Test for multiple clients with different DBs.
 - Add unit testing.
 - Add a print feature.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
-- Build the node\_modules dependancies.
+- Build the node_modules dependancies.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
@@ -42,8 +43,26 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
-- Refactored to use express with minimaly.
+- Refactored to use express with minimal changes.
 - Let's do a nodejitsu deployment
+- Documented and corrected (Bug#19) 
+#####(Bug#19) Event emitter leak:
+```
+(node) warning: possible EventEmitter memory leak detected. 11 listeners added. Use emitter.setMaxListeners() to increase limit.
+Trace
+    at addListener (events.js:160:15)
+    at /Users/kat/src/Todos/build/todoServer.js:154:17
+    at callbacks (/usr/local/lib/node_modules/express/lib/router/index.js:161:37)
+    at param (/usr/local/lib/node_modules/express/lib/router/index.js:135:11)
+    at pass (/usr/local/lib/node_modules/express/lib/router/index.js:142:5)
+    at Router._dispatch (/usr/local/lib/node_modules/express/lib/router/index.js:170:5)
+    at Object.router (/usr/local/lib/node_modules/express/lib/router/index.js:33:10)
+    at next (/usr/local/lib/node_modules/express/node_modules/connect/lib/proto.js:199:15)
+    at resume (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:60:7)
+    at SendStream.error (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:73:37)
+```
+- Added "logDate" build prop to make bake
+- Formated the logger output.
 
 #Work done in previous releases
 ###2.5
@@ -155,7 +174,7 @@ Replace the weekly task list that I keep on paper.
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-next (Bug#19)
+Next: (Bug#20)
 
 #####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})

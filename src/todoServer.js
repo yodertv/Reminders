@@ -30,8 +30,8 @@ var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-t
 
 var dbs = []; // Array of connections
 
+var logDate = @LOGDATE@; // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
-//var port = process.argv[2] || 80;
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
@@ -51,7 +51,12 @@ var reObjectify = function (key, value) {
 
 var app = express();
 // configure Express
-app.use(express.logger());
+if (logDate) {
+  app.use(express.logger(':date [:remote-addr]-:method :url :status :res[content-length] :response-time ms'));
+} else {
+  app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+}
+// app.use(express.logger());
 app.use(express.cookieParser());
 // app.use(express.session({ secret: DBKey }));
 // Initialize Passport!  Also use passport.session() middleware, to support
@@ -75,6 +80,7 @@ app.get('/list/todo*', function(req, res)
     var reqUrl = url.parse(req.url, true); // true parses the query string.
     var uri = reqUrl.pathname;
     var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
+    console.log("Redirect ", uri);
     res.writeHead(302, { 'location' : "/#list/" + collectionName });
     res.end();
 });
@@ -141,15 +147,21 @@ app.all('/api/1/databases/*', function(req, response) {
 
     if (dbs[dbName] == undefined) {
       dbs[dbName] = new mongojs(dbUrl);
+      dbs[dbName].on('error',function(err) {
+      console.log('database error', err);
+      throw err;
+    });
+
     }
 
     // var db = mongojs(dbUrl, [collectionName]);
-
+/*
+    moved inside undefined section to try and solve (Bug#20)
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
     });
-    
+*/    
     /* Todo: Learn how to add collections.
     if (dbs[dbName][collectionName] == undefined) {
       dbs[dbName].Collection(collectionName);
