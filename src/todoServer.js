@@ -297,6 +297,55 @@ app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, respo
   }
 });
 
+app.put('/api/1/databases/*/collections/todo*', function(req, res) {
+  // console.log('PUT NEW COLLECTION:', uri);
+  // Drop existing documents and replace with
+  // Insert of the entire array into collection.
+  // Makes a new collection if it doesn't exist.
+
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var dbUrl = dblist[dbName];
+  var fullBody = '';
+
+  req.on('data', function(chunk) {
+
+    fullBody += chunk.toString();
+    // console.log("Received body data : ");
+    // console.log(chunk.toString());
+  });
+  req.on('end', function() {
+    console.log("PUT Collection Received : ", fullBody.length);
+    // Replace the document specified by id
+    // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
+    // Where todo* is the collection name.
+    dbs[dbName].collection(collectionName).drop();
+    if (fullBody.length > 2) { // A stringified empty collection has "[]"
+      dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+        if (err != null) {
+          var errString = err.toString();
+          console.log("DB_INSERT_ERR:", errString);
+          res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+          res.end(errString);
+        }
+        else { 
+          // console.log("docs:\n" +  JSON.stringify(doc));
+          res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+          res.write(JSON.stringify(doc));
+          res.end();
+        }
+      });
+    }
+    else { // Avoid the empty collection error from DB by skipping the insert above.
+      res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+      res.end();          
+    }
+  });
+});
+
 app.all('/api/1/databases/*', function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -353,6 +402,7 @@ app.all('/api/1/databases/*', function(req, response) {
       });
     });   
   } // End if POST
+/*
   else if (req.method == 'PUT') {
     // console.log('PUT NEW COLLECTION:', uri);
 
@@ -395,6 +445,7 @@ app.all('/api/1/databases/*', function(req, response) {
       }
     });
   } // End if PUT
+  */
   else {
     console.log("Unexpected request: " + req.connection.remoteAddress + ": " + req.method + " " + req.url);
     response.redirect('/');
