@@ -43,17 +43,20 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
-- Refactored to use express with minimal changes.
 - Let's do a nodejitsu deployment
-- Documented and corrected (Bug#20)
-#####(Bug#20)
+- Refactored to use express with minimal changes.
+- Then completed the refatoring.
+- Added "logDate" build prop to make bake
+- Formated the logger output.
+
+### Bugs fixed:
+#####Documented and corrected(Bug#20)
 ```
 DB_INSERT_ERR: MongoError: Invalid Operation, No operations in bulk
 ```
 	Not critical. The failure doesn't affect the expected behavior. Only shows in log. Could be better by not making the call.
 
-- Documented and corrected (Bug#19) 
-#####(Bug#19) Event emitter leak:
+#####Documented and corrected Event emitter leak(Bug#19)
 ```
 (node) warning: possible EventEmitter memory leak detected. 11 listeners added. Use emitter.setMaxListeners() to increase limit.
 Trace
@@ -68,8 +71,6 @@ Trace
     at resume (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:60:7)
     at SendStream.error (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:73:37)
 ```
-- Added "logDate" build prop to make bake
-- Formated the logger output.
 
 #Work done in previous releases
 ###2.5
