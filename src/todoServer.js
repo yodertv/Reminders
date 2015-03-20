@@ -346,110 +346,46 @@ app.put('/api/1/databases/*/collections/todo*', function(req, res) {
   });
 });
 
-app.all('/api/1/databases/*', function(req, response) {
+app.post('/api/1/databases/*', function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
-  var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
-  var objID = "";
-
-  if (match>0) {
-    objID = dbPart.slice(match);
-    dbPart = dbPart.slice(0, match-1); // Remove /objID 
-    // console.log("match =", match, "\n objID =", objID);
-  }
-
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
 
-  if (objID) {  // Basic object REST. GET, PUT, DELETE
-    console.log("ERRRRRORRRRR!!!!");
-  } // End if (ObjID)
-  else if (req.method == 'GET') {
-    console.log("ERRORRRRRR!!! Get collection.")
-  } // End 'GET'
-  else if (req.method == 'POST') {     // Insert a new doc into collectionName
-    // console.log('POST NEW DOC:', uri);
-    // Insert and new doc into collection.
+  // Insert a new doc into collectionName
+  // console.log('POST NEW DOC:', uri);
+  // Insert and new doc into collection.
 
-    var fullBody = '';
-    req.on('data', function(chunk) {
+  var fullBody = '';
+  req.on('data', function(chunk) {
 
-      fullBody += chunk.toString();
-      // console.log("Received body data : ");
-      // console.log(chunk.toString());
-    });
-    req.on('end', function() {
-      // console.log("POST NEW DOC Received : ", fullBody);
-      // Replace the document specified by id
-      // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-      // Where todo* is the collection name.
-    
-      dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
-        if (err != null) {
-          var errString = err.toString();
-          console.log("DB_INSERT_ERR:", errString);
-          response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-          response.end(errString);
-        }
-        else { 
-          // console.log("Inserted doc:\n", doc);
-          response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-          response.write(JSON.stringify(doc));
-          response.end();
-        }
-      });
-    });   
-  } // End if POST
-/*
-  else if (req.method == 'PUT') {
-    // console.log('PUT NEW COLLECTION:', uri);
-
-    // Drop existing documents and replace with
-    // Insert of the entire array into collection.
-    // Makes a new collection if it doesn't exist.
-
-    var fullBody = '';
-    req.on('data', function(chunk) {
-
-      fullBody += chunk.toString();
-      // console.log("Received body data : ");
-      // console.log(chunk.toString());
-    });
-    req.on('end', function() {
-      console.log("PUT Collection Received : ", fullBody.length);
-      // Replace the document specified by id
-      // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-      // Where todo* is the collection name.
-      dbs[dbName].collection(collectionName).drop();
-      if (fullBody.length > 2) { // A stringified empty collection has "[]"
-        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
-          if (err != null) {
-            var errString = err.toString();
-            console.log("DB_INSERT_ERR:", errString);
-            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-            response.end(errString);
-          }
-          else { 
-            // console.log("docs:\n" +  JSON.stringify(doc));
-            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(doc));
-            response.end();
-          }
-        });
+    fullBody += chunk.toString();
+    // console.log("Received body data : ");
+    // console.log(chunk.toString());
+  });
+  req.on('end', function() {
+    // console.log("POST NEW DOC Received : ", fullBody);
+    // Replace the document specified by id
+    // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
+    // Where todo* is the collection name.
+  
+    dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
+      if (err != null) {
+        var errString = err.toString();
+        console.log("DB_INSERT_ERR:", errString);
+        response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+        response.end(errString);
       }
-      else { // Avoid the empty collection error from DB by skipping the insert above.
+      else { 
+        // console.log("Inserted doc:\n", doc);
         response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-        response.end();          
+        response.write(JSON.stringify(doc));
+        response.end();
       }
     });
-  } // End if PUT
-  */
-  else {
-    console.log("Unexpected request: " + req.connection.remoteAddress + ": " + req.method + " " + req.url);
-    response.redirect('/');
-  }
+  });   
 });
 
 http.createServer(app).listen(parseInt(port, 10));
