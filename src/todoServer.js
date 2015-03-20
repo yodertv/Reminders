@@ -110,6 +110,69 @@ app.del('/todo*', function(req, res) {
   });
 });
 
+app.get('/api/1/databases/*/collections/', function(req, res) {
+  // No collection name in URI. Get the collection names.
+  // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
+  // Get archiveList 
+  // console.log('GET COLLECTION NAMES: ', uri);
+
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+
+  dbs[dbName].getCollectionNames( function( err, myColls ){
+    if (err != null) {
+        var errString = err.toString();
+        console.log("DB_GETCOLLECTIONNAMES_ERR:", errString);
+        res.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
+        res.end(errString);
+    }
+    else {
+      // console.log("GET COLLECTIONS:\n", myColls);
+      res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+      res.write(JSON.stringify(myColls))
+      res.end();
+    }
+  })
+});
+
+app.get('/api/1/databases/*/collections/*', function(req, res) {      
+  // console.log('GET DOCS:', uri);
+
+  // Get all documents from a specified collection
+  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
+  // Where todo* is the collection name.
+  
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var dbUrl = dblist[dbName];
+
+  // The client always starts with reading the collection. Open db here.
+  if (dbs[dbName] == undefined) {
+    dbs[dbName] = new mongojs(dbUrl);
+    dbs[dbName].on('error',function(err) {
+      console.log('database error', err);
+      throw err;
+    });
+  }
+
+  dbs[dbName].collection(collectionName).find( function( err, myDocs ){
+    if (err != null) {
+      console.log("DB_FIND_ERR:", err);
+    }
+    else {
+      // console.log("GET DOCS:\n", myDocs);
+      res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
+      res.write(JSON.stringify(myDocs));
+      res.end();
+    }
+  });
+});
+
 app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, response){
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
@@ -127,7 +190,7 @@ app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, respo
 
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
-
+  /*
   console.log("\nuri =", uri,
     "\ndbPart =", dbPart, 
     "\ndbName =", dbName,
@@ -135,7 +198,7 @@ app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, respo
     "\nobjID = ", objID,
     "\ndbUrl =", dbUrl
   );
-
+  */
   // Open the mongjs connection to the db
   if (dbs[dbName] == undefined) {
     dbs[dbName] = new mongojs(dbUrl);
@@ -276,7 +339,7 @@ app.all('/api/1/databases/*', function(req, response) {
 */
 
   
-  if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
+//  if (uri.indexOf(restUrl) == 0) { // /api/1/databases/
 
     var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
     var dbName = dbPart.slice(0,dbPart.indexOf('/'));
@@ -302,15 +365,6 @@ app.all('/api/1/databases/*', function(req, response) {
     );
     */
 
-    if (dbs[dbName] == undefined) {
-      dbs[dbName] = new mongojs(dbUrl);
-      dbs[dbName].on('error',function(err) {
-        console.log('database error', err);
-        throw err;
-      });
-    }
-
-    // var db = mongojs(dbUrl, [collectionName]);
 /*
     moved inside undefined section to try and solve (Bug#19)
     dbs[dbName].on('error',function(err) {
@@ -419,6 +473,8 @@ app.all('/api/1/databases/*', function(req, response) {
 
     } // End if (ObjID)
     else if (req.method == 'GET') {
+      console.log("ERRORRRRRR!!! Get collection.")
+      /*
       if(collectionName == '') { // Get the collection names
         // No collection name in URI
         // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
@@ -462,6 +518,7 @@ app.all('/api/1/databases/*', function(req, response) {
           // db.close();
         });
       }
+      */
     } // End 'GET'
     else if (req.method == 'POST') {     // Insert a new doc into collectionName
       // console.log('POST NEW DOC:', uri);
@@ -538,7 +595,7 @@ app.all('/api/1/databases/*', function(req, response) {
         }
       });
     } // End if PUT
-  } // End if /api/1/databases/
+//  } // End if /api/1/databases/
   /* Move to app.del()
   else if (req.method == 'DELETE') { // Delete archived collection using mongojs.
     
