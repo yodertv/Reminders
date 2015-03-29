@@ -12,7 +12,6 @@
 var os = require("os");
 var url = require("url");
 var http = require("http");
-var nStatic = require('node-static');
 var mongojs = require("mongojs");
 var express = require("express");
 
@@ -22,6 +21,7 @@ var express = require("express");
 // This list should be baked by build depending on the environment.
 
 var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
+              'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
               'test-todo' : 'localhost:27017/test-todo',
               'todo_new_test' : 'localhost:27017/todo_new_test',
               'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',

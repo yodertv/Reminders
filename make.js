@@ -78,7 +78,7 @@ var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
 
-_shell.config.fatal = true;
+_shell.config.fatal = false;
 
 // Global options
 program
@@ -200,6 +200,9 @@ function prep(env){
  	} 
     
     // Check node-module depenancies
+	if (! program.silent) {
+    	console.log('\n Checking node-modules depenancies...');
+    }
     var list_results = _shell.exec('npm list', {'silent':'true'});// non-zero exit code
     if (list_results.code !== 0) {
 		console.log('\n Sorry, there are missing dependancies reported by npm list.\n');
