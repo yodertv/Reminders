@@ -48,6 +48,8 @@ Replace the weekly task list that I keep on paper.
 - Then completed the refatoring.
 - Added "logDate" build prop to make bake
 - Formated the logger output.
+- Tested w/ Mongodb v3.0.1. Worked with upgraded mongjs.
+- Added db to list for old version of mongo installed on katrinas-macbook-air.
 
 ### Bugs fixed:
 #####Documented and corrected(Bug#20)
