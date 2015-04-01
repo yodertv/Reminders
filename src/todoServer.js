@@ -23,6 +23,7 @@ var express = require("express");
 var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
               'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
               'test-todo' : 'localhost:27017/test-todo',
+              'test-todo-1' : 'localhost:27017/test-todo-1',
               'todo_new_test' : 'localhost:27017/todo_new_test',
               'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
               'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
@@ -53,7 +54,7 @@ var app = express();
 
 // configure Express
 if (logDate) {
-  app.use(express.logger(':date [:remote-addr]-:method :url :status :res[content-length] :response-time ms'));
+  app.use(express.logger(':date [:remote-addr]:method :url :status :res[content-length] :response-time ms'));
 } else {
   app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
 }
@@ -88,7 +89,7 @@ app.del('/todo*', function(req, res) {
   // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
   // Delete archived collection using mongojs.
   // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
-  // mongolab rest API didn't support delete.  
+  // mongolab rest API didn't support delete collection.  
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = reqUrl.query['mongoDB'];
@@ -322,28 +323,41 @@ app.put('/api/1/databases/*/collections/todo*', function(req, res) {
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
-    dbs[dbName].collection(collectionName).drop();
-    if (fullBody.length > 2) { // A stringified empty collection has "[]"
-      dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
-        if (err != null) {
-          var errString = err.toString();
-          console.log("DB_INSERT_ERR:", errString);
-          res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-          res.end(errString);
-        }
-        else { 
-          // console.log("docs:\n" +  JSON.stringify(doc));
-          res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-          res.write(JSON.stringify(doc));
-          res.end();
-        }
-      });
-    }
-    else { // Avoid the empty collection error from DB by skipping the insert above.
-      res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-      res.end();          
-    }
-  });
+ 
+    // Suspect race condition when the insert below beats the key cleanup of the drop cause a duplicate key error and loss of data.
+    // attempted to fix by putting the insert into the return function
+    // dbs[dbName].collection(collectionName).drop();
+    
+    dbs[dbName].collection(collectionName).drop( function(err) {
+      /*if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
+        var errString = err.toString();
+        console.log("DB_PUT_DROP_COLLECTION_ERR:", errString);
+        res.writeHead(500, "DB_PUT_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+        res.end(errString);
+      }
+      else */
+      if (fullBody.length > 2) { // A stringified empty collection has "[]"
+        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+          if (err != null) {
+            var errString = err.toString();
+            console.log("DB_INSERT_ERR:", errString);
+            res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+            res.end(errString);
+          }
+          else { 
+            // console.log("docs:\n" +  JSON.stringify(doc));
+            res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+            res.write(JSON.stringify(doc));
+            res.end();
+          }
+        });
+      }
+      else { // Avoid the empty collection error from DB by skipping the insert above.
+        res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+        res.end();          
+      }
+    });
+  }); 
 });
 
 app.post('/api/1/databases/*', function(req, response) {
