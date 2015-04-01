@@ -43,6 +43,7 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
+- Made an attempt to fix (Bug#18). Hard to reproduce.
 - Let's do a nodejitsu deployment
 - Refactored to use express with minimal changes.
 - Then completed the refatoring.
@@ -50,6 +51,15 @@ Replace the weekly task list that I keep on paper.
 - Formated the logger output.
 
 ### Bugs fixed:
+
+#####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
+	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
+ 	Happend in old test-todo db.
+
+ 	Happend again on yodertvtodo 3.26.15 on kitchen-mac.
+ 	DB_INSERT_ERR: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: yodertvtodo.todo.$_id_  dup key: { : ObjectId('54701f6fe4b0d8aa33853ba3') }","op":{"_id":"54701f6fe4b0d8aa33853ba3","text":"Amazon account switch","done":false}})
+	Fri, 27 Mar 2015 03:08:06 GMT [::ffff:192.168.0.11]-PUT /api/1/databases/yodertvtodo/collections/todo 500 - 48 ms
+
 #####Documented and corrected(Bug#20)
 ```
 DB_INSERT_ERR: MongoError: Invalid Operation, No operations in bulk
@@ -183,14 +193,6 @@ Trace
 
 #Known Bugs:
 Next: (Bug#21)
-
-#####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
-	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
- 	Happend in old test-todo db.
-
- 	Happend again on yodertvtodo 3.26.15 on kitchen-mac.
- 	DB_INSERT_ERR: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: yodertvtodo.todo.$_id_  dup key: { : ObjectId('54701f6fe4b0d8aa33853ba3') }","op":{"_id":"54701f6fe4b0d8aa33853ba3","text":"Amazon account switch","done":false}})
-	Fri, 27 Mar 2015 03:08:06 GMT [::ffff:192.168.0.11]-PUT /api/1/databases/yodertvtodo/collections/todo 500 - 48 ms
 
 #####(Bug#17) Server crashes when on localnet with multiple clients: database error [Error: connection closed]
 	192.168.0.2: PUT /api/1/databases/test-todo/collections/todo database error [Error: connection closed]
