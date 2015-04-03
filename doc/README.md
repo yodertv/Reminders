@@ -43,10 +43,10 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
-- Made an attempt to fix (Bug#18). Hard to reproduce.
-- Let's do a nodejitsu deployment
-- Refactored to use express with minimal changes.
+- Tested at merchants. Worked from iPhone on AK's local area net.
+- Made an attempt to fix (Bug#18). Hard to reproduce. Put the insert in the callback of the drop(), but noticed that dropping an empty collection resulted in an error so ignoring drop errors.
 - Then completed the refatoring.
+- Refactored to use express with minimal changes.
 - Added "logDate" build prop to make bake
 - Formated the logger output.
 
