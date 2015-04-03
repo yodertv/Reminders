@@ -12,18 +12,18 @@ Replace the weekly task list that I keep on paper.
 - History - Presents the list of archives and allows you to view them.
 - Delete icon - Deletes a task from the list. Delete icon and complete checkbox are hidden or shown based on (edit==true).
 - Displays total and remaing task counts.
-- Hosted at http://192.168.1.11 with node StaticServer http server.
-- Host the service on the web so I can use it at work. (yodertv.com)
-- Tested on nook browser, iTouch, Safari, chrome on Mac, chrome on widows, and IE (fails because it requires CORS).
-- Depends on bootstrap, angular, and jQuerry.
+- Can be hosted at localhost, localnet and nodjitsu using express.
+- Tested on: nook browser, iTouch, Safari, iPhone, chrome on Mac, chrome on widows, and IE (fails because it requires CORS).
+- Client depends on bootstrap, angular, and jquery.
+- Server depends on express, http, and mongojs.
 - Has a custom favicon.
 - Responsive to three device sizes.
 - Lists are displayed in tables.
-- Uses pills for navigation replaces href strings in earlier versions with buttons.
+- Uses pills for navigation.
 - Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. Button disappears when displaying the last archive.
-- Deleting items in an archive is now supported.
-- Deleting archives is now supported in the nodejs server version.
-- All deployment knowledge is in mongolab.js.
+- Editing and deleting items in an archive.
+- Editing and deleting archives.
+- All deployment knowledge is in make.js and build_props_files.
 
 #Future Enhancements (backlog)
 - Test for multiple clients with different DBs.
@@ -43,7 +43,7 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
-- Tested at merchants. Worked from iPhone on AK's local area net.
+- Tested at merchants wifi. Worked from iPhone on AK's local area net.
 - Made an attempt to fix (Bug#18). Hard to reproduce. Put the insert in the callback of the drop(), but noticed that dropping an empty collection resulted in an error so ignoring drop errors.
 - Then completed the refatoring.
 - Refactored to use express with minimal changes.
