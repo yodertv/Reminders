@@ -194,7 +194,15 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#21)
+Next: (Bug#22)
+
+#####(Bug#21)
+When the todoServer host has been asleep for sometime the DB connection to Mongolab are broken and this failure below occurs. It seems to clear up on the 2nd try.
+```
+DB_FIND_ERR: [Error: failed to connect to [ds043047-a.mongolab.com:43047]]
+DB_GETCOLLECTIONNAMES_ERR: Error: failed to connect to [ds043047-a.mongolab.com:43047]
+Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvtodo/collections/ 500 - 36553 ms
+```
 
 #####(Bug#17) Server crashes when on localnet with multiple clients: database error [Error: connection closed]
 	192.168.0.2: PUT /api/1/databases/test-todo/collections/todo database error [Error: connection closed]
