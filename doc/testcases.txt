@@ -1,0 +1,17 @@
+test cases:
+
+- Logon
+- Logon with registration
+	- Available DBs
+	- No DBs available (never tested)
+- Welcome/About page logged in
+- Welcome/About page logged out
+- Menu: About, Today, Logout
+- Logout, Logout from Google too
+- Add task
+- Edit / Delete tasks
+- Archive
+- List Archive
+- History list
+- Delete archive
+- Next archive button ">>"

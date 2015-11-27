@@ -1,7 +1,7 @@
 {
-  "name": "TodoTst",
+  "name": "Todo",
   "scripts": {
-    "start": "todoServer.js"
+    "start": "node ./todoServer.js"
   },
   "version": "0.@VERSION@",
   "engines": {
@@ -15,8 +15,8 @@
     "commander" : "2.6.0",
     "shelljs" : "0.3.0"
   },
-  "subdomain": "yodertcode",
-  "#1_comment" : "Environment indepentant build variables.",
+  "subdomain": "yodercode",
+  "#1_comment" : "Environment independent build variables.",
   "build_dir" : "./build",
   "lib_dir" : "./lib",
   "src_dir" : "./src"

@@ -124,10 +124,13 @@ app.get('/api/1/databases/*/collections/', function(req, res) {
   // No collection name in URI. Get all the collection names.
   // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
   // Get archiveList 
-  // console.log('GET COLLECTION NAMES: ', uri);
-
+  
+  
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
+
+  // console.log('GET COLLECTION NAMES: ', uri);
+
   var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
 
@@ -402,7 +405,9 @@ app.post('/api/1/databases/*', function(req, response) {
   });   
 });
 
-http.createServer(app).listen(parseInt(port, 10));
+// console.log("process.env.PORT=", process.env.PORT);
+
+http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
 console.log("Todo Server running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");

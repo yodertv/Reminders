@@ -36,7 +36,7 @@ var _env = undefined;
 */
 
 // Names of valid environments with definition property files defined
-var validEnvs = ['localnet','localhost','jitsu'];
+var validEnvs = ['localnet','localhost','jitsu','modulus'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['mongolab.js', 'todo.html', 'todo.js', 'history.html',

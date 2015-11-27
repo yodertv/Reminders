@@ -1,0 +1,20 @@
+{
+	"#0_comment" : "Build poperties for Modulus deployment and validation.",
+	
+	"name" : "modulus",
+	"ENV" : "PROD",
+	"version" : "2.0",
+
+	"#1_comment" : "Should server log date? On Nodejitsu dates are logged by the application environment.",
+	"logDate" : "true",
+
+	"#2__comment" : "When using the local network, auth must be disabled because google auth will only accept 127.0.0.1 or a routable address.",
+	"disableAuth" : "true",
+	
+	"#3_comment" : "Deployment details.",
+	"nodeURL" : "http://todos-55911.onmodulus.net/",
+	"mongoDB" : "bobstodos",
+	"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/",
+	"newDB" : "mongodb://nodejitsu_yodertv:jek2pjencj2qh8bu97duuemb87@ds059887.mongolab.com:59887/nodejitsu_yodertv_nodejitsudb2315353469"
+}
+
