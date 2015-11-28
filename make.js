@@ -64,7 +64,7 @@ for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
 var BLD_FILES = ['package.json'];
 
 // Files into which to bake the @VERSION@
-var VER_FILES = [DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'package.json'];
+var VER_FILES = [DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'todoServer.js'];
 
 // Files into which to bake the @NODEURL@
 var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServer.js'];
@@ -200,17 +200,19 @@ function prep(env){
  	} 
     
     // Check node-module depenancies
+    /*
 	if (! program.silent) {
     	console.log('\n Checking node-modules depenancies...');
     }
-    var list_results = _shell.exec('npm list', {'silent':'true'});// non-zero exit code
+    var list_results = _shell.exec('npm ls', {'silent':'true'});// non-zero exit code
     if (list_results.code !== 0) {
 		console.log('\n Sorry, there are missing dependancies reported by npm list.\n');
 		console.log(' ', list_results.output);
 		console.log(' Exit code:', list_results.code);
 		program.help();
 	}
-
+	*/
+    
     // Prepare the distribution directories
     _shell.mkdir('-p', DIST_STATIC);
 	var err = _shell.error();
@@ -241,7 +243,7 @@ function prep(env){
     // Use sed to perform global replace in the build directory
 
 	for (var i 	= VER_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@VERSION@', _props.version, VER_FILES[i]);	
+		_shell.sed('-i', '@VERSION@', _pkg.version, VER_FILES[i]);	
 	};
 
 	for (var i 	= URL_FILES.length - 1; i >= 0; i--) {

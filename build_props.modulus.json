@@ -3,7 +3,6 @@
 	
 	"name" : "modulus",
 	"ENV" : "PROD",
-	"version" : "2.0",
 
 	"#1_comment" : "Should server log date? On Nodejitsu dates are logged by the application environment.",
 	"logDate" : "true",

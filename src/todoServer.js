@@ -1,13 +1,6 @@
-// TodoServer.js 2.1
-//
-'use strict';
+// todoServer.js @VERSION@ //
 
-/*
-    https = require("https");
-    path = require("path");
-    fs = require("fs");
-    sys  = require('sys');
-*/
+'use strict';
 
 var os = require("os");
 var url = require("url");

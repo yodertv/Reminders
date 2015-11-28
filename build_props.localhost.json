@@ -3,7 +3,6 @@
 	
 	"name" : "localhost",
 	"ENV" : "DEV",
-	"version" : "2.4",
 
 	"#1_comment" : "Should server log date?",
 	"logDate" : "true",

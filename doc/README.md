@@ -43,6 +43,7 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
+- Upgraded node and npm to the latest 5.1.0 and 3.3.12 respectively.
 - Solved (Bug#22)
 - Deployed to nodjitsu and modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
 - Tested at merchants wifi. Worked from iPhone on AK's local area net.

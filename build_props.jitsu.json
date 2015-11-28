@@ -3,7 +3,6 @@
 	
 	"name" : "jitsu",
 	"ENV" : "PROD",
-	"version" : "2.4",
 
 	"#1_comment" : "Should server log date? On Nodejitsu dates are logged by the application environment.",
 	"logDate" : "false",
