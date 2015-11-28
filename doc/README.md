@@ -43,6 +43,8 @@ Replace the weekly task list that I keep on paper.
 - Dynamically provision new users.
 
 #Work in progress
+- Solved (Bug#22)
+- Deployed to nodjitsu and modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
 - Tested at merchants wifi. Worked from iPhone on AK's local area net.
 - Made an attempt to fix (Bug#18). Hard to reproduce. Put the insert in the callback of the drop(), but noticed that dropping an empty collection resulted in an error so ignoring drop errors.
 - Then completed the refatoring.
@@ -53,6 +55,11 @@ Replace the weekly task list that I keep on paper.
 - Added db to list for old version of mongo installed on katrinas-macbook-air.
 
 ### Bugs fixed:
+
+#####(Bug#22)
+Upgraded to mongojs v1.4.1 and used options:
+// connect using SCRAM-SHA-1 mechanism 
+var db = mongojs('username:password@example.com/mydb', ['mycollection'], {authMechanism: 'ScramSHA1'})
 
 #####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
@@ -194,7 +201,13 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#22)
+Next: (Bug#24)
+
+#####(Bug#22)
+Auth failures with mongolab using mongojs. Todos fails to connects using "mongojs": "0.18.0", and new mongojs(dbUrl); Works correctly on localhost.
+```
+mongojs: Unable to connect to any application instances.
+```
 
 #####(Bug#21)
 When the todoServer host has been asleep for sometime the DB connection to Mongolab are broken and this failure below occurs. It seems to clear up on the 2nd try.

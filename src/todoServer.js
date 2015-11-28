@@ -128,11 +128,18 @@ app.get('/api/1/databases/*/collections/', function(req, res) {
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-
-  // console.log('GET COLLECTION NAMES: ', uri);
-
   var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+
+  // The client may start with reading the collection names. Open db here.
+  if (dbs[dbName] == undefined) {
+    console.log("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES, with dbUrl " + dbUrl);
+    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'ScramSHA1'});
+    dbs[dbName].on('error',function(err) {
+      console.log('database error', err);
+      throw err;
+    });
+  }
 
   dbs[dbName].getCollectionNames( function( err, myColls ){
     if (err != null) {
@@ -163,9 +170,10 @@ app.get('/api/1/databases/*/collections/*', function(req, res) {
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
 
-  // The client always starts with reading the collection. Open db here.
+  // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = new mongojs(dbUrl);
+    console.log("Opening DB " + dbName + " via DB_FIND, with dbUrl " + dbUrl);
+    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'ScramSHA1'});
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;

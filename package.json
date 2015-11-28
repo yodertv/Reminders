@@ -1,5 +1,5 @@
 {
-  "name": "Todo",
+  "name": "To-dos",
   "scripts": {
     "start": "node ./todoServer.js"
   },
@@ -9,13 +9,13 @@
   },
   "dependencies": {
     "express": "3.1.0",
-    "mongojs": "0.18.0"
+    "mongojs": "1.4.1"
   },
   "build_dependencies": {
     "commander" : "2.6.0",
     "shelljs" : "0.3.0"
   },
-  "subdomain": "yodercode",
+  "subdomain": "yodertx",
   "#1_comment" : "Environment independent build variables.",
   "build_dir" : "./build",
   "lib_dir" : "./lib",
