@@ -1,4 +1,4 @@
-Todos v2.5
+Todos v0.3.0
 ==========
 #Objective:
 Replace the weekly task list that I keep on paper.
@@ -42,15 +42,18 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Dynamically provision new users.
 
-#Work in progress
+### Version 0.3.0 (12.2.2015)
+- Fixing build and tagging v0.3.0. Major release because of all the dependancies that were upgrades.
+- Server running 5.1.1.
+- Rolled the devEnvironment back to node v4.2.2 and npm 2.14.7.
 - Upgraded node and npm to the latest 5.1.0 and 3.3.12 respectively.
 - Solved (Bug#22)
-- Deployed to nodjitsu and modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
+- Deployed to nodjitsu, while modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
 - Tested at merchants wifi. Worked from iPhone on AK's local area net.
 - Made an attempt to fix (Bug#18). Hard to reproduce. Put the insert in the callback of the drop(), but noticed that dropping an empty collection resulted in an error so ignoring drop errors.
 - Then completed the refatoring.
 - Refactored to use express with minimal changes.
-- Added "logDate" build prop to make bake
+- Added "logDate" build prop to make bake step.
 - Formated the logger output.
 - Tested w/ Mongodb v3.0.1. Worked with upgraded mongjs.
 - Added db to list for old version of mongo installed on katrinas-macbook-air.

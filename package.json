@@ -1,9 +1,9 @@
 {
-  "name": "To-dos",
+  "name": "Todos",
   "scripts": {
     "start": "node ./todoServer.js"
   },
-  "version": "0.2.5",
+  "version": "0.3.0",
   "engines": {
     "node": "5.1.0"
   },
@@ -11,7 +11,7 @@
     "express": "3.1.0",
     "mongojs": "1.4.1"
   },
-  "build_dependencies": {
+  "devDependencies": {
     "commander" : "2.6.0",
     "shelljs" : "0.3.0"
   },

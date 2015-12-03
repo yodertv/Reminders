@@ -1,4 +1,4 @@
-/* Todos.js 2.1 /*
+/* todos.js @VERSION@ /*
 /* Controllers */
 'use strict';
 
@@ -7,13 +7,6 @@ var todo = angular.module('todo', [
 	'ngRoute', 
 	'mongolab'
 ]);	
-
-/*
-// Rolling back to 1.0.2 
-var todo = angular.module('todo', [
-	'mongolab'
-]);	
-*/
 
 todo.config(['$routeProvider',
 	function($routeProvider) {

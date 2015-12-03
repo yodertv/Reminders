@@ -64,7 +64,7 @@ for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
 var BLD_FILES = ['package.json'];
 
 // Files into which to bake the @VERSION@
-var VER_FILES = [DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'todoServer.js'];
+var VER_FILES = [DIST_STATIC + '/' + 'todo.js', DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'todoServer.js'];
 
 // Files into which to bake the @NODEURL@
 var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServer.js'];
@@ -200,7 +200,7 @@ function prep(env){
  	} 
     
     // Check node-module depenancies
-    /*
+    
 	if (! program.silent) {
     	console.log('\n Checking node-modules depenancies...');
     }
@@ -211,7 +211,6 @@ function prep(env){
 		console.log(' Exit code:', list_results.code);
 		program.help();
 	}
-	*/
     
     // Prepare the distribution directories
     _shell.mkdir('-p', DIST_STATIC);
