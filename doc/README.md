@@ -25,27 +25,14 @@ Replace the weekly task list that I keep on paper.
 - Editing and deleting archives.
 - All deployment knowledge is in make.js and build_props_files.
 
-#Future Enhancements (backlog)
-- Test for multiple clients with different DBs.
-- Add unit testing.
-- Add a print feature.
-- Upgrade Bootstrap.
-- Consider making the build manifest in JSON notation rather than string.
-- Build the node_modules dependancies.
-- Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
-- Print a digest from the History page.
-- Keep common tasks. These should be replenished everytime the list is archived.
-- Give the user a way to edit the list of repeating tasks.
-- Minimize trips to server. Keep data cached between pages.
-- Support authentication.
-- Support multiple users.
-- Support addvertisments.
-- Dynamically provision new users.
+
+### Work in progress
 
 ### Version 0.3.0 (12.2.2015)
 - Fixing build and tagging v0.3.0. Major release because of all the dependancies that were upgrades.
 - Server running 5.1.1.
 - Rolled the devEnvironment back to node v4.2.2 and npm 2.14.7.
+- Build the node_modules dependancies. Use npm install.
 - Upgraded node and npm to the latest 5.1.0 and 3.3.12 respectively.
 - Solved (Bug#22)
 - Deployed to nodjitsu, while modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
@@ -60,12 +47,18 @@ Replace the weekly task list that I keep on paper.
 
 ### Bugs fixed:
 
-#####(Bug#22)
+#####Documented and corrected (Bug#22)
+Auth failures with mongolab using mongojs. Todos fails to connects using "mongojs": "0.18.0", and new mongojs(dbUrl); Works correctly on localhost.
+```
+mongojs: Unable to connect to any application instances.
+```
+Solved by suggestion from mongolabs support:
+
 Upgraded to mongojs v1.4.1 and used options:
 // connect using SCRAM-SHA-1 mechanism 
 var db = mongojs('username:password@example.com/mydb', ['mycollection'], {authMechanism: 'ScramSHA1'})
 
-#####(Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
+#####Documented and corrected (Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
  	Happend in old test-todo db.
 
@@ -205,13 +198,11 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#24)
+Next: (Bug#25)
 
-#####(Bug#22)
-Auth failures with mongolab using mongojs. Todos fails to connects using "mongojs": "0.18.0", and new mongojs(dbUrl); Works correctly on localhost.
-```
-mongojs: Unable to connect to any application instances.
-```
+#####(Bug#24)
+- Invalid date on occasion when navigaing the history. Likey be a race condition. Not consistantly repeatable.
+
 
 #####(Bug#21)
 When the todoServer host has been asleep for sometime the DB connection to Mongolab are broken and this failure below occurs. It seems to clear up on the 2nd try.
@@ -238,3 +229,19 @@ Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvt
 
 #####(Bug#12) connection to the DB doesn't have a fail check and crashes the server when things aren't right.
 #####(Bug#6) Invalid date on history page in IE9.
+
+#Future Enhancements (backlog)
+- Test for multiple clients with different DBs.
+- Add unit testing.
+- Upgrade Bootstrap.
+- Consider making the build manifest in JSON notation rather than string.
+- Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
+- Print a digest from the History page.
+- Keep common tasks. These should be replenished everytime the list is archived.
+- Give the user a way to edit the list of repeating tasks.
+- Minimize trips to server. Keep data cached between pages.
+- Support authentication.
+- Support multiple users.
+- Support addvertisments.
+- Dynamically provision new users.
+- Add a print feature.
