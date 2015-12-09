@@ -40,7 +40,7 @@ var validEnvs = ['localnet','localhost','jitsu','modulus'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['mongolab.js', 'todo.html', 'todo.js', 'history.html',
-				 'list.html', 'index.html', 'todo.css'];
+				 'list.html', 'index.html', 'login.html', 'todo.css'];
 var SRC_FILES = [];
 for (var i = 0; i < SRC_FILES_NAMES.length; i++) {
  	SRC_FILES.push(SRC_PATH + '/' + SRC_FILES_NAMES[i]);
@@ -64,7 +64,12 @@ for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
 var BLD_FILES = ['package.json'];
 
 // Files into which to bake the @VERSION@
-var VER_FILES = [DIST_STATIC + '/' + 'todo.js', DIST_STATIC + '/' + 'index.html', DIST_PATH + '/' + 'todoServer.js'];
+var VER_FILES = [
+	DIST_STATIC + '/' + 'todo.js', 
+	DIST_STATIC + '/' + 'index.html', 
+	DIST_STATIC + '/' + 'login.html',
+	DIST_PATH + '/' + 'todoServer.js'
+];
 
 // Files into which to bake the @NODEURL@
 var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServer.js'];
