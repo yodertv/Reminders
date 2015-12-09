@@ -1,4 +1,5 @@
-// todoServer.js @VERSION@ //
+var nodeDesc = "Todo Server v@VERSION@";
+/* Fully working Todo demonstration application using mongo, angular, and express. */
 
 'use strict';
 
@@ -118,11 +119,11 @@ app.get('/api/1/databases/*/collections/', function(req, res) {
   // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
   // Get archiveList 
   
-  
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var dbUrl = dblist[dbName];
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
@@ -410,5 +411,5 @@ app.post('/api/1/databases/*', function(req, response) {
 
 http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
-console.log("Todo Server running on " + os.hostname() + " at port " + port);
+console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
