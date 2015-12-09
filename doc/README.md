@@ -27,6 +27,9 @@ Replace the weekly task list that I keep on paper.
 
 
 ### Work in progress
+- Clean-up readme.
+- Merge multi-user and multi-auth from html-todos and Auth projects.
+- Noted (Bug#25) that button/title doesn't show year when it is different from current year. 
 
 ### Version 0.3.0 (12.2.2015)
 - Fixing build and tagging v0.3.0. Major release because of all the dependancies that were upgrades.
@@ -200,9 +203,11 @@ Trace
 #Known Bugs:
 Next: (Bug#25)
 
+#####(Bug#25)
+- Lable/button for the todos list doesn't include the year when it is different from current year.
+
 #####(Bug#24)
 - Invalid date on occasion when navigaing the history. Likey be a race condition. Not consistantly repeatable.
-
 
 #####(Bug#21)
 When the todoServer host has been asleep for sometime the DB connection to Mongolab are broken and this failure below occurs. It seems to clear up on the 2nd try.
@@ -231,7 +236,7 @@ Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvt
 #####(Bug#6) Invalid date on history page in IE9.
 
 #Future Enhancements (backlog)
-- Test for multiple clients with different DBs.
+- Create login and session management so that I can test for multiple clients with different DBs.
 - Add unit testing.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
