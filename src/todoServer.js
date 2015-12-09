@@ -8,12 +8,10 @@ var url = require("url");
 var http = require("http");
 var mongojs = require("mongojs");
 var express = require("express");
-
-// dbUrl = "yodertv:sugmag@ds045907.mongolab.com:45907/test-todo", 
-// E.g. "username:password@example.com/mydb"
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 // This list should be baked by build depending on the environment.
-
 var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
               'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
               'test-todo' : 'localhost:27017/test-todo',
@@ -21,9 +19,10 @@ var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-t
               'todo_new_test' : 'localhost:27017/todo_new_test',
               'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
               'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
-              'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'}
+              'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'
+            }
 
-var dbs = []; // Array of connections
+var dbs = []; // Array of db connections
 
 var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
@@ -44,6 +43,82 @@ var reObjectify = function (key, value) {
   return value;
 }
 
+var users = [
+    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com' }
+  , { id: 2, username: 'yoderm01', password: 'secret', email: 'yoderm01@gmail.com' }
+  , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com' }
+  , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com' }
+  , { id: 5, username: 'frank', password: 'birthday', email: 'frank@example.com' }
+];
+
+function findById(id, fn) {
+  var idx = id - 1;
+  if (users[idx]) {
+    fn(null, users[idx]);
+  } else {
+    fn(new Error('User ' + id + ' does not exist'));
+  }
+}
+
+function findByUsername(username, fn) {
+  for (var i = 0, len = users.length; i < len; i++) {
+    var user = users[i];
+    if (user.username === username) {
+      return fn(null, user);
+    }
+  }
+  return fn(null, null);
+}
+
+function findByEmail(email, fn) {
+  for (var i = 0, len = users.length; i < len; i++) {
+    var user = users[i];
+    if (user.email === email) {
+      return fn(null, user);
+    }
+  }
+  return fn(null, null);
+}
+
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+// Use the LocalStrategy within Passport.
+//   Strategies in passport require a `verify` function, which accept
+//   credentials (in this case, a username and password), and invoke a callback
+//   with a user object.  In the real world, this would query a database;
+//   however, in this example we are using a baked-in set of users.
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // Find the user by username.  If there is no user with the given
+      // username, or the password is not correct, set the user to `false` to
+      // indicate failure and set a flash message.  Otherwise, return the
+      // authenticated `user`.
+      findByUsername(username, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+        if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
+        return done(null, user);
+      })
+    });
+  }
+));
+
+var sessionStore = new express.session.MemoryStore();
 var app = express();
 
 // configure Express
@@ -54,22 +129,46 @@ if (logDate) {
 }
 
 app.use(express.cookieParser());
-// app.use(express.session({ secret: DBKey }));
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 app.use(express.static(__dirname + '/static'));
+app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
 
-app.get('/history', function(req, res) { 
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(passport.initialize());
+app.use(passport.session());
+
+// POST /login
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+//
+//   curl -v -d "username=bob&password=secret" http://localhost:8080/auth/local
+app.post('/auth/local',
+  passport.authenticate('local', { failureRedirect: '/login.html' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+  
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/login.html');
+});
+
+app.get('/about', ensureAuthenticated, function(req, res){
+  //res.send('index', { user: req.user });
+  res.send('hello, ' + req.user.username + ', from ' + nodeDesc + '.');
+});
+
+app.get('/history', ensureAuthenticated, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
   console.log("Redirect /history.")
   res.writeHead(302, { 'location' : '/#history' });
   res.end();
 });
 
-app.get('/list/todo*', function(req, res) {
+app.get('/list/todo*', ensureAuthenticated, function(req, res) {
   // Redirect list route. Allows reload and sharing of list URL.
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -79,7 +178,7 @@ app.get('/list/todo*', function(req, res) {
   res.end();
 });
 
-app.del('/todo*', function(req, res) {
+app.del('/todo*', ensureAuthenticated, function(req, res) {
   // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
   // Delete archived collection using mongojs.
   // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
@@ -114,7 +213,7 @@ Angular resource mapping from docs:
 'delete': {method:'DELETE'} };
 */
 
-app.get('/api/1/databases/*/collections/', function(req, res) {
+app.get('/api/1/databases/*/collections/', ensureAuthenticated, function(req, res) {
   // No collection name in URI. Get all the collection names.
   // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
   // Get archiveList 
@@ -151,7 +250,7 @@ app.get('/api/1/databases/*/collections/', function(req, res) {
   })
 });
 
-app.get('/api/1/databases/*/collections/*', function(req, res) {      
+app.get('/api/1/databases/*/collections/*', ensureAuthenticated, function(req, res) {      
   // console.log('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
@@ -187,7 +286,7 @@ app.get('/api/1/databases/*/collections/*', function(req, res) {
   });
 });
 
-app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, response){
+app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, response){
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -303,7 +402,7 @@ app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', function(req, respo
   }
 });
 
-app.put('/api/1/databases/*/collections/todo*', function(req, res) {
+app.put('/api/1/databases/*/collections/todo*', ensureAuthenticated, function(req, res) {
   // console.log('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
@@ -365,7 +464,7 @@ app.put('/api/1/databases/*/collections/todo*', function(req, res) {
   }); 
 });
 
-app.post('/api/1/databases/*', function(req, response) {
+app.post('/api/1/databases/*', ensureAuthenticated, function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
@@ -413,3 +512,13 @@ http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
 console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
+
+// Simple route middleware to ensure user is authenticated.
+//   Use this route middleware on any resource that needs to be protected.  If
+//   the request is authenticated (typically via a persistent login session),
+//   the request will proceed.  Otherwise, the user will be redirected to the
+//   login page.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login.html')
+}
