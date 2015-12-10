@@ -90,8 +90,10 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  findById(id, function (err, user) {
+    done(err, user);
+  });
 });
 
 // Use the LocalStrategy within Passport.
@@ -137,6 +139,8 @@ app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: f
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(app.router);
+
 
 // POST /login
 //   Use passport.authenticate() as route middleware to authenticate the
