@@ -26,6 +26,7 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in make.js and build_props_files.
 
 ### Work in progress
+- Merge finally working for local auth. But can't add tasks.
 - Merge multi-user and multi-auth from html-todos and Auth projects.
 - Noted (Bug#25) that button/title doesn't show year when it is different from current year.
 - Documented and fixed (Bug#26) : Opening via get collections failed because of no dbUrl variable.
