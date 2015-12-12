@@ -90,10 +90,8 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  findById(id, function (err, user) {
-    done(err, user);
-  });
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
 });
 
 // Use the LocalStrategy within Passport.
@@ -124,23 +122,28 @@ var sessionStore = new express.session.MemoryStore();
 var app = express();
 
 // configure Express
-if (logDate) {
-  app.use(express.logger(':date [:remote-addr]:method :url :status :res[content-length] :response-time ms'));
-} else {
-  app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
-}
+app.configure(function() {
 
-app.use(express.cookieParser());
+  app.use(express.static(__dirname + '/static'));
 
-app.use(express.static(__dirname + '/static'));
-app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
+  if (logDate) { // date in logger output?
+    app.use(express.logger(':date [:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+  } else {
+    app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+  }
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(app.router);
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  
+  app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
 
+  // Initialize Passport!  Also use passport.session() middleware, to support
+  // persistent login sessions (recommended).
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+});
 
 // POST /login
 //   Use passport.authenticate() as route middleware to authenticate the
