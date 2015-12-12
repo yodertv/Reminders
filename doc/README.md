@@ -25,12 +25,10 @@ Replace the weekly task list that I keep on paper.
 - Editing and deleting archives.
 - All deployment knowledge is in make.js and build_props_files.
 
-
 ### Work in progress
-- Clean-up readme.
 - Merge multi-user and multi-auth from html-todos and Auth projects.
 - Noted (Bug#25) that button/title doesn't show year when it is different from current year.
-- Documented and fixed (Bug#26) : Opening via get collections failed because of not dbUrl variable.
+- Documented and fixed (Bug#26) : Opening via get collections failed because of no dbUrl variable.
 
 ### Version 0.3.0 (12.2.2015)
 - Fixing build and tagging v0.3.0. Major release because of all the dependancies that were upgrades.
