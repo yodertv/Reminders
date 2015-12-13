@@ -27,12 +27,13 @@ var dbs = []; // Array of db connections
 
 var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
+var apiPath = "@APIPATH@";
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
 
-var restUrl = "/api/1/databases/";
-var restHost = "api.mongolab.com";
+// var apiPath = "/api/1/databases/";
+// var restHost = "api.mongolab.com";
 // var restPort = 443;
 var DBKey = "50a2a0e3e4b0cd0bfc12435d";
 
@@ -229,7 +230,7 @@ app.get('/api/1/databases/*/collections/', ensureAuthenticated, function(req, re
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var dbUrl = dblist[dbName];
 
@@ -267,7 +268,7 @@ app.get('/api/1/databases/*/collections/*', ensureAuthenticated, function(req, r
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
@@ -299,7 +300,7 @@ app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', ensureAuthenticated
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
   var objID = "";
@@ -419,7 +420,7 @@ app.put('/api/1/databases/*/collections/todo*', ensureAuthenticated, function(re
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
@@ -476,7 +477,7 @@ app.put('/api/1/databases/*/collections/todo*', ensureAuthenticated, function(re
 app.post('/api/1/databases/*', ensureAuthenticated, function(req, response) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(restUrl.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];

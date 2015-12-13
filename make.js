@@ -66,6 +66,7 @@ var BLD_FILES = ['package.json'];
 // Files into which to bake the @VERSION@
 var VER_FILES = [
 	DIST_STATIC + '/' + 'todo.js', 
+	DIST_STATIC + '/' + 'mongolab.js', 
 	DIST_STATIC + '/' + 'index.html', 
 	DIST_STATIC + '/' + 'login.html',
 	DIST_PATH + '/' + 'todoServer.js'
@@ -75,7 +76,10 @@ var VER_FILES = [
 var URL_FILES = [DIST_STATIC + '/' + 'mongolab.js', DIST_PATH + '/' + 'todoServer.js'];
 
 // Files into which to bake the @MONGODB@
-var DB_FILES = [DIST_STATIC + '/' + 'mongolab.js'];
+var API_FILES = [
+	DIST_STATIC + '/' + 'mongolab.js',
+	DIST_PATH + '/' + 'todoServer.js'
+];
 
 // Files into which to bake the @LOGDATE@
 var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
@@ -254,8 +258,8 @@ function prep(env){
 		_shell.sed('-i', '@NODEURL@', _props.nodeURL, URL_FILES[i]);	
 	};
 
-	for (var i 	= DB_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@MONGODB@', _props.mongoDB, DB_FILES[i]);	
+	for (var i 	= API_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', '@APIPATH@', _props.apiPath, API_FILES[i]);	
 	};
 
 	for (var i 	= LOG_FILES.length - 1; i >= 0; i--) {

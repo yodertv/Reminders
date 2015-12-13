@@ -1,31 +1,15 @@
 // This is a module for cloud persistance in mongolab - https://mongolab.com
 //
-// Mongolab.js "@VERSION@"
+// mongolab.js v@VERSION@
 //
-// Deployment knowledge goes here URL and DB must be edited based on where it runs 
-// and what DB to use.
+// Deployment knowledge goes here: nodeUrl and apiPath must be defined in the build_props.
 
 'use strict';
 
 var nodeURL = "@NODEURL@";
+var apiPath = "@APIPATH@";
 
-// var nodeURL = "http://yodertst.nodejitsu.com/"; // Production site
-// var nodeURL = "http://192.168.0.4/";  // kitchen-mac @ home.
-// var nodeURL = "http://kitchen-mac.local/";  // kitchen-mac @ home.
-// var nodeURL = "http://127.0.0.1:8080/";  // localhost.
-
-var mongoDB = "@MONGODB@";
-
-// var mongoDB = "test-todo";
-// var mongoDB = "bobstodos";
-// var mongoDB = "yodertvtodo"; // Production DB
-// var mongoDB = "frankstodos";
-
-var resURL = nodeURL + "api/1/databases/" + mongoDB + "/collections/";
-
-  // console.log("Mongolabjs: window href ", window.location.href);
-  // console.log("Mongolabjs: nodeURL ", nodeURL);
-  // console.log("Mongolabjs: resURL ", resURL);
+var resURL = nodeURL + apiPath;
 
 var myMod = new angular.module('mongolab', ['ngResource']);
 

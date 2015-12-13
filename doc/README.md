@@ -248,6 +248,7 @@ Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvt
 #####(Bug#6) Invalid date on history page in IE9.
 
 #Future Enhancements (backlog)
+- Rename default collection "todo" to "today".
 - Create login and session management so that I can test for multiple clients with different DBs.
 - Add unit testing.
 - Upgrade Bootstrap.
