@@ -12,15 +12,16 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 // This list should be baked by build depending on the environment.
-var dblist = {//'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
-              'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
-              'test-todo' : 'localhost:27017/test-todo',
-              'test-todo-1' : 'localhost:27017/test-todo-1',
-              'todo_new_test' : 'localhost:27017/todo_new_test',
-              'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
-              'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
-              'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'
-            }
+var dblist = {
+  //'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
+  'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
+  'test-todo' : 'localhost:27017/test-todo',
+  'test-todo-1' : 'localhost:27017/test-todo-1',
+  'todo_new_test' : 'localhost:27017/todo_new_test',
+  'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
+  'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
+  'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'
+}
 
 var dbs = []; // Array of db connections
 

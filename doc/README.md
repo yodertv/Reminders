@@ -25,6 +25,12 @@ Replace the weekly task list that I keep on paper.
 - Editing and deleting archives.
 - All deployment knowledge is in make.js and build_props_files.
 
+### Work in progress
+- Add user db and lookup database by user.
+- Add welcome and login screens.
+- Documented (Bug#27) -- Server silently sends the client crap when not able to connect to db.
+- Added session monitor interval function.
+
 ### Work 0.3.1 (12.13.15)
 - Merge finally working for local auth. But can't add tasks. Found body parser was consuming form data before the URL handler. Fixed.
 - Merge multi-user and multi-auth from html-todos and Auth projects.
@@ -201,7 +207,10 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#27)
+Next: (Bug#28)
+
+#####(Bug#27)
+- Server silently sends the client crap when not able to connect to db.
 
 #####(Bug#26)
 - Opening via get collections failed because of not dbUrl variable.
