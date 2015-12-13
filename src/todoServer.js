@@ -538,7 +538,7 @@ function ensureAuthenticated(req, res, next) {
 // interval example - 5x output every 2secs using setInterval
 function interval_example() {
   var start_time = new Date();
-  console.log("\nStarting 10 second interval, stopping after 25 times.");
+  console.log("\nStarting 30 second interval, stopping after 25 times.");
   var count = 1;
   var interval = setInterval(function() {
     if (count == 25) clearInterval(this);
