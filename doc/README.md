@@ -26,7 +26,7 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in make.js and build_props_files.
 
 ### Work in progress
-- Add user db and lookup database by user.
+- Add user list, move db knowledge to server and lookup database by user.
 - Add welcome and login screens.
 - Documented (Bug#27) -- Server silently sends the client crap when not able to connect to db.
 - Added session monitor interval function.
