@@ -133,7 +133,7 @@ app.configure(function() {
   }
 
   app.use(express.cookieParser());
-  app.use(express.bodyParser());
+  //app.use(express.bodyParser());
   app.use(express.methodOverride());
   
   app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
@@ -145,6 +145,7 @@ app.configure(function() {
   app.use(app.router);
 });
 
+
 // POST /login
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
@@ -152,7 +153,7 @@ app.configure(function() {
 //   which, in this example, will redirect the user to the home page.
 //
 //   curl -v -d "username=bob&password=secret" http://localhost:8080/auth/local
-app.post('/auth/local',
+app.post('/auth/local', express.bodyParser(),
   passport.authenticate('local', { failureRedirect: '/login.html' }),
   function(req, res) {
     res.redirect('/');
@@ -480,15 +481,15 @@ app.post('/api/1/databases/*', ensureAuthenticated, function(req, response) {
   var dbUrl = dblist[dbName];
 
   // Insert a new doc into collectionName
-  // console.log('POST NEW DOC:', uri);
+  // console.log('In POST (insert) new doc into collection:', uri);
   // Insert and new doc into collection.
 
   var fullBody = '';
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    // console.log("Received body data : ");
-    // console.log(chunk.toString());
+    console.log("Received body data : ");
+    console.log(chunk.toString());
   });
   req.on('end', function() {
     // console.log("POST NEW DOC Received : ", fullBody);
