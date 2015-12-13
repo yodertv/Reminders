@@ -27,7 +27,9 @@ var dbs = []; // Array of db connections
 
 var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
-var apiPath = "@APIPATH@";
+var apiPath = '/' + "@APIPATH@";
+var mongoDB = "test-todo"; // Temporary until API conversion is complete.
+var dbName = mongoDB;
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
@@ -188,14 +190,15 @@ app.get('/list/todo*', ensureAuthenticated, function(req, res) {
   res.end();
 });
 
-app.del('/todo*', ensureAuthenticated, function(req, res) {
-  // Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+app.del(apiPath + '/todo*', ensureAuthenticated, function(req, res) {
+  // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+  // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
   // Delete archived collection using mongojs.
   // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
   // mongolab rest API didn't support delete collection.  
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbName = reqUrl.query['mongoDB'];
+  // var dbName = reqUrl.query['mongoDB'];
   var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
 
   // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
@@ -223,15 +226,15 @@ Angular resource mapping from docs:
 'delete': {method:'DELETE'} };
 */
 
-app.get('/api/1/databases/*/collections/', ensureAuthenticated, function(req, res) {
+app.get(apiPath, ensureAuthenticated, function(req, res) {
   // No collection name in URI. Get all the collection names.
-  // Form of request: http://127.0.0.1/api/1/databases/test-todo/collections/
+  // Form of request: http://127.0.0.1/apiPath/
   // Get archiveList 
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  // var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
+  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var dbUrl = dblist[dbName];
 
   // The client may start with reading the collection names. Open db here.
@@ -260,7 +263,7 @@ app.get('/api/1/databases/*/collections/', ensureAuthenticated, function(req, re
   })
 });
 
-app.get('/api/1/databases/*/collections/*', ensureAuthenticated, function(req, res) {      
+app.get(apiPath + '*', ensureAuthenticated, function(req, res) {      
   // console.log('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
@@ -268,9 +271,7 @@ app.get('/api/1/databases/*/collections/*', ensureAuthenticated, function(req, r
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
-  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var collectionName = uri.slice(apiPath.length); // Remove apiPath
   var dbUrl = dblist[dbName];
 
   // The client may start with reading the documents from the collection. Open db here.
@@ -296,12 +297,12 @@ app.get('/api/1/databases/*/collections/*', ensureAuthenticated, function(req, r
   });
 });
 
-app.all('/api/1/databases/*/collections/*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, response){
-  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
+app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, response){
+  // Form of URL: http://127.0.0.1/{apiPath}/{*}/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
   var objID = "";
 
