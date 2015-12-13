@@ -492,7 +492,8 @@ app.post('/api/1/databases/*', ensureAuthenticated, function(req, response) {
     console.log(chunk.toString());
   });
   req.on('end', function() {
-    // console.log("POST NEW DOC Received : ", fullBody);
+    // 
+    console.log("POST NEW DOC Received : ", fullBody);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
@@ -521,6 +522,8 @@ http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
 
+interval_example();
+
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -529,4 +532,39 @@ console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdow
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login.html')
+}
+
+
+// interval example - 5x output every 2secs using setInterval
+function interval_example() {
+  var start_time = new Date();
+  console.log("\nStarting 10 second interval, stopping after 25 times.");
+  var count = 1;
+  var interval = setInterval(function() {
+    if (count == 25) clearInterval(this);
+    var end_time = new Date();
+    var difference = end_time.getTime() - start_time.getTime();
+    console.log("Tick no. " + count + " after " + Math.round(difference/1000) + " seconds");
+    count++;
+
+    listSessions();
+    
+  }, 10000);
+}
+
+// Log the current sessions. Called periodically by interval_example
+function listSessions() {
+
+  sessionStore.all(function(n, s) {
+    for (var i = 0, c = 0; i < s.length; i++) {
+      var result = JSON.parse(s[i]);
+      if (result.passport.user !== undefined) {
+        c++;
+        console.log("["+i+"] "+result.passport.user.email);
+      }
+      // console.log(typeof result);
+      // sessionStore.destroy(s[i], function(){console.log("Destroying:", i)});
+    }
+    console.log(i + " Sessions, " + c + " Users.");
+  });
 }
