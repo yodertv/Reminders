@@ -549,7 +549,7 @@ function interval_example() {
 
     listSessions();
     
-  }, 10000);
+  }, 30000);
 }
 
 // Log the current sessions. Called periodically by interval_example
