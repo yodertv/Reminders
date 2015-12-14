@@ -314,7 +314,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
 
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
-  /*
+  
   console.log("\nuri =", uri,
     "\ndbPart =", dbPart, 
     "\ndbName =", dbName,
@@ -322,7 +322,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
     "\nobjID = ", objID,
     "\ndbUrl =", dbUrl
   );
-  */
+  
   switch (req.method) {
 
     case 'GET':  // don't believe we use this API call in the current implementation. Which means it's not tested.
@@ -413,7 +413,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
   }
 });
 
-app.put('/api/1/databases/*/collections/todo*', ensureAuthenticated, function(req, res) {
+app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   // console.log('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
@@ -422,7 +422,7 @@ app.put('/api/1/databases/*/collections/todo*', ensureAuthenticated, function(re
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
   var fullBody = '';
