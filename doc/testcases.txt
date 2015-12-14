@@ -16,3 +16,4 @@ test cases:
 - History list
 - Delete archives
 - Next archive button ">>"
+- Share list and history urls
