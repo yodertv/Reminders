@@ -27,10 +27,11 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 
 ### Work in progress
+- Add user list and lookup database by user.
 - Add welcome and login screens.
 
 ### Work 0.3.2 (12.14.15)
-- Add user list, move db knowledge to server and lookup database by user.
+- Moved db knowledge to server and updated apiPath.
 - Documented (Bug#27) -- Server silently sends the client crap when not able to connect to db.
 - Added session monitor interval function.
 
