@@ -28,8 +28,8 @@ var dbs = []; // Array of db connections
 var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
 var apiPath = '/' + "@APIPATH@";
-var mongoDB = "test-todo"; // Temporary until API conversion is complete.
-var dbName = mongoDB;
+// var mongoDB = "test-todo"; // Temporary until API conversion is complete.
+// var dbName = mongoDB;
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
@@ -48,11 +48,11 @@ var reObjectify = function (key, value) {
 }
 
 var users = [
-    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com' }
-  , { id: 2, username: 'yoderm01', password: 'secret', email: 'yoderm01@gmail.com' }
-  , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com' }
-  , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com' }
-  , { id: 5, username: 'frank', password: 'birthday', email: 'frank@example.com' }
+    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com', db: 'bobstodos' }
+  , { id: 2, username: 'yoderm01', password: 'secret', email: 'yoderm01@gmail.com', db: 'yodertvtodo' }
+  , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com', db: 'test-todo' }
+  , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com', db: 'todo_new_test' }
+  , { id: 5, username: 'frank', password: 'birthday', email: 'frank@example.com', db: 'frankstodos' }
 ];
 
 function findById(id, fn) {
@@ -206,8 +206,7 @@ app.get(apiPath, ensureAuthenticated, function(req, res) {
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  // var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var dbName = req.user.db;
   var dbUrl = dblist[dbName];
 
   // The client may start with reading the collection names. Open db here.
@@ -246,7 +245,8 @@ app.get(apiPath + '*', ensureAuthenticated, function(req, res) {
   var uri = reqUrl.pathname;
   var collectionName = uri.slice(apiPath.length); // Remove apiPath
   var dbUrl = dblist[dbName];
-
+  var dbName = req.user.db;
+  
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_FIND");
@@ -275,7 +275,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var dbName = req.user.db;
   var match = dbPart.search("[A-Fa-f0-9]{24}$"); // Object ID in URI
   var objID = "";
 

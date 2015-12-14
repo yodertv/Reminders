@@ -10,9 +10,9 @@ test cases:
 - Logout, Logout from Google too
 - Add task
 - Completet task
-- Edit / Delete tasks for todos and archives
+- Edit / Delete tasks for todos and archive
 - Archive
 - List Archive
 - History list
-- Delete archive
+- Delete archives
 - Next archive button ">>"
