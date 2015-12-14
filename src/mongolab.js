@@ -54,7 +54,7 @@ myMod.factory('Todo', function($resource, $http) {
     }
 
     Todo.dropArchive = function(name, cb) {
-      $http.delete(nodeURL + name + '/?mongoDB=' + mongoDB).success(cb);
+      $http.delete(resURL + name).success(cb);
     }
 
   return Todo;

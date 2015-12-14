@@ -190,7 +190,7 @@ app.get('/list/todo*', ensureAuthenticated, function(req, res) {
   res.end();
 });
 
-app.del(apiPath + '/todo*', ensureAuthenticated, function(req, res) {
+app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
   // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
   // Delete archived collection using mongojs.
@@ -199,7 +199,7 @@ app.del(apiPath + '/todo*', ensureAuthenticated, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   // var dbName = reqUrl.query['mongoDB'];
-  var collectionName = uri.substr(1, uri.length-2); // Get collection name from URI
+  var collectionName = uri.slice(apiPath.length); // Get collection name from URI
 
   // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
 
