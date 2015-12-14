@@ -1,4 +1,4 @@
-Todos v0.3.1
+Todos v0.3.2
 ==========
 #Objective:
 Replace the weekly task list that I keep on paper.
@@ -24,10 +24,13 @@ Replace the weekly task list that I keep on paper.
 - Editing and deleting items in an archive.
 - Editing and deleting archives.
 - All deployment knowledge is in make.js and build_props_files.
+- Rest apiPath is configurable.
 
 ### Work in progress
-- Add user list, move db knowledge to server and lookup database by user.
 - Add welcome and login screens.
+
+### Work 0.3.2 (12.14.15)
+- Add user list, move db knowledge to server and lookup database by user.
 - Documented (Bug#27) -- Server silently sends the client crap when not able to connect to db.
 - Added session monitor interval function.
 
