@@ -9,7 +9,8 @@ test cases:
 - Menu: About, Today, Logout
 - Logout, Logout from Google too
 - Add task
-- Edit / Delete tasks
+- Completet task
+- Edit / Delete tasks for todos and archives
 - Archive
 - List Archive
 - History list
