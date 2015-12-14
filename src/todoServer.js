@@ -190,33 +190,6 @@ app.get('/list/todo*', ensureAuthenticated, function(req, res) {
   res.end();
 });
 
-app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
-  // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
-  // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
-  // Delete archived collection using mongojs.
-  // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
-  // mongolab rest API didn't support delete collection.  
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
-  var uri = reqUrl.pathname;
-  // var dbName = reqUrl.query['mongoDB'];
-  var collectionName = uri.slice(apiPath.length); // Get collection name from URI
-
-  // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
-
-  dbs[dbName].collection(collectionName).drop( function(err) {
-    if (err != null) {
-      var errString = err.toString();
-      console.log("DB_DROP_COLLECTION_ERR:", errString);
-      res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
-      res.end(errString);
-    }
-    else { // Send a success response.
-      res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
-      res.end();        
-    }
-  });
-});
-
 /*
 Angular resource mapping from docs:
 { 'get':    {method:'GET'},
@@ -411,6 +384,33 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
       response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
       response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
   }
+});
+
+app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
+  // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
+  // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
+  // Delete archived collection using mongojs.
+  // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
+  // mongolab rest API didn't support delete collection.  
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  // var dbName = reqUrl.query['mongoDB'];
+  var collectionName = uri.slice(apiPath.length); // Get collection name from URI
+
+  // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
+
+  dbs[dbName].collection(collectionName).drop( function(err) {
+    if (err != null) {
+      var errString = err.toString();
+      console.log("DB_DROP_COLLECTION_ERR:", errString);
+      res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+      res.end(errString);
+    }
+    else { // Send a success response.
+      res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
+      res.end();        
+    }
+  });
 });
 
 app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
