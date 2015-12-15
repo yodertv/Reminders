@@ -422,8 +422,8 @@ app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  // var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var dbName = req.user.db;
   var dbUrl = dblist[dbName];
   var fullBody = '';
 
@@ -485,6 +485,7 @@ app.post(apiPath + '*', ensureAuthenticated, function(req, response) {
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   //var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
+  var dbName = req.user.db; 
   var dbUrl = dblist[dbName];
 
   var fullBody = '';
