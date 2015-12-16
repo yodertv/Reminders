@@ -199,7 +199,7 @@ Angular resource mapping from docs:
 'delete': {method:'DELETE'} };
 */
 
-app.get(apiPath, ensureAuthenticated, function(req, res) {
+app.get(apiPath, ensureAuthenticated, express.bodyParser(), function(req, res) {
   // No collection name in URI. Get all the collection names.
   // Form of request: http://127.0.0.1/apiPath/
   // Get archiveList 
@@ -235,7 +235,7 @@ app.get(apiPath, ensureAuthenticated, function(req, res) {
   })
 });
 
-app.get(apiPath + '*', ensureAuthenticated, function(req, res) {      
+app.get(apiPath + '*', ensureAuthenticated, express.bodyParser(), function(req, res) {      
   // console.log('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo

@@ -27,6 +27,7 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 
 ### Work in progress
+- Documented (Bug#)
 - Add user list and lookup database by user.
 - Add welcome and login screens.
 
@@ -211,8 +212,29 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#28)
+Next: (Bug#29)
 
+##### (Bug#28)
+'''
+Wed, 16 Dec 2015 02:00:18 GMT [::1]POST /auth/local 302 46 3 ms
+Opening DB bobstodos via DB_FIND
+TypeError: Cannot read property '_dbname' of undefined
+    at new Database (/usr/local/lib/node_modules/mongojs/lib/database.js:25:38)
+    at new module.exports (/usr/local/lib/node_modules/mongojs/index.js:6:12)
+    at /Users/mike/src/Todos/build/todoServer.js:253:19
+    at callbacks (/usr/local/lib/node_modules/express/lib/router/index.js:161:37)
+    at multipart (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/multipart.js:64:37)
+    at /usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/bodyParser.js:57:9
+    at urlencoded (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/urlencoded.js:51:37)
+    at /usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/bodyParser.js:55:7
+    at json (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/json.js:53:37)
+    at bodyParser (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/bodyParser.js:53:5)
+Wed, 16 Dec 2015 02:00:18 GMT [::1]GET /api/todos/todo 500 979 4 ms
+Opening DB bobstodos via DB_GETCOLLECTIONNAMES
+Wed, 16 Dec 2015 02:00:19 GMT [::1]GET /api/todos/ 200 - 682 ms
+Wed, 16 Dec 2015 02:00:26 GMT [::1]GET /api/todos/todo 200 - 26 ms
+Wed, 16 Dec 2015 02:00:26 GMT [::1]GET /api/todos/ 200 - 33 ms
+'''
 #####(Bug#27)
 - Server silently sends the client crap when not able to connect to db.
 
