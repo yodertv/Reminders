@@ -254,15 +254,15 @@ function prep(env){
     // Use sed to perform global replace in the build directory
 
 	for (var i 	= VER_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@VERSION@', _pkg.version, VER_FILES[i]);	
+		_shell.sed('-i', /@VERSION@/g, _pkg.version, VER_FILES[i]);	
 	};
 
 	for (var i 	= URL_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@NODEURL@', _props.nodeURL, URL_FILES[i]);	
+		_shell.sed('-i', /@NODEURL@/g, _props.nodeURL, URL_FILES[i]);	
 	};
 
 	for (var i 	= API_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', '@APIPATH@', _props.apiPath, API_FILES[i]);	
+		_shell.sed('-i', /@APIPATH@/g, _props.apiPath, API_FILES[i]);	
 	};
 
 	for (var i 	= LOG_FILES.length - 1; i >= 0; i--) {
