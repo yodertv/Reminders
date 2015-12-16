@@ -5,7 +5,7 @@
 // angular 1.3 splits route 
 var todo = angular.module('todo', [
 	'ngRoute', 
-	'mongolab'
+	'TodoServices'
 ]);	
 
 todo.config(['$routeProvider',

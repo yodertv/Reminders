@@ -87,6 +87,7 @@ myMod.factory('Todo', function($resource, $http, $log) {
   return Todo;
 });
 
+/*
 myMod.config( function($httpProvider) {
   function exampleInterceptor($q,$log,$location) {
     function success(response) {
@@ -109,3 +110,4 @@ myMod.config( function($httpProvider) {
   }
   $httpProvider.responseInterceptors.push(exampleInterceptor);
 });
+*/

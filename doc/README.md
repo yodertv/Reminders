@@ -29,7 +29,8 @@ Replace the weekly task list that I keep on paper.
 ### Work in progress
 - Documented and fixed (Bug#28).
 - Add user list and lookup database by user.
-- Add welcome and login screens.
+- Add welcome and login screens by merging html-todos with Todos.
+- Fixed global replacement in make.js sed commands for BAKING in variables.
 
 ### Work 0.3.2 (12.14.15)
 - Moved db knowledge to server and updated apiPath.
