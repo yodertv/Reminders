@@ -27,7 +27,7 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 
 ### Work in progress
-- Documented (Bug#)
+- Documented and fixed (Bug#28).
 - Add user list and lookup database by user.
 - Add welcome and login screens.
 

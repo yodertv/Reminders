@@ -199,7 +199,7 @@ Angular resource mapping from docs:
 'delete': {method:'DELETE'} };
 */
 
-app.get(apiPath, ensureAuthenticated, express.bodyParser(), function(req, res) {
+app.get(apiPath, ensureAuthenticated, function(req, res) {
   // No collection name in URI. Get all the collection names.
   // Form of request: http://127.0.0.1/apiPath/
   // Get archiveList 
@@ -235,7 +235,7 @@ app.get(apiPath, ensureAuthenticated, express.bodyParser(), function(req, res) {
   })
 });
 
-app.get(apiPath + '*', ensureAuthenticated, express.bodyParser(), function(req, res) {      
+app.get(apiPath + '*', ensureAuthenticated, function(req, res) {      
   // console.log('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
@@ -243,9 +243,8 @@ app.get(apiPath + '*', ensureAuthenticated, express.bodyParser(), function(req, 
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var collectionName = uri.slice(apiPath.length); // Remove apiPath
-  var dbUrl = dblist[dbName];
   var dbName = req.user.db;
+  var dbUrl = dblist[dbName];
   
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
@@ -257,6 +256,7 @@ app.get(apiPath + '*', ensureAuthenticated, express.bodyParser(), function(req, 
     });
   }
 
+  var collectionName = uri.slice(apiPath.length); // Remove apiPath
   dbs[dbName].collection(collectionName).find( function( err, myDocs ){
     if (err != null) {
       console.log("DB_FIND_ERR:", err);
