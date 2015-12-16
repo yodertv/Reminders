@@ -11,24 +11,38 @@ var todo = angular.module('todo', [
 todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.
-      		when('/', {
-				templateUrl: 'todo.html',
-      			controller: TodoCtrl
-      		}).
-  	  		when('/list/:archiveName', {
-  				templateUrl: 'list.html',
-  	  			controller: ListCtrl
-  	  		}).
-      		when('/history', {
-  				templateUrl: 'history.html',
-      			controller: HistoryCtrl
-      		}).
-      		otherwise({
-      			redirectTo: '/'
-      		});
+      		when('/todo',              {templateUrl: 'todo.html', controller: TodoCtrl}).
+  	  		when('/list/:archiveName', {templateUrl: 'list.html', controller: ListCtrl}).
+      		when('/history',           {templateUrl: 'history.html', controller: HistoryCtrl}).
+      		when('/welcome',           {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
+      		otherwise(				   {redirectTo:  '/welcome'});
 	}]);
 
 todo.config(function($locationProvider){ $locationProvider.html5Mode(true) });
+
+function WelcomeCtrl($scope, UserService) {
+
+	$scope.logout = function() {
+  		// Print this archive list.
+  		console.log("Logout called. Logoutfromgoogle?",$scope.logoutfromgoogle, ".");
+  		UserService.logout($scope.logoutfromgoogle, function(){
+  			// Clear user data w/o depending on another call to /account.
+  			$scope.authenticated = false;
+  			$scope.user = undefined;
+  		});
+  	}
+
+	$scope.user = UserService.get( function(user){
+		// console.log(user);
+		$scope.authenticated = (user.id != undefined);
+		$scope.registered = (user.mongoDB != undefined);
+		
+		// console.log("authenticated=", $scope.authenticated);
+	});
+	$scope.logoutfromgoogle = false;
+
+//    $scope.lastname = UserService.lastname;
+}
 
 function buildArchiveList(data, scope, name) { 
 
@@ -158,11 +172,11 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 	};
 
 	$scope.homeClick = function() {
-		$location.path('/');
+		$location.path('/todo');
 	};
 
 	$scope.editClick = function() {
-		// Edit button toggles between Home (Today) and edit.
+		// Edit button toggles between edit and not.
 		if (!$scope.showDelete) { // If not in edit mode switch to it.
 			$scope.showDelete = true;
 		}

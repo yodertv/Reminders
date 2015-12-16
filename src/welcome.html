@@ -1,0 +1,38 @@
+<!-- Welcome.html -->  
+<ul class="nav nav-pills">
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-align-justify"></i></a>
+  <ul class="dropdown-menu">
+    <li><a tabindex="-1" href="#/welcome">About</a></li>
+    <li><a tabindex="-1" href="#/todo">Today</a></li>    
+    <li><a tabindex="-1" href="#/history">History</a></li>
+    <li class="divider"></li>
+    <!-- <li><a tabindex="-1" href="/logout">Logout</a></li> -->
+    <li><a tabindex="-1" href="" ng-click="logout()">Logout</a></li>
+  </ul>
+</li>
+<li class="active"><a href="#/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
+<li><a href="#/todo">Todos @VERSION@</a></li>
+</ul>
+<!-- About <strong>&nbsp;&nbsp;Todos 3.1</strong><br> -->
+<br>We hope you like this simple todos app. <br> Thanks, <br>-Mike <br>
+<div ng-hide="authenticated">
+<br><a href="/auth/google">Login with Google</a><br>
+</div>
+<div ng-show="authenticated">
+<br> Authenticated as:  <strong>{{user.email}}</strong>
+<div ng-show="registered">
+Registered DB:  <strong>{{user.mongoDB}}</strong><br><br>
+</div>
+<strong>
+<a href="#/todo">Continue</a> |
+<a href="" ng-click="logout()" >Logout&nbsp;&nbsp;</a>
+</strong>
+<input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input>
+</div>
+<br>
+Todos @VERSION@<br>
+Copyright 2015 Yoder Code. <br>
+Thanks to: Angular, Node, <br> 
+&nbsp;Mongodb, Express, Passport. <br>
+Hosted by: Nodjitsu and MongoLab.
