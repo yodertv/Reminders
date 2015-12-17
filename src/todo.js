@@ -35,7 +35,7 @@ function WelcomeCtrl($scope, UserService) {
 	$scope.user = UserService.get( function(user){
 		// console.log(user);
 		$scope.authenticated = (user.id != undefined);
-		$scope.registered = (user.mongoDB != undefined);
+		$scope.registered = (user.db != undefined);
 		
 		// console.log("authenticated=", $scope.authenticated);
 	});

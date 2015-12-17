@@ -168,9 +168,16 @@ app.get('/logout', function(req, res){
   res.redirect('/login.html');
 });
 
-app.get('/about', ensureAuthenticated, function(req, res){
-  //res.send('index', { user: req.user });
-  res.send('hello, ' + req.user.username + ', from ' + nodeDesc + '.');
+app.get('/account', ensureAuthenticated, function(req, res){
+  console.log(req.user);
+  res.send(req.user);
+});
+
+app.get('/welcome', ensureAuthenticated, function(req, res){
+  // Redirect welcome route. Allows reload and sharing of welcome URL.
+  console.log("Redirect /welcome.")
+  res.writeHead(302, { 'location' : '/#welcome' });
+  res.end();
 });
 
 app.get('/history', ensureAuthenticated, function(req, res) { 
@@ -526,7 +533,7 @@ http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
 
-interval_example();
+// interval_example();
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If

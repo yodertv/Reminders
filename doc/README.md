@@ -27,6 +27,7 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 
 ### Work in progress
+- Documented (Bug#29)
 - Documented and fixed (Bug#28).
 - Add user list and lookup database by user.
 - Add welcome and login screens by merging html-todos with Todos.
@@ -213,7 +214,12 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#29)
+Next: (Bug#30)
+##### (Bug#29)
+Unexpected concatenation of routes...
+'''
+http://localhost:8080/welcome#%2Ftodo
+'''
 
 ##### (Bug#28)
 '''
