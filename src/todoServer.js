@@ -136,6 +136,8 @@ app.configure(function() {
     app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   }
 
+  app.use(express.static(__dirname + '/static'));
+
   app.use(express.cookieParser());
   //app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -173,7 +175,7 @@ app.get('/account', ensureAuthenticated, function(req, res){
   res.send(req.user);
 });
 
-app.get('/welcome', ensureAuthenticated, function(req, res){
+app.get('/welcome', function(req, res){
   // Redirect welcome route. Allows reload and sharing of welcome URL.
   console.log("Redirect /welcome.")
   res.writeHead(302, { 'location' : '/#welcome' });
