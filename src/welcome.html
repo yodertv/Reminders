@@ -3,21 +3,24 @@
 <li class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-align-justify"></i></a>
   <ul class="dropdown-menu">
-    <li><a tabindex="-1" href="#/welcome">About</a></li>
-    <li><a tabindex="-1" href="#/todo">Today</a></li>    
-    <li><a tabindex="-1" href="#/history">History</a></li>
+    <li><a tabindex="-1" href="/welcome">About</a></li>
+    <li><a tabindex="-1" href="/todo">Today</a></li>    
+    <li><a tabindex="-1" href="/history">History</a></li>
     <li class="divider"></li>
-    <!-- <li><a tabindex="-1" href="/logout">Logout</a></li> -->
     <li><a tabindex="-1" href="" ng-click="logout()">Logout</a></li>
   </ul>
 </li>
 <li class="active"><a href="#/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
-<li><a href="#/todo">Todos @VERSION@</a></li>
+<li><a href="/todo">Todos @VERSION@</a></li>
 </ul>
-<!-- About <strong>&nbsp;&nbsp;Todos 3.1</strong><br> -->
 <br>We hope you like this simple todos app. <br> Thanks, <br>-Mike <br>
 <div ng-hide="authenticated">
-<br><a href="/login.html">Login</a><br>
+<form name="input" action="auth/local" method="post">
+User ID: <input type="text" name="username"><br>
+Password: <input type="password" name="password">
+<input type="submit" value="Enter">
+</form>
+<!-- <br><a href="/login.html">Login</a><br> -->
 </div>
 <div ng-show="authenticated">
 <br> Authenticated as:  <strong>{{user.email}}</strong>
