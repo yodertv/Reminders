@@ -171,7 +171,7 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
-  console.log(req.user);
+  // console.log(req.user);
   res.send(req.user);
 });
 
