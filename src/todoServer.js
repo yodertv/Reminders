@@ -162,12 +162,12 @@ app.configure(function() {
 app.post('/auth/local', express.bodyParser(),
   passport.authenticate('local', { failureRedirect: '/login.html' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/#todo');
   });
   
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/login.html');
+  res.redirect('/#welcome');
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
@@ -184,7 +184,7 @@ app.get('/welcome', function(req, res){
 
 app.get('/history', ensureAuthenticated, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
-  console.log("Redirect /history.")
+  console.log("Redirect /#history.")
   res.writeHead(302, { 'location' : '/#history' });
   res.end();
 });
