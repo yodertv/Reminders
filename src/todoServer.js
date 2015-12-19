@@ -1,5 +1,11 @@
-var nodeDesc = "Todo Server v@VERSION@";
 /* Fully working Todo demonstration application using mongo, angular, and express. */
+
+// Build properties used by todoServer.js
+var nodeDesc = "Todo Server v@VERSION@";
+var nodeURL = "@NODEURL@";        // URL of the deployed server.
+var apiPath = '/' + "@APIPATH@";  // The path to the XHR API
+var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged for us.
+var DBKey = "50a2a0e3e4b0cd0bfc12435d";
 
 'use strict';
 
@@ -11,7 +17,7 @@ var express = require("express");
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-// This list should be baked by build depending on the environment.
+// This list should be replaced with my user db and seperated into it own module.
 var dblist = {
   //'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
   'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
@@ -25,17 +31,8 @@ var dblist = {
 
 var dbs = []; // Array of db connections
 
-var logDate = @LOGDATE@;  // true or false. Set by build props. E.g. On jitsu date is logged for us.
-var nodeURL = "@NODEURL@";
-var apiPath = '/' + "@APIPATH@";
-
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
-
-// var apiPath = "/api/1/databases/";
-// var restHost = "api.mongolab.com";
-// var restPort = 443;
-var DBKey = "50a2a0e3e4b0cd0bfc12435d";
 
 var reObjectify = function (key, value) {
 
@@ -87,7 +84,6 @@ function findByEmail(email, fn) {
 //   serialize users into and deserialize users out of the session.  Typically,
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
-
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -133,13 +129,9 @@ app.configure(function() {
   } else {
     app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   }
-
   app.use(express.static(__dirname + '/static'));
-
   app.use(express.cookieParser());
-  //app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  
+  app.use(express.methodOverride());  
   app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
 
   // Initialize Passport!  Also use passport.session() middleware, to support
@@ -148,7 +140,6 @@ app.configure(function() {
   app.use(passport.session());
   app.use(app.router);
 });
-
 
 // POST /login
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -197,20 +188,16 @@ app.get('/list/todo*', ensureAuthenticated, function(req, res) {
   res.end();
 });
 
-/*
-Angular resource mapping from docs:
+/* Angular resource mapping from docs:
 { 'get':    {method:'GET'},
 'save':   {method:'POST'},
 'query':  {method:'GET', isArray:true},
 'remove': {method:'DELETE'},
-'delete': {method:'DELETE'} };
-*/
-
+'delete': {method:'DELETE'} }; */
 app.get(apiPath, ensureAuthenticated, function(req, res) {
-  // No collection name in URI. Get all the collection names.
+  // Get archiveList: no collection name in URI, so get all the collection names.
   // Form of request: http://127.0.0.1/apiPath/
-  // Get archiveList 
-  
+
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
