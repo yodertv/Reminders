@@ -29,6 +29,7 @@ function WelcomeCtrl($scope, UserService) {
   			// Clear user data w/o depending on another call to /account.
   			$scope.authenticated = false;
   			$scope.user = undefined;
+  			$scope.failedCount = 0;
   		});
   	}
 
@@ -36,10 +37,16 @@ function WelcomeCtrl($scope, UserService) {
 		// console.log(user);
 		$scope.authenticated = (user.id != undefined);
 		$scope.registered = (user.db != undefined);
-		
-		// console.log("authenticated=", $scope.authenticated);
+		if ($scope.authenticated == true) { $scope.failedCount = 0};		
+		console.log("authenticated=", $scope.authenticated);
+		console.log("registered=", $scope.registered);
+		console.log("failedCount=", $scope.failedCount);
 	});
+
 	$scope.logoutfromgoogle = false;
+	$scope.authenticated = false;
+	$scope.registered = false;
+	$scope.failedCount = 0;
 
 //    $scope.lastname = UserService.lastname;
 }

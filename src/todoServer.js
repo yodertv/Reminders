@@ -149,7 +149,7 @@ app.configure(function() {
 //
 //   curl -v -d "username=bob&password=secret" http://localhost:8080/auth/local
 app.post('/auth/local', express.bodyParser(),
-  passport.authenticate('local', { failureRedirect: '/login.html' }),
+  passport.authenticate('local', { failureRedirect: '/#welcome.html' }),
   function(req, res) {
     res.redirect('/#todo');
   });
