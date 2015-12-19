@@ -401,9 +401,8 @@ app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   // mongolab rest API didn't support delete collection.  
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  // var dbName = reqUrl.query['mongoDB'];
+  var dbName = req.user.db;
   var collectionName = uri.slice(apiPath.length); // Get collection name from URI
-
   // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
 
   dbs[dbName].collection(collectionName).drop( function(err) {
