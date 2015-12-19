@@ -15,12 +15,13 @@ todo.config(['$routeProvider',
   	  		when('/list/:archiveName', {templateUrl: 'list.html', controller: ListCtrl}).
       		when('/history',           {templateUrl: 'history.html', controller: HistoryCtrl}).
       		when('/welcome',           {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
+      		when('/authfailed',		   {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		otherwise(				   {redirectTo:  '/welcome'});
 	}]);
 
 todo.config(function($locationProvider){ $locationProvider.html5Mode(true) });
 
-function WelcomeCtrl($scope, UserService) {
+function WelcomeCtrl($scope, $location, UserService) {
 
 	$scope.logout = function() {
   		// Print this archive list.
@@ -43,12 +44,15 @@ function WelcomeCtrl($scope, UserService) {
 		console.log("failedCount=", $scope.failedCount);
 	});
 
+	console.log("location=", $location.path());
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;
 	$scope.registered = false;
-	$scope.failedCount = 0;
-
-//    $scope.lastname = UserService.lastname;
+	if ($location.path() == '/authfailed') 
+		{ 
+			$scope.authFailed = true;
+			$scope.authFailedMsg = "User or password incorect. Try again."
+		 };
 }
 
 function buildArchiveList(data, scope, name) { 
@@ -59,7 +63,7 @@ function buildArchiveList(data, scope, name) {
     // function for getArchiveList();
 
 	var today = new Date();
-	var d = new Date(); 		// Does putting this constructor out of the loop below have any benefit?
+	var d = new Date(); // Does putting this constructor out of the loop below have any benefit?
 	var currArchive = {};
 
 	// The data has all collections in the DB. So we filter for only the collections that start w/ todo using regex.

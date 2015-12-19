@@ -13,17 +13,17 @@
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
 <li><a href="/todo">Todos @VERSION@</a></li>
 </ul>
-<br>We hope you like this simple todos app. <br> <br>
-Thanks, <br>
--Mike <br>
-<br>
+We hope you like this simple todos app. Thanks, <br>
+-Mike <br><br>
+<div ng-show="authFailed">
+{{authFailedMsg}}
+</div>
 <div ng-hide="authenticated">
 <form name="input" action="auth/local" method="post">
 &nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
 Password: <input type="password" name="password"><br>
 &nbsp;&nbsp;<input type="submit" value="Enter">
 </form>
-<!-- <br><a href="/login.html">Login</a><br> -->
 </div>
 <div ng-show="authenticated">
 <br> Authenticated as:  <strong>{{user.email}}</strong>
