@@ -27,6 +27,7 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 
 ### Work in progress
+- Added failure message on welcome page when login fails.
 - Documented and fixed (Bug#29)
 - Documented and fixed (Bug#28).
 - Add user list and lookup database by user.

@@ -38,21 +38,19 @@ function WelcomeCtrl($scope, $location, UserService) {
 		// console.log(user);
 		$scope.authenticated = (user.id != undefined);
 		$scope.registered = (user.db != undefined);
-		if ($scope.authenticated == true) { $scope.failedCount = 0};		
-		console.log("authenticated=", $scope.authenticated);
-		console.log("registered=", $scope.registered);
-		console.log("failedCount=", $scope.failedCount);
+		// console.log("authenticated=", $scope.authenticated);
+		// console.log("registered=", $scope.registered);
+		// console.log("failedCount=", $scope.failedCount);
 	});
 
-	console.log("location=", $location.path());
+	// console.log("location=", $location.path());
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;
 	$scope.registered = false;
-	if ($location.path() == '/authfailed') 
-		{ 
-			$scope.authFailed = true;
-			$scope.authFailedMsg = "User or password incorect. Try again."
-		 };
+	if ($location.path() == '/authfailed') { 
+		$scope.authFailed = true;
+		$scope.authFailedMsg = "User or password incorect. Try again."
+	 };
 }
 
 function buildArchiveList(data, scope, name) { 
