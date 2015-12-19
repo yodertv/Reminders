@@ -25,11 +25,9 @@ var dblist = {
 
 var dbs = []; // Array of db connections
 
-var logDate = @LOGDATE@;  // true or false. Set by build props. In jitsu date is logged for us.
+var logDate = @LOGDATE@;  // true or false. Set by build props. E.g. On jitsu date is logged for us.
 var nodeURL = "@NODEURL@";
 var apiPath = '/' + "@APIPATH@";
-// var mongoDB = "test-todo"; // Temporary until API conversion is complete.
-// var dbName = mongoDB;
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
@@ -184,7 +182,7 @@ app.get('/welcome', function(req, res){
 
 app.get('/history', ensureAuthenticated, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
-  console.log("Redirect /#history.")
+  console.log("Redirect /history.")
   res.writeHead(302, { 'location' : '/#history' });
   res.end();
 });

@@ -13,12 +13,15 @@
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
 <li><a href="/todo">Todos @VERSION@</a></li>
 </ul>
-<br>We hope you like this simple todos app. <br> Thanks, <br>-Mike <br>
+<br>We hope you like this simple todos app. <br> <br>
+Thanks, <br>
+-Mike <br>
+<br>
 <div ng-hide="authenticated">
 <form name="input" action="auth/local" method="post">
-User ID: <input type="text" name="username"><br>
-Password: <input type="password" name="password">
-<input type="submit" value="Enter">
+&nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
+Password: <input type="password" name="password"><br>
+&nbsp;&nbsp;<input type="submit" value="Enter">
 </form>
 <!-- <br><a href="/login.html">Login</a><br> -->
 </div>
@@ -34,8 +37,10 @@ Registered DB:  <strong>{{user.db}}</strong><br><br>
 <input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input>
 </div>
 <br>
-Todos @VERSION@<br>
+Todos @VERSION@ <br>
 Copyright 2015 Yoder Code. <br>
-Thanks to: Angular, Node, <br> 
-&nbsp;Mongodb, Express, Passport. <br>
-Hosted by: Nodjitsu and MongoLab.
+<br>
+Thanks to: Angular, Node, Bootstrap, <br> 
+&nbsp;&nbsp;&nbsp;Mongodb, Express, Passport. <br>
+<br>
+Hosted by: Modulus and MongoLab. <br>
