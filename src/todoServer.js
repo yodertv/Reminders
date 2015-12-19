@@ -542,7 +542,7 @@ console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdow
 //   login page.
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login.html')
+  res.redirect('/#welcome')
 }
 
 
