@@ -161,7 +161,8 @@ app.get('/logout', function(req, res){
 
 app.get('/account', ensureAuthenticated, function(req, res){
   // console.log(req.user);
-  res.send(req.user);
+  var userObj = { email: req.user.email, db: req.user.db } ;
+  res.send(userObj);
 });
 
 app.get('/welcome', function(req, res){
