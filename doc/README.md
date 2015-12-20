@@ -26,7 +26,7 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in make.js and build_props_files.
 - Rest apiPath is configurable.
 
-### Work in progress
+### Version 0.3.3 (12.19.15)
 - Added failure message on welcome page when login fails.
 - Documented and fixed (Bug#29)
 - Documented and fixed (Bug#28).
@@ -34,12 +34,12 @@ Replace the weekly task list that I keep on paper.
 - Add welcome and login screens by merging html-todos with Todos.
 - Fixed global replacement in make.js sed commands for BAKING in variables.
 
-### Work 0.3.2 (12.14.15)
+### Version 0.3.2 (12.14.15)
 - Moved db knowledge to server and updated apiPath.
 - Documented (Bug#27) -- Server silently sends the client crap when not able to connect to db.
 - Added session monitor interval function.
 
-### Work 0.3.1 (12.13.15)
+### Version 0.3.1 (12.13.15)
 - Merge finally working for local auth. But can't add tasks. Found body parser was consuming form data before the URL handler. Fixed.
 - Merge multi-user and multi-auth from html-todos and Auth projects.
 - Noted (Bug#25) that button/title doesn't show year when it is different from current year.
