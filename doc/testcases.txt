@@ -8,6 +8,7 @@ test cases:
 - Welcome/About page logged out
 - Menu: About, Today, Logout
 - Logout, Logout from Google too
+- auth/local test login and login failure. Logout from each page menu.
 - Add task
 - Completet task
 - Edit / Delete tasks for todos and archive

@@ -20,11 +20,13 @@ Replace the weekly task list that I keep on paper.
 - Responsive to three device sizes.
 - Lists are displayed in tables.
 - Uses pills for navigation.
-- Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. Button disappears when displaying the last archive.
+- Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. 
+- Button disappears when displaying the last archive.
 - Editing and deleting items in an archive.
 - Editing and deleting archives.
 - All deployment knowledge is in make.js and build_props_files.
 - Rest apiPath is configurable.
+- Login to /auth/local, with failure notification
 
 ### Version 0.3.3 (12.19.15)
 - Added failure message on welcome page when login fails.
@@ -215,7 +217,18 @@ Trace
 - Tweaked html views with some &nbsp; to make the view a little nicer.
 
 #Known Bugs:
-Next: (Bug#30)
+Next: (Bug#32)
+
+##### (Bug#31)
+Deep linking fails for lists.
+'''
+Cannot GET /list/:todoFri-Dec-18-2015. 
+Cannot GET /todo
+'''
+
+##### (Bug#30)
+- GET /account sends password to client.
+
 ##### (Bug#29)
 Unexpected concatenation of routes...
 '''
