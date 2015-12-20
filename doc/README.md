@@ -28,6 +28,9 @@ Replace the weekly task list that I keep on paper.
 - Rest apiPath is configurable.
 - Login to /auth/local, with failure notification
 
+### Work in progress
+- Documented and fixed (Bug#30) Don't send password to client.
+
 ### Version 0.3.3 (12.19.15)
 - Added failure message on welcome page when login fails.
 - Documented and fixed (Bug#29)

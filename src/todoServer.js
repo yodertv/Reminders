@@ -24,6 +24,7 @@ var dblist = {
   'test-todo' : 'localhost:27017/test-todo',
   'test-todo-1' : 'localhost:27017/test-todo-1',
   'todo_new_test' : 'localhost:27017/todo_new_test',
+  'bobs_local' : 'localhost:27017/bobstodos',
   'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
   'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
   'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'
@@ -43,10 +44,11 @@ var reObjectify = function (key, value) {
 }
 
 var users = [
-    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com', db: 'bobstodos' }
-  , { id: 2, username: 'yoderm01', password: 'secret', email: 'yoderm01@gmail.com', db: 'yodertvtodo' }
+    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com', db: 'bobs_local' }
+  , { id: 2, username: 'mike', password: 'secret', email: 'yoderm01@gmail.com', db: 'yodertvtodo' }
   , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com', db: 'test-todo' }
   , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com', db: 'todo_new_test' }
+  , { id: 5, username: 'bobby', password: 'birthday', email: 'bobby@example.com', db: 'bobstodos' }
   , { id: 5, username: 'frank', password: 'birthday', email: 'frank@example.com', db: 'frankstodos' }
 ];
 
