@@ -29,9 +29,9 @@ Replace the weekly task list that I keep on paper.
 - Login to /auth/local, with failure notification
 
 ### Work in progress
-- Documented and fixed (Bug#30) Don't send password to client.
 
 ### Version 0.3.3 (12.19.15)
+- Documented and fixed (Bug#30) Don't send password to client.
 - Added failure message on welcome page when login fails.
 - Documented and fixed (Bug#29)
 - Documented and fixed (Bug#28).
@@ -298,6 +298,7 @@ Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvt
 #####(Bug#6) Invalid date on history page in IE9.
 
 #Future Enhancements (backlog)
+- Display mongodb host as wells as registered DB on welcome screen.
 - Rename default collection "todo" to "today".
 - Create login and session management so that I can test for multiple clients with different DBs.
 - Add unit testing.

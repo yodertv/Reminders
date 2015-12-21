@@ -10,6 +10,9 @@ cd ./build ; node ./todoServer.js & cd ..
 Connect to mongod with repl interface
 mongo
 
+Create new DBs:
+- Copy an existing template using dump and restore.
+- Commands are documented in README.md of project testMongo.
 
 ## deploy to modulus
 modulus project create
