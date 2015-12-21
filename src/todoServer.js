@@ -27,7 +27,7 @@ var dblist = {
   'bobs_local' : 'localhost:27017/bobstodos',
   'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
   'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
-  'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo'
+  'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo' // my production db
 }
 
 var dbs = []; // Array of db connections
@@ -156,7 +156,7 @@ app.post('/auth/local', express.bodyParser(),
     res.redirect('/#todo');
   });
   
-app.get('/logout', function(req, res){
+app.get('/logout', ensureAuthenticated, function(req, res){
   req.logout();
   res.redirect('/#welcome');
 });
@@ -171,6 +171,13 @@ app.get('/welcome', function(req, res){
   // Redirect welcome route. Allows reload and sharing of welcome URL.
   console.log("Redirect /welcome.")
   res.writeHead(302, { 'location' : '/#welcome' });
+  res.end();
+});
+
+app.get('/todo', ensureAuthenticated, function(req, res){
+  // Redirect todo route. Allows reload and sharing of todo URL.
+  console.log("Redirect /todo.")
+  res.writeHead(302, { 'location' : '/#todo' });
   res.end();
 });
 
@@ -259,7 +266,6 @@ app.get(apiPath + '*', ensureAuthenticated, function(req, res) {
       console.log("DB_FIND_ERR:", err);
     }
     else {
-      // console.log("GET DOCS:\n", myDocs);
       res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
       res.write(JSON.stringify(myDocs));
       res.end();
@@ -285,6 +291,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dblist[dbName];
   
+  /*
   console.log("\nuri =", uri,
     "\ndbPart =", dbPart, 
     "\ndbName =", dbName,
@@ -292,7 +299,8 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
     "\nobjID = ", objID,
     "\ndbUrl =", dbUrl
   );
-  
+  */
+
   switch (req.method) {
 
     case 'GET':  // don't believe we use this API call in the current implementation. Which means it's not tested.
