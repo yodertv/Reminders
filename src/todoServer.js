@@ -438,7 +438,7 @@ app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
     // console.log(chunk.toString());
   });
   req.on('end', function() {
-    console.log("PUT Collection Received : ", fullBody.length);
+    // console.log("PUT Collection Received : ", fullBody.length);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
@@ -496,12 +496,12 @@ app.post(apiPath + '*', ensureAuthenticated, function(req, response) {
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    console.log("Received body data : ");
-    console.log(chunk.toString());
+    // console.log("Received body data : ");
+    // console.log(chunk.toString());
   });
   req.on('end', function() {
     // 
-    console.log("POST NEW DOC Received : ", fullBody);
+    // console.log("POST NEW DOC Received : ", fullBody);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
