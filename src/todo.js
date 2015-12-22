@@ -156,7 +156,12 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
  		$scope.todos = Todo.getList(name);
  		$scope.archiveName = name;
 		var d = new Date(name.replace(/todo/,"").replace(/-/," "));
-		$scope.label = d.toDateString().replace(d.getFullYear(), "");
+		var today = new Date();
+		if (d.getFullYear() == today.getFullYear()) {
+			$scope.label = d.toDateString().replace(d.getFullYear(), "");
+		} else {
+			$scope.label = d.toDateString();
+		}
 	}
 
 	$scope.delete = function() {
