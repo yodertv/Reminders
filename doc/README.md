@@ -1,33 +1,37 @@
-Todos v0.3.2
-==========
+Todos v0.3.3
+============
 #Objective:
 Replace the weekly task list that I keep on paper.
-#Curently does or demonstrates:
+
+#Curently demonstrates the following key features:
 - Manages a list of Todos (aka tasks).
-- Persists Todo data mongodb using angular's ngResource, $http service and mongojs.
-- Implements a REST API.
+- Persists Todo data on mongodb using angular's ngResource, $http service and mongojs.
 - Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
 - Add - Adds a new task to the list with done:false; Saves the new task to the DB.
 - Checkbox - When checked: done:true; Item's text is displayed as strike-through; Saves the updated item to the DB.
 - History - Presents the list of archives and allows you to view them.
 - Delete icon - Deletes a task from the list. Delete icon and complete checkbox are hidden or shown based on (edit==true).
 - Displays total and remaing task counts.
-- Can be hosted at localhost, localnet and nodjitsu using express.
-- Tested on: nook browser, iTouch, Safari, iPhone, chrome on Mac, chrome on widows, and IE (fails because it requires CORS).
-- Client depends on bootstrap, angular, and jquery.
-- Server depends on express, http, and mongojs.
-- Has a custom favicon.
-- Responsive to three device sizes.
-- Lists are displayed in tables.
-- Uses pills for navigation.
-- Has a forward button that takes you to the next older archive. Use the browser back command to return to the previous archive. 
-- Button disappears when displaying the last archive.
+- Welcome page for login and current user info.
+- Tested on: nook browser, iTouch, Safari, iPhone, chrome on Mac, chrome on widows, and IE.
+- Responsive to three device sizes. Uses pills for navigation and a small menu.
+- Has a conditional forward button that takes you to the next older archive if it exists.
+- Routing supports browser back and deep linking to archives and any page. 
 - Editing and deleting items in an archive.
 - Editing and deleting archives.
-- All deployment knowledge is in make.js and build_props_files.
-- Rest apiPath is configurable.
+- ImplRest apiPath is configurable.
 - Login to /auth/local, with failure notification
-- Logs user name using the token of express (connect) logger.
+- Logs user name using a custom token of express (connect) logger.
+
+#Deployments:
+- TodoServer can be hosted on localhost, localnet and Modulus.
+- Mongodb can be hosted on localhost, localnet, and MongoLab.
+- All deployment knowledge is in make.js and build_props_files.
+
+#Dependancies:
+- Client depends on bootstrap, angular, and jquery.
+- Server depends on express, passport, http, and mongojs.
+- DB depends on MongoLab for production and local mongodb for dev.
 
 ### Work in progress
 - Testing on localnet with multiple devices.
