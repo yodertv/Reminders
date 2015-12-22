@@ -1,4 +1,4 @@
-Todos v0.3.3
+Todos v0.3.4
 ============
 #Objective:
 Replace the weekly task list that I keep on paper.
@@ -33,9 +33,11 @@ Replace the weekly task list that I keep on paper.
 - Server depends on express, passport, http, and mongojs.
 - DB depends on MongoLab for production and local mongodb for dev.
 
-### Work in progress
+### Version 0.3.4 (12.22.15)
 - Testing on localnet with multiple devices.
 - Added logging user name.
+- Fixed (Bug#25).
+- Updated README.
 
 ### Version 0.3.3 (12.19.15)
 - Documented and fixed (Bug#30) Don't send password to client.
@@ -307,17 +309,14 @@ Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvt
 #Future Enhancements (backlog)
 - Display mongodb host as wells as registered DB on welcome screen.
 - Rename default collection "todo" to "today".
-- Create login and session management so that I can test for multiple clients with different DBs.
 - Add unit testing.
 - Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
+- Minimize trips to server. Keep data cached between pages.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Print a digest from the History page.
 - Keep common tasks. These should be replenished everytime the list is archived.
 - Give the user a way to edit the list of repeating tasks.
-- Minimize trips to server. Keep data cached between pages.
-- Support authentication.
-- Support multiple users.
 - Support addvertisments.
 - Dynamically provision new users.
 - Add a print feature.
