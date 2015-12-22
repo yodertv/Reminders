@@ -49,7 +49,7 @@ var users = [
   , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com', db: 'test-todo' }
   , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com', db: 'todo_new_test' }
   , { id: 5, username: 'bobby', password: 'birthday', email: 'bobby@example.com', db: 'bobstodos' }
-  , { id: 5, username: 'frank', password: 'birthday', email: 'frank@example.com', db: 'frankstodos' }
+  , { id: 6, username: 'frank', password: 'birthday', email: 'frank@example.com', db: 'frankstodos' }
 ];
 
 function findById(id, fn) {
@@ -172,9 +172,9 @@ app.get('/account', ensureAuthenticated, function(req, res){
   res.send(userObj);
 });
 
-app.get('/welcome', function(req, res){
+app.get(['/welcome', '/authfailed'], function(req, res){
   // Redirect welcome route. Allows reload and sharing of welcome URL.
-  console.log("Redirect /welcome.")
+  // console.log("Redirect /welcome.")
   res.writeHead(302, { 'location' : '/#welcome' });
   res.end();
 });
