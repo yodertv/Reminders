@@ -1,7 +1,11 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#32)
+##Open Bugs -- Next: (Bug#33)
+###(Bug#32) No handling of XHR auth failures.
+- intercepter code from html-todos causes angular modulerr:
+http://errors.angularjs.org/1.3.9/$injector/modulerr?p0=todo&p1=Error%3A%20…20d%20(http%3A%2F%2Fkats-air.local%3A8080%2Fjs%2Fangular.min.js%3A17%3A350
+
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
@@ -9,6 +13,7 @@ Todos Bug List
 ```
 Cannot GET /list/:todoFri-Dec-18-2015.
 Cannot GET /todo
+Cannot GET /authfailed
 ```
 ### (Bug#30) GET /account sends password to client.
 
@@ -51,7 +56,6 @@ DB_FIND_ERR: [Error: failed to connect to [ds043047-a.mongolab.com:43047]]
 DB_GETCOLLECTIONNAMES_ERR: Error: failed to connect to [ds043047-a.mongolab.com:43047]
 Tue, 07 Apr 2015 11:45:33 GMT [::ffff:192.168.0.11]GET /api/1/databases/yodertvtodo/collections/ 500 - 36553 ms
 ```
-
 ###(Bug#17) Server crashes when on localnet with multiple clients:
 ```
 database error [Error: connection closed]
