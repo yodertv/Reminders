@@ -27,8 +27,11 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in make.js and build_props_files.
 - Rest apiPath is configurable.
 - Login to /auth/local, with failure notification
+- Logs user name using the token of express (connect) logger.
 
 ### Work in progress
+- Testing on localnet with multiple devices.
+- Added logging user name.
 
 ### Version 0.3.3 (12.19.15)
 - Documented and fixed (Bug#30) Don't send password to client.

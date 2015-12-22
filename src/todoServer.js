@@ -120,6 +120,11 @@ passport.use(new LocalStrategy(
 
 var sessionStore = new express.session.MemoryStore();
 var app = express();
+express.logger.token('user', function(req, res)
+  { 
+    if (req.user == undefined) return ('undefined')
+    else return req.user.username; 
+  });
 
 // configure Express
 app.configure(function() {
@@ -127,9 +132,9 @@ app.configure(function() {
   app.use(express.static(__dirname + '/static'));
 
   if (logDate) { // date in logger output?
-    app.use(express.logger(':date [:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+    app.use(express.logger(':date [:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   } else {
-    app.use(express.logger('[:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+    app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   }
   app.use(express.static(__dirname + '/static'));
   app.use(express.cookieParser());
