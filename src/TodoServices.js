@@ -65,7 +65,7 @@ myMod.factory('Todo', function($resource, $http, $log) {
     Todo.getList = function(name) {
       // console.log("query", name)
       if(name == null) { name = 'todo'; };
-      return Todo.query({todo:name, id:undefined});
+      return Todo.query({todo : name, id : undefined});
     }
 
     Todo.saveTodos = function(todos, name) {

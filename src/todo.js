@@ -168,7 +168,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 		var index = $scope.todos.indexOf(this.todo);
 		$scope.todos.splice(index,1);
 		// Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
-		Todo.remove({todo: $scope.archiveName, id: this.todo._id});
+		Todo.remove({todo : $scope.archiveName, id : this.todo._id});
 	};
 
 	$scope.remaining = function() {
@@ -182,7 +182,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 	$scope.update = function() {
 		// console.log("Update", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-		Todo.update({todo: $scope.archiveName, 	id: this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
+		Todo.update({todo : $scope.archiveName, id : this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
 	};
 
 	$scope.homeClick = function() {
@@ -234,13 +234,13 @@ function TodoCtrl($scope, Todo) {
 		//	console.log(index)
 		$scope.todos.splice(index,1); // remove from memory
 		// Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db line had to be changed.
-		Todo.remove({todo: "todo", id: this.todo._id}); // remove from db
+		Todo.remove({todo : "todo", id : this.todo._id}); // remove from db
 	};
 
 	$scope.update = function() {
 		// console.log("Update :", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-		Todo.update({todo: "todo", 	id: this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
+		Todo.update({todo : "todo", id : this.todo._id}, angular.extend({}, this.todo, {_id : undefined}));
 	};
 
 	$scope.editClick = function() {
@@ -280,7 +280,7 @@ function TodoCtrl($scope, Todo) {
 	      		if (todo.done) {
 	      			// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
 					// Todo.update({todo: archiveName, id: todo._id.$oid}, angular.extend({}, todo, {_id:undefined}));
-	      			Todo.update({todo: archiveName, id: todo._id}, angular.extend({}, todo, {_id:undefined}));
+	      			Todo.update({todo : archiveName, id : todo._id}, angular.extend({}, todo, {_id : undefined}));
       			}
 	      	})
       	}
