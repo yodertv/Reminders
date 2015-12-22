@@ -193,7 +193,7 @@ app.get('/history', ensureAuthenticated, function(req, res) {
   res.end();
 });
 
-app.get('/list/todo*', ensureAuthenticated, function(req, res) {
+app.get('/list/:todo*', ensureAuthenticated, function(req, res) {
   // Redirect list route. Allows reload and sharing of list URL.
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
