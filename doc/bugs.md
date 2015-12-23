@@ -1,7 +1,10 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#33)
+##Open Bugs -- Next: (Bug#34)
+
+###(Bug#33) Menu fails on iPhone in Todos. Works for on iPhone for html-todos.
+
 ###(Bug#32) No handling of XHR auth failures.
 - intercepter code from html-todos causes angular modulerr:
 http://errors.angularjs.org/1.3.9/$injector/modulerr?p0=todo&p1=Error%3A%20…20d%20(http%3A%2F%2Fkats-air.local%3A8080%2Fjs%2Fangular.min.js%3A17%3A350
@@ -89,4 +92,5 @@ database error [Error: connection closed]
 ```
 ###(Bug#12) Connection Failure no handled.
 Connection to the DB doesn't have a fail check and crashes the server when things aren't right.
+
 ###(Bug#6) Invalid date on history page in IE9.
