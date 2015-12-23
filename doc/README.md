@@ -33,8 +33,23 @@ Replace the weekly task list that I keep on paper.
 - Server depends on express, passport, http, and mongojs.
 - DB depends on MongoLab for production and local mongodb for dev.
 
+#Backlog:
+- Dynamically provision new users.
+- Display mongodb host as wells as registered DB on welcome screen.
+- Rename default collection "todo" to "today".
+- Add unit testing.
+- Upgrade Bootstrap.
+- Consider making the build manifest in JSON notation rather than string.
+- Minimize trips to server. Keep data cached between pages.
+- Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
+- Keep common tasks. These should be replenished everytime the list is archived.
+- Give the user a way to edit the list of repeating tasks.
+- Support addvertisments.
+- Add a print feature.
+- Print a digest from the History page.
+
 ### Work in progress
-- Seperated bugs into bugs.md
+- Seperated bugs and resolution info into bugs.md
 - Fixed intercept function for auth failure in XHR calls.
 
 ### Version 0.3.4 (12.22.15)
@@ -46,8 +61,8 @@ Replace the weekly task list that I keep on paper.
 ### Version 0.3.3 (12.19.15)
 - Documented and fixed (Bug#30) Don't send password to client.
 - Added failure message on welcome page when login fails.
-- Documented and fixed (Bug#29)
-- Documented and fixed (Bug#28).
+- Documented and fixed (Bug#29) Unexpected concatenation of routes.
+- Documented and fixed (Bug#28) dbName undefined.
 - Add user list and lookup database by user.
 - Add welcome and login screens by merging html-todos with Todos.
 - Fixed global replacement in make.js sed commands for BAKING in variables.
@@ -61,7 +76,7 @@ Replace the weekly task list that I keep on paper.
 - Merge finally working for local auth. But can't add tasks. Found body parser was consuming form data before the URL handler. Fixed.
 - Merge multi-user and multi-auth from html-todos and Auth projects.
 - Noted (Bug#25) that button/title doesn't show year when it is different from current year.
-- Documented and fixed (Bug#26) : Opening via get collections failed because of no dbUrl variable.
+- Documented and fixed (Bug#26) Opening via get collections failed because of no dbUrl variable.
 
 ### Version 0.3.0 (12.2.2015)
 - Fixing build and tagging v0.3.0. Major release because of all the dependancies that were upgrades.
@@ -69,8 +84,11 @@ Replace the weekly task list that I keep on paper.
 - Rolled the devEnvironment back to node v4.2.2 and npm 2.14.7.
 - Build the node_modules dependancies. Use npm install.
 - Upgraded node and npm to the latest 5.1.0 and 3.3.12 respectively.
-- Solved (Bug#22)
-- Deployed to nodjitsu, while modulus fails to connect to mongolab dbs with auth failures. (Bug#22)
+- Documented and corrected (Bug#22) Auth failures with mongolab using mongojs.
+- Documented and corrected(Bug#20) DB_INSERT_ERR: MongoError: Invalid Operation, No operations in bulk.
+- Documented and corrected (Bug#19) Event emitter leak.
+- Documented and corrected (Bug#18) Duplicate objectID error.
+- Deployed to nodjitsu
 - Tested at merchants wifi. Worked from iPhone on AK's local area net.
 - Made an attempt to fix (Bug#18). Hard to reproduce. Put the insert in the callback of the drop(), but noticed that dropping an empty collection resulted in an error so ignoring drop errors.
 - Then completed the refatoring.
@@ -80,54 +98,10 @@ Replace the weekly task list that I keep on paper.
 - Tested w/ Mongodb v3.0.1. Worked with upgraded mongjs.
 - Added db to list for old version of mongo installed on katrinas-macbook-air.
 
-### Bugs fixed:
-
-#####Documented and corrected (Bug#22)
-Auth failures with mongolab using mongojs. Todos fails to connects using "mongojs": "0.18.0", and new mongojs(dbUrl); Works correctly on localhost.
-```
-mongojs: Unable to connect to any application instances.
-```
-Solved by suggestion from mongolabs support:
-
-Upgraded to mongojs v1.4.1 and used options:
-// connect using SCRAM-SHA-1 mechanism 
-var db = mongojs('username:password@example.com/mydb', ['mycollection'], {authMechanism: 'ScramSHA1'})
-
-#####Documented and corrected (Bug#18) Duplicate objectID error. Happens on first archive of the day when the current todos are recreated:
-	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
- 	Happend in old test-todo db.
-
- 	Happend again on yodertvtodo 3.26.15 on kitchen-mac.
- 	DB_INSERT_ERR: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: yodertvtodo.todo.$_id_  dup key: { : ObjectId('54701f6fe4b0d8aa33853ba3') }","op":{"_id":"54701f6fe4b0d8aa33853ba3","text":"Amazon account switch","done":false}})
-	Fri, 27 Mar 2015 03:08:06 GMT [::ffff:192.168.0.11]-PUT /api/1/databases/yodertvtodo/collections/todo 500 - 48 ms
-
-#####Documented and corrected(Bug#20)
-```
-DB_INSERT_ERR: MongoError: Invalid Operation, No operations in bulk
-```
-	Not critical. The failure doesn't affect the expected behavior. Only shows in log. Could be better by not making the call.
-
-#####Documented and corrected Event emitter leak(Bug#19)
-```
-(node) warning: possible EventEmitter memory leak detected. 11 listeners added. Use emitter.setMaxListeners() to increase limit.
-Trace
-    at addListener (events.js:160:15)
-    at /Users/kat/src/Todos/build/todoServer.js:154:17
-    at callbacks (/usr/local/lib/node_modules/express/lib/router/index.js:161:37)
-    at param (/usr/local/lib/node_modules/express/lib/router/index.js:135:11)
-    at pass (/usr/local/lib/node_modules/express/lib/router/index.js:142:5)
-    at Router._dispatch (/usr/local/lib/node_modules/express/lib/router/index.js:170:5)
-    at Object.router (/usr/local/lib/node_modules/express/lib/router/index.js:33:10)
-    at next (/usr/local/lib/node_modules/express/node_modules/connect/lib/proto.js:199:15)
-    at resume (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:60:7)
-    at SendStream.error (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:73:37)
-```
-
 ###2.5
 - Tested quite a bit on Linda's local net. Did not encounter (Bug#17) did git dublicate ID (Bug#18) once.
-- Solved:
-	(Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
-	(Bug#7) With new angular and locationProvider fails to reload history page. Solved by redirecting to /#history and /#list.
+- Fixed (Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
+- Fixed (Bug#7) With new angular and locationProvider fails to reload history page. Solved by redirecting to /#history and /#list.
 
 ###2.4
 - Tested localnet build and run on kitchen-mac. Tested iPad, iTouch, IE 9 on windows, Chrome on windows, Chrome on Nook.
@@ -137,7 +111,7 @@ Trace
 - Changed local host build from 127.0.0.1 to localhost.
 
 ###2.3
-- Fixed update of existing todos in history list -- (Bug#16) Marking a task done in a historical list fails to communicate w/ the server.
+- Fixed (Bug#16) Update of existing todos in history list.
 - Limit file server to only static files. Static server does NOT serve up the server files or the package.json file.
 - Enhanced make.js to support the new file structure.
 
@@ -147,36 +121,16 @@ Trace
 ###2.1.3
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
 - Newest bootstrap version 3.3.1. Didn't work. Went back.
-- Further testing found two bugs (8 and 9)
+- Further testing found two bugs (Bug#8) and (Bug#9)
 - Work off-line better with local mongodb.
-- Got getCollectionMames() and collection.drop() working on local host. Curious about the number of collections opening. That must be the mongojs library. I added close() to the method I tested.
+- Got getCollectionNames() and collection.drop() working on local host. Curious about the number of collections opening. That must be the mongojs library. I added close() to the method I tested.
 - Interesting behavoir with the new route, reloading doesn't get "routed".
 - Objective to leave ngResource unchanged (i.e. reproduce the REST API)
-- Fixed (Bug#8) Drop collection fails to return (HTTP Pending). Collection is succesfully dropped.
-- Fixed (Bug13) Inserting an array to a collection doesn't have the expected behavior of replacing the collection. Instead they are added back in. I depend on this in the archive to remove the completed items for the current list. Fixed by dropping the collection first.
-- Fixed(Bug#11) Server shows:
-```
-    uri = /api/1/databases/test-todo/collections/todo/5179feafe4b0494c6ed82de2 
-	dbPart = test-todo/collections/todo 
-	dbName = test-todo 
-	collectionName = todo 
-	objID =  5179feafe4b0494c6ed82de2 
-	dbUrl = localhost:27017/test-todo
-	UPDATE DOC:  /api/1/databases/test-todo/collections/todo/5179feafe4b0494c6ed82de2
-	Received :  {"text":"iii","done":true}
-	doc:
-	{"ok":true,"n":0,"updatedExisting":true}
-	But doc in db is not changed:
-	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }
-```
-- Not Related to (Bug#10). Fixed by setting upsert option.
-- Fixed (Bug#15) The inserted data from the client doesn't preserve the mongo ObjectID. Corrected with a reObjectify function that cleans up the data during the JSON.parse().
-- FIxed (Bug#10) two _id forms in db:
-```
-{ "_id" : ObjectId("519992d7e4b0601363034fef"), "text" : "fasd", "done" : true }
-	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }
-	fixed by reObjectify() function as in (Bug#15).
-```
+- Fixed (Bug#8) Drop collection fails to return (HTTP Pending).
+- Fixed (Bug#13) Inserting an array to a collection doesn't have the expected behavior of replacing the collection.
+- Fixed (Bug#11) Update to task fails.
+- Fixed (Bug#15) The inserted data from the client doesn't preserve the mongo ObjectID.
+- FIxed (Bug#10) two _id forms in db.
 
 ###2.1.2
 - Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
@@ -191,7 +145,7 @@ Trace
 - Use package.json file for my two configuration items, src_dir, build_dir and lib_dir
 - Changed bake to prep and added node_module dependancy check.
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
-- Still one bug. Today page is blank when routed to from History. -- Fixed by adding '/' after #.
+- Still one bug (Big#??). Today page is blank when routed to from History. -- Fixed by adding '/' after #.
 
 ###2.1
 - Use node-static to serve up my static files.
@@ -203,7 +157,7 @@ Trace
 
 ###2.0
 - Enhanced todoServer.js to proxy mongo's REST api and allow non-CORS compliant browsers to access the data. Still need a place to host todoServer.js on Node. ie 9 can view the data, but it still broken from a style sheet prespective.
-- (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. Need to consider JSONP. Changes hosting requirements. Implemented with a nodejs proxy so there is only a single origin as var as the browser is concerned.
+- Fixed (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. 
 - Enhanced ro remove archives from the archive list. I delete collections with mongojs.
 - Discovered the Puffin browser for nook. Works with Todos 1.4. Now only IE fails. I don't think I care.
 - Deployed to nodjitsu to some success. Proxy bug sent me a erant re-direct.
@@ -218,7 +172,7 @@ Trace
 ###1.5
 - Merge Node v0.4 MongoApp drop collection code into StaticServer and rename as todoServer
 - Change mongolab.js to add a dropArchive function.
-- (Bug#3) When archive creates a new file the forward button still points to the previous archive. Should be updated on the save.
+- Fixed (Bug#3) Archive forward button isn't pointing to next older archive.
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
 
@@ -228,20 +182,5 @@ Trace
 - Refactored getArchiveList into it's own function and moved into service, mongolab.js.
 - buildArchiveList used three times so it's now a function shared by three controllers.
 - Refactor all DB access into the mongolab module.
-- (Bug#1) Archive has been fixed by merging any newly completed tasks into the archive for the same day if it exists.
+- Fixed (Bug#1) Archive steps on previous archive data. 
 - Tweaked html views with some &nbsp; to make the view a little nicer.
-
-#Future Enhancements (backlog)
-- Display mongodb host as wells as registered DB on welcome screen.
-- Rename default collection "todo" to "today".
-- Add unit testing.
-- Upgrade Bootstrap.
-- Consider making the build manifest in JSON notation rather than string.
-- Minimize trips to server. Keep data cached between pages.
-- Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
-- Print a digest from the History page.
-- Keep common tasks. These should be replenished everytime the list is archived.
-- Give the user a way to edit the list of repeating tasks.
-- Support addvertisments.
-- Dynamically provision new users.
-- Add a print feature.
