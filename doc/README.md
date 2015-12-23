@@ -33,6 +33,10 @@ Replace the weekly task list that I keep on paper.
 - Server depends on express, passport, http, and mongojs.
 - DB depends on MongoLab for production and local mongodb for dev.
 
+### Work in progress
+- Seperated bugs into bugs.md
+- Fixed intercept function for auth failure in XHR calls.
+
 ### Version 0.3.4 (12.22.15)
 - Testing on localnet with multiple devices.
 - Added logging user name.
@@ -119,7 +123,6 @@ Trace
     at SendStream.error (/usr/local/lib/node_modules/express/node_modules/connect/lib/middleware/static.js:73:37)
 ```
 
-#Work done in previous releases
 ###2.5
 - Tested quite a bit on Linda's local net. Did not encounter (Bug#17) did git dublicate ID (Bug#18) once.
 - Solved:

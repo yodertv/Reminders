@@ -5,6 +5,20 @@ Todos Bug List
 ###(Bug#32) No handling of XHR auth failures.
 - intercepter code from html-todos causes angular modulerr:
 http://errors.angularjs.org/1.3.9/$injector/modulerr?p0=todo&p1=Error%3A%20…20d%20(http%3A%2F%2Fkats-air.local%3A8080%2Fjs%2Fangular.min.js%3A17%3A350
+```
+Failed to instantiate module TodoServices due to:
+TypeError: Cannot read property 'push' of undefined
+    at http://kats-air.local:8080/TodoServices.js:111:37
+    at Object.e [as invoke] (http://kats-air.local:8080/js/angular.min.js:37:96)
+    at d (http://kats-air.local:8080/js/angular.min.js:35:301)
+    at http://kats-air.local:8080/js/angular.min.js:35:425
+    at s (http://kats-air.local:8080/js/angular.min.js:7:302)
+    at g (http://kats-air.local:8080/js/angular.min.js:35:202)
+    at http://kats-air.local:8080/js/angular.min.js:35:371
+    at s (http://kats-air.local:8080/js/angular.min.js:7:302)
+    at g (http://kats-air.local:8080/js/angular.min.js:35:202)
+    at Ob (http://kats-air.local:8080/js/angular.min.js:38:435
+```
 
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 

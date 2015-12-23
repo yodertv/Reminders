@@ -161,12 +161,12 @@ app.post('/auth/local', express.bodyParser(),
     res.redirect('/#todo');
   });
   
-app.get('/logout', ensureAuthenticated, function(req, res){
+app.get('/logout', ensureAuthRedirect, function(req, res){
   req.logout();
   res.redirect('/#welcome');
 });
 
-app.get('/account', ensureAuthenticated, function(req, res){
+app.get('/account', ensureAuthRedirect, function(req, res){
   // console.log(req.user);
   var userObj = { email: req.user.email, db: req.user.db } ;
   res.send(userObj);
@@ -179,21 +179,21 @@ app.get(['/welcome', '/authfailed'], function(req, res){
   res.end();
 });
 
-app.get('/todo', ensureAuthenticated, function(req, res){
+app.get('/todo', ensureAuthRedirect, function(req, res){
   // Redirect todo route. Allows reload and sharing of todo URL.
   console.log("Redirect /todo.")
   res.writeHead(302, { 'location' : '/#todo' });
   res.end();
 });
 
-app.get('/history', ensureAuthenticated, function(req, res) { 
+app.get('/history', ensureAuthRedirect, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
   console.log("Redirect /history.")
   res.writeHead(302, { 'location' : '/#history' });
   res.end();
 });
 
-app.get('/list/:todo*', ensureAuthenticated, function(req, res) {
+app.get('/list/:todo*', ensureAuthRedirect, function(req, res) {
   // Redirect list route. Allows reload and sharing of list URL.
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -209,7 +209,7 @@ app.get('/list/:todo*', ensureAuthenticated, function(req, res) {
 'query':  {method:'GET', isArray:true},
 'remove': {method:'DELETE'},
 'delete': {method:'DELETE'} }; */
-app.get(apiPath, ensureAuthenticated, function(req, res) {
+app.get(apiPath, ensureAuth401, function(req, res) {
   // Get archiveList: no collection name in URI, so get all the collection names.
   // Form of request: http://127.0.0.1/apiPath/
 
@@ -244,7 +244,7 @@ app.get(apiPath, ensureAuthenticated, function(req, res) {
   })
 });
 
-app.get(apiPath + '*', ensureAuthenticated, function(req, res) {      
+app.get(apiPath + '*', ensureAuth401, function(req, res) {      
   // console.log('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
@@ -278,7 +278,7 @@ app.get(apiPath + '*', ensureAuthenticated, function(req, res) {
   });
 });
 
-app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, response){
+app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   // Form of URL: http://127.0.0.1/{apiPath}/{*}/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -396,7 +396,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuthenticated, function(req, respo
   }
 });
 
-app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
+app.del(apiPath + 'todo*', ensureAuth401, function(req, res) {
   // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
   // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
   // Delete archived collection using mongojs.
@@ -422,7 +422,7 @@ app.del(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   });
 });
 
-app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
+app.put(apiPath + 'todo*', ensureAuth401, function(req, res) {
   // console.log('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
@@ -484,7 +484,7 @@ app.put(apiPath + 'todo*', ensureAuthenticated, function(req, res) {
   }); 
 });
 
-app.post(apiPath + '*', ensureAuthenticated, function(req, response) {
+app.post(apiPath + '*', ensureAuth401, function(req, response) {
   // Insert a new doc into collectionName
   // console.log('In POST (insert) new doc into collection:', uri);
   // Insert and new doc into collection.
@@ -535,18 +535,24 @@ http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
 
-// interval_example();
+// interval_example(); // Turn this on to look see the session leak.
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
-function ensureAuthenticated(req, res, next) {
+function ensureAuthRedirect(req, res, next) { // Use this for routes called by the browser.
   if (req.isAuthenticated()) { return next(); }
+  setTimeout(listSessions,1000); // Print sessions in one sec.
   res.redirect('/#welcome')
 }
 
+function ensureAuth401(req, res, next) {  // Use this for routes consumed by XHR.
+  if (req.isAuthenticated()) { return next(); }
+  setTimeout(listSessions,1000); // Print sessions in one sec.
+  res.send(401);
+}
 
 // interval example - 5x output every 2secs using setInterval
 function interval_example() {

@@ -87,27 +87,23 @@ myMod.factory('Todo', function($resource, $http, $log) {
   return Todo;
 });
 
-/*
-myMod.config( function($httpProvider) {
-  function exampleInterceptor($q,$log,$location) {
-    function success(response) {
-      // $log.info('Successful response: ' + response);
-      return response;
-    }
-    function error(response) { // Expect a 401 when not authenticated.
-      var status = response.status;
-      // $rootScope.errorState = true; This didn't work a controller.
-      // $rootScope.errorString = JSON.stringify(response);
-      $log.error('Response status: ' + status + '. ' + JSON.stringify(response) + ' ' + $location.path());
+myMod.factory('authInterceptor', ['$q', '$location', function($q, $location) {
+  return {
+    response: function(response) {
+      // console.log('Successful response: ' + response.status);
+      return response || $q.when(response);
+    },
+    responseError: function(rejection) { // Expect a 401 when Unauthorized.
+      var status = rejection.status;
+      // console.log('Rejection status: ' + status + '. ' + JSON.stringify(rejection) + ' ' + $location.path());
       if ($location.path() != '/welcome') {
         $location.path('/welcome');
       }
-      return $q.reject(response); //similar to throw response;
-    }
-    return function(promise) {
-      return promise.then(success, error);
+      return $q.reject(rejection);
     }
   }
-  $httpProvider.responseInterceptors.push(exampleInterceptor);
-});
-*/
+}]);
+
+myMod.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptor');
+}]);
