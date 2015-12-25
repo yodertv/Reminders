@@ -11,7 +11,8 @@
     "express": "3.1.0",
     "passport": "0.2.1",
     "passport-local": "1.0.0",
-    "mongojs": "1.4.1"
+    "mongojs": "1.4.1",
+    "bootstrap": "3.3.6"
   },
   "devDependencies": {
     "commander" : "2.6.0",

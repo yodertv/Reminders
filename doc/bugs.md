@@ -3,8 +3,11 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#34)
 
-###(Bug#33) Menu fails on iPhone in Todos. Works for on iPhone for html-todos.
+###(Bug#33) Menu fails on iPhone Safari in Todos. 
+Works for on iPhone for html-todos.
 Need to run safari under the iOS simulator and test there.
+Also fails on nook. Will try hashtag in menu hrefs. That's what html-todos has. Didn't work.
+Next I'll check the bootstrap version. Those are the same. Best hypothysis is that HTML5 routing broke this. Hence the difference between html-todos and Todos. Need to upgrade bootstrap.
 
 ###(Bug#32) No handling of XHR auth failures.
 - intercepter code from html-todos causes angular modulerr:
