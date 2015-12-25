@@ -16,6 +16,13 @@ var mongojs = require("mongojs");
 var express = require("express");
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var userList = require("./user-list");
+var userOptions = {
+  'dbUrl' : 'localhost:27017/users',
+  'collectionName' : 'userList'
+}
+
+userList.getUserList(userOptions);
 
 // This list should be replaced with my user db and seperated into it own module.
 var dblist = {
@@ -43,38 +50,19 @@ var reObjectify = function (key, value) {
   return value;
 }
 
-var users = [
-    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com', db: 'bobs_local' }
-  , { id: 2, username: 'mike', password: 'secret', email: 'yoderm01@gmail.com', db: 'yodertvtodo' }
-  , { id: 3, username: 'test', password: 'birthday', email: 'test@example.com', db: 'test-todo' }
-  , { id: 4, username: 'joe', password: 'birthday', email: 'joe@example.com', db: 'todo_new_test' }
-  , { id: 5, username: 'bobby', password: 'birthday', email: 'bobby@example.com', db: 'bobstodos' }
-  , { id: 6, username: 'frank', password: 'birthday', email: 'frank@example.com', db: 'frankstodos' }
+var localUsers = [
+    { username: 'bob', password: 'secret', email: 'bob@example.com'}
+  , { username: 'mike', password: 'secret', email: 'yoderm01@gmail.com'}
+  , { username: 'test', password: 'birthday', email: 'test@example.com'}
+  , { username: 'joe', password: 'birthday', email: 'joe@example.com'}
+  , { username: 'bobby', password: 'birthday', email: 'bobby@example.com'}
+  , { username: 'frank', password: 'birthday', email: 'frank@example.com'}
 ];
 
-function findById(id, fn) {
-  var idx = id - 1;
-  if (users[idx]) {
-    fn(null, users[idx]);
-  } else {
-    fn(new Error('User ' + id + ' does not exist'));
-  }
-}
-
 function findByUsername(username, fn) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
+  for (var i = 0, len = localUsers.length; i < len; i++) {
+    var user = localUsers[i];
     if (user.username === username) {
-      return fn(null, user);
-    }
-  }
-  return fn(null, null);
-}
-
-function findByEmail(email, fn) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.email === email) {
       return fn(null, user);
     }
   }
@@ -112,7 +100,9 @@ passport.use(new LocalStrategy(
         if (err) { return done(err); }
         if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
         if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
-        return done(null, user);
+        return done(null, {"email" : user.email, "db" : userList.findByEmail(user.email, function (err, user) {
+          return ( user.db );
+        })});
       })
     });
   }
@@ -216,7 +206,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var dbUrl = dblist[dbName];
+  var dbUrl = dbName;
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
@@ -253,7 +243,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var dbUrl = dblist[dbName];
+  var dbUrl = dbName; // Add login credentials here.
   
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
@@ -294,7 +284,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   }
 
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
-  var dbUrl = dblist[dbName];
+  var dbUrl = dbName;
   
   /*
   console.log("\nuri =", uri,
@@ -433,7 +423,7 @@ app.put(apiPath + 'todo*', ensureAuth401, function(req, res) {
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db;
-  var dbUrl = dblist[dbName];
+  var dbUrl = dbName;
   var fullBody = '';
 
   req.on('data', function(chunk) {
@@ -495,7 +485,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   //var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db; 
-  var dbUrl = dblist[dbName];
+  var dbUrl = dbName;
 
   var fullBody = '';
   req.on('data', function(chunk) {
