@@ -25,6 +25,7 @@ var userOptions = {
 userList.getUserList(userOptions);
 
 // This list should be replaced with my user db and seperated into it own module.
+/*
 var dblist = {
   //'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
   'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
@@ -36,6 +37,7 @@ var dblist = {
   'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
   'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo' // my production db
 }
+*/
 
 var dbs = []; // Array of db connections
 
@@ -53,10 +55,10 @@ var reObjectify = function (key, value) {
 var localUsers = [
     { username: 'bob', password: 'secret', email: 'bob@example.com'}
   , { username: 'mike', password: 'secret', email: 'yoderm01@gmail.com'}
-  , { username: 'test', password: 'birthday', email: 'test@example.com'}
-  , { username: 'joe', password: 'birthday', email: 'joe@example.com'}
-  , { username: 'bobby', password: 'birthday', email: 'bobby@example.com'}
-  , { username: 'frank', password: 'birthday', email: 'frank@example.com'}
+  , { username: 'test', password: 'secret', email: 'test@example.com'}
+  , { username: 'joe', password: 'secret', email: 'joe@example.com'}
+  , { username: 'bobby', password: 'secret', email: 'bobby@example.com'}
+  , { username: 'frank', password: 'secret', email: 'frank@example.com'}
 ];
 
 function findByUsername(username, fn) {
@@ -113,7 +115,7 @@ var app = express();
 express.logger.token('user', function(req, res)
   { 
     if (req.user == undefined) return ('undefined')
-    else return req.user.username; 
+    else return req.user.email; 
   });
 
 // configure Express
@@ -206,7 +208,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var dbUrl = dbName;
+  var dbUrl = dbName; // Add login credentials here.
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
