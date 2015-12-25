@@ -56,7 +56,7 @@ for (var i = 0; i < LIB_FILES_NAMES.length; i++) {
 }; 
 
 // Server source files to copy to root directory.
-var SRV_FILES_NAMES = ['todoServer.js'];
+var SRV_FILES_NAMES = ['todoServer.js', 'user-list.js'];
 var SRV_FILES = [];
 for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
  	SRV_FILES.push(SRC_PATH + '/' + SRV_FILES_NAMES[i]);
@@ -281,10 +281,8 @@ function build(env){
 
 	if (! program.silent) {
         console.log('\n Building %s...', _env);
-    }
-	
+    }	
     // concat and minify files here or do anything that modifies the prep'd dist files for the target environment.
-
 }
 
 function install(env) {
@@ -295,91 +293,3 @@ function install(env) {
     }
 	// Execute the steps to depoy the distribution to the selected run-time environment.
 }
-
-/*
-* Original ant config. Remaining functions to implement.
-<project name="todos" default="localhost, build">
-
-	<!-- Usage: ant localhost build -->
-
-	<property name="build.dir" value="../build" />
-	<property name="lib.dir" value="../lib" />
-	<property name="src.dir" value="." />
-	<property name="static.dir" value="${build.dir}/static" />
-
-	<target name="localhost">
-		<loadproperties srcfile="build.properties.localhost" />
-	</target>
-
-	<target name="jitsu">
-		<loadproperties srcfile="build.properties.jitsu" />
-	</target>
-
-	<target name="build" depends="clean,prep,install,bake">
-		<echo>Built ${name} version ${version}!</echo>
-	</target>
-
-	<target name="clean">
-		<echo>Cleaning ${name} version ${version}! ${build.dir}</echo>
-		<delete dir="${build.dir}"/>
-	</target>
-
-	<target name="prep" depends="clean">
-		<echo>Preping ${name} build dir ${build.dir}</echo>
-		<mkdir dir="${build.dir}"/>
-	</target>
-
-	<target name="install" depends="prep">
-		<echo>Installing ${name} build dir ${build.dir}</echo>
-		<copy todir="${build.dir}">
-			<fileset dir="${src.dir}" includes="
-				package.json,
-				userlist.js,
-				todoServer.js">
-			</fileset>
-		</copy>
-		<copy todir="${static.dir}">
-			<fileset dir="${src.dir}" includes="
-				*.html,
-				TodoServices.js,
-				todo.js">
-			</fileset>
-		</copy>
-		<copy todir="${static.dir}">
-			<fileset dir="${lib.dir}" includes="
-				img/*.png,
-				img/favicon.ico">
-			</fileset>
-		</copy>
-		<copy todir="${static.dir}">
-			<fileset dir="${lib.dir}" includes="
-				js/angular.min.js,
-				js/angular-resource.min.js,
-    			js/jquery-2.0.0.min.js,
-    			js/bootstrap.min.js,
-    			js/ui-bootstrap-tpls-0.3.0.min.js,
-    			css/bootstrap.min.css,
-    			css/bootstrap-responsive.min.css">
-    		</fileset>
-		</copy>
-		<copy todir="${static.dir}/css">
-			<filelist dir="${src.dir}" files="todo.css"></filelist>
-		</copy>
-	</target>
-
-	<target name="bake" depends="install">
-		<echo>Baking ${name} build dir ${build.dir}, $(nodeURL}, ${logDate}.</echo>
-		<replaceregexp match="@VERSION@" replace="${version}" flags="g" byline="true">
-			<filelist dir="${build.dir}" files="package.json,${static.dir}/welcome.html,
-				${static.dir}/index.html"></filelist>
-		</replaceregexp>
-		<replaceregexp match="@NODEURL@" replace="${nodeURL}" flags="g" byline="true">
-			<filelist dir="${build.dir}" files="${static.dir}/TodoServices.js,
-				todoServer.js"></filelist>
-		</replaceregexp>
-		<replaceregexp match="@LOGDATE@" replace="${logDate}" flags="g" byline="true">
-			<filelist dir="${build.dir}" files="todoServer.js"></filelist>
-		</replaceregexp>
-	</target>
-</project>
-*/
