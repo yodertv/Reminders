@@ -48,9 +48,11 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Work in progress
+### Work in progress (12.25.15)
 - Seperated bugs and resolution info into bugs.md
 - Fixed intercept function for auth failure in XHR calls.
+- Added user-list.js module for managing use registration. Retires internal list.
+- Tested registering a db that doesn't exist. Works.
 
 ### Version 0.3.4 (12.22.15)
 - Testing on localnet with multiple devices.
