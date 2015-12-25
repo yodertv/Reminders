@@ -3,11 +3,19 @@ test cases:
 - Logon
 - Logon with registration
 	- Available DBs
-	- No DBs available (never tested)
+	- No DBs available
+	- Registered db doesn't exist (will create on first entered todo). 
 - Welcome/About page logged in
+	- local auth
+	- google auth
 - Welcome/About page logged out
+	- local auth
+	- google auth
 - Menu: About, Today, Logout
-- Logout, Logout from Google too
+- Logout:
+	- local auth
+	- google auth
+	- Logout from Google too
 - auth/local test login and login failure. Logout from each page menu.
 - Add task
 - Completet task
@@ -17,4 +25,5 @@ test cases:
 - History list
 - Delete archives
 - Next archive button ">>"
+- Next achive button hidden on last archive.
 - Share list and history urls
