@@ -8,9 +8,9 @@
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://192.168.0.7:8080/",
+	"nodeURL" : "http://kitchen-mac.local:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
-	"userDbName" : "ds043972.mongolab.com:43972/users"
+	"userDbName" : "localhost:27017/users"
 }
 

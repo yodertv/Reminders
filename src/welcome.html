@@ -16,25 +16,25 @@
 Thanks for trying this simple Todos app.<br>
 -Mike <br><br>
 <div ng-show="authFailed">
-<font color="red"> {{authFailedMsg}}.</font>
+	<font color="red"> {{authFailedMsg}}.</font>
 </div>
 <div ng-hide="authenticated">
-<form name="input" action="auth/local" method="post">
-&nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
-Password: <input type="password" name="password"><br>
-&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Enter">
-</form>
+	<form name="input" action="auth/local" method="post">
+		&nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
+		Password: <input type="password" name="password"><br>
+		&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Enter">
+	</form>
 </div>
 <div ng-show="authenticated">
-<br> Authenticated as:  <strong>{{user.email}}</strong>
-<div ng-show="registered">
-Registered DB:  <strong>{{user.db}}</strong><br><br>
-</div>
-<strong>
-<a href="/todo" class="btn btn-default">Continue</a> |
-<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
-</strong>
-<!-- <input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input> -->
+	<br> Authenticated as:  <strong>{{user.email}}</strong>
+	<div ng-show="registered">
+	Registered DB:  <strong>{{user.db}}</strong><br><br>
+	</div>
+	<strong>
+	<a href="/todo" class="btn btn-default">Continue</a> |
+	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
+	</strong>
+	<input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input>
 </div>
 <br>
 <strong>Todos @VERSION@</strong><br>
