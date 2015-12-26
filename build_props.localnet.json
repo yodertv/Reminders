@@ -8,8 +8,9 @@
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://kats-air.local:8080/",
+	"nodeURL" : "http://192.168.0.7:8080/",
 	"apiPath" : "api/todos/",
-	"angularRoot" : "js/"
+	"angularRoot" : "js/",
+	"userDbName" : "ds043972.mongolab.com:43972/users"
 }
 

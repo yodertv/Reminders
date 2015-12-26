@@ -3,8 +3,16 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#34)
 
-###(Bug#33) Menu fails on iPhone in Todos. Works for on iPhone for html-todos.
+###(Bug#27) Server silently sends the client crap when not able to connect to db.
+
+##Closed Bugs
+
+###(Bug#33) Menu fails on iPhone Safari in Todos. 
+Works for on iPhone for html-todos.
 Need to run safari under the iOS simulator and test there.
+Also fails on nook. Will try hashtag in menu hrefs. That's what html-todos has. Didn't work.
+Next I'll check the bootstrap version. Those are the same. Best hypothysis is that HTML5 routing broke this. Hence the difference between html-todos and Todos. Need to upgrade bootstrap. Done. Menu working on iPhone and nook.
+Closed 12.25.2015 (972f1f1)
 
 ###(Bug#32) No handling of XHR auth failures.
 - intercepter code from html-todos causes angular modulerr:
@@ -23,10 +31,8 @@ TypeError: Cannot read property 'push' of undefined
     at g (http://kats-air.local:8080/js/angular.min.js:35:202)
     at Ob (http://kats-air.local:8080/js/angular.min.js:38:435
 ```
+Closed 12.22.2015 (f32006b)
 
-###(Bug#27) Server silently sends the client crap when not able to connect to db.
-
-##Closed Bugs
 ### (Bug#31) Deep linking fails for lists.
 ```
 Cannot GET /list/:todoFri-Dec-18-2015.

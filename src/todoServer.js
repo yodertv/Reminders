@@ -17,8 +17,11 @@ var express = require("express");
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var userList = require("./user-list");
+
+var nodeProd = ( process.env.NODE_ENV === 'production');
+
 var userOptions = {
-  'dbUrl' : 'localhost:27017/users',
+  'dbUrl' : '@USERDBNAME@',
   'collectionName' : 'userList'
 }
 
@@ -56,7 +59,7 @@ var localUsers = [
     { username: 'bob', password: 'secret', email: 'bob@example.com'}
   , { username: 'mike', password: 'secret', email: 'yoderm01@gmail.com'}
   , { username: 'test', password: 'secret', email: 'test@example.com'}
-  , { username: 'joe', password: 'secret', email: 'joe@example.com'}
+  , { username: 'code', password: 'secret', email: 'yodercode@gmail.com'}
   , { username: 'bobby', password: 'secret', email: 'bobby@example.com'}
   , { username: 'frank', password: 'secret', email: 'frank@example.com'}
 ];
@@ -208,7 +211,10 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var dbUrl = dbName; // Add login credentials here.
+
+  // Assume produciton has db authenitcation on. Has desirable side effect of failing to connect
+  // on DBs without authentication enabled.
+  var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
@@ -245,8 +251,11 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var dbUrl = dbName; // Add login credentials here.
-  
+
+  // Assume produciton has db authenitcation on. Has desirable side effect of failing to connect
+  // on DBs without authentication enabled.
+  var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_FIND");

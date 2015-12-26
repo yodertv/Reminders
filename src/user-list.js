@@ -30,12 +30,16 @@ exports.findByEmail = function(email, fn) {
 exports.getUserList = function (options) {
 
   // Get user list objects from users collection of users DB. Using mongojs api and the options
-  // specifying the db and collection.
-  
-  var dbUrl = options.dbUrl;
+  // specifying the dbUrl and collectionName.
+
+  var nodeProd = ( process.env.NODE_ENV === 'production' );
+  var dbName = options.dbUrl;  
+  var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
+  // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   var collectionName = options.collectionName;
   
-  console.log("Get User List opening DB: " + dbUrl);
+  console.log("Get User List opening DB: " + options.dbUrl);
   userDb = new mongojs(dbUrl, [collectionName], {authMechanism: 'ScramSHA1'});
   userDb.on('error',function(err) {
     console.log('userDb database error', err);

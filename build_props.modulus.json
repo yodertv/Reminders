@@ -10,6 +10,6 @@
 	"#3_comment" : "Deployment details.",
 	"nodeURL" : "http://todos-55911.onmodulus.net/",
 	"apiPath" : "api/todos/",
-	"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/"
+	"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/",
+	"userDbName" : "ds043972.mongolab.com:43972/users"
 }
-

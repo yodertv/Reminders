@@ -1,7 +1,7 @@
 <!-- Welcome.html -->  
 <ul class="nav nav-pills">
 <li class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-align-justify"></i></a>
+  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
   <ul class="dropdown-menu">
     <li><a tabindex="-1" href="/welcome">About</a></li>
     <li><a tabindex="-1" href="/todo">Today</a></li>    
@@ -13,7 +13,7 @@
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
 <li><a href="/todo">Todos @VERSION@</a></li>
 </ul>
-We hope you like this simple todos app. Thanks, <br>
+Thanks for trying this simple Todos app.<br>
 -Mike <br><br>
 <div ng-show="authFailed">
 <font color="red"> {{authFailedMsg}}.</font>
@@ -22,7 +22,7 @@ We hope you like this simple todos app. Thanks, <br>
 <form name="input" action="auth/local" method="post">
 &nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
 Password: <input type="password" name="password"><br>
-&nbsp;&nbsp;<input type="submit" value="Enter">
+&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Enter">
 </form>
 </div>
 <div ng-show="authenticated">
@@ -31,8 +31,8 @@ Password: <input type="password" name="password"><br>
 Registered DB:  <strong>{{user.db}}</strong><br><br>
 </div>
 <strong>
-<a href="/todo">Continue</a> |
-<a href="" ng-click="logout()" >Logout&nbsp;&nbsp;</a>
+<a href="/todo" class="btn btn-default">Continue</a> |
+<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
 </strong>
 <!-- <input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input> -->
 </div>
@@ -41,6 +41,6 @@ Todos @VERSION@ <br>
 Copyright 2015 Yoder Code. <br>
 <br>
 Thanks to: Angular, Node, Bootstrap, <br> 
-&nbsp;&nbsp;&nbsp;Mongodb, Express, Passport. <br>
+&nbsp;&nbsp;&nbsp;Mongodb, Express, Passport, Glyphicons. <br>
 <br>
 Hosted by: Modulus and MongoLab. <br>

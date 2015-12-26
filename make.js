@@ -40,8 +40,7 @@ var validEnvs = ['localnet','localhost','jitsu','modulus'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'history.html',
-				 'list.html', 'index.html', 'login.html', 'todo.css',
-				 'welcome.html'];
+				 'list.html', 'index.html', 'todo.css', 'welcome.html'];
 
 var SRC_FILES = [];
 for (var i = 0; i < SRC_FILES_NAMES.length; i++) {
@@ -49,7 +48,7 @@ for (var i = 0; i < SRC_FILES_NAMES.length; i++) {
 }; 
 
 // Client lib files to copy to static directory
-var LIB_FILES_NAMES = ['js', 'css', 'img'];
+var LIB_FILES_NAMES = ['js', 'css', 'img', 'fonts'];
 var LIB_FILES = [];
 for (var i = 0; i < LIB_FILES_NAMES.length; i++) {
  	LIB_FILES.push(LIB_PATH + '/' + LIB_FILES_NAMES[i]);
@@ -70,7 +69,6 @@ var VER_FILES = [
 	DIST_STATIC + '/' + 'todo.js', 
 	DIST_STATIC + '/' + 'TodoServices.js', 
 	DIST_STATIC + '/' + 'index.html',
-	DIST_STATIC + '/' + 'login.html',
 	DIST_STATIC + '/' + 'welcome.html',
 	DIST_PATH + '/' + 'todoServer.js'
 ];
@@ -89,6 +87,9 @@ var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
 
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
+
+// Files into which to bake the @USERDBNAME@
+var USERDB_FILES = [DIST_PATH + '/' + "todoServer.js"];
 
 _shell.config.fatal = false;
 
@@ -271,6 +272,10 @@ function prep(env){
 
 	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
 		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, ANG_FILES[i]);	
+	};
+
+	for (var i 	= USERDB_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', /@USERDBNAME@/g, _props.userDbName, USERDB_FILES[i]);	
 	};
 }
 

@@ -1,10 +1,7 @@
-<!-- List.html v2.2 -->	 
-<div class="container">  
-<div class="row">
-<div class="span6">
+<!-- List.html -->
 <ul class="nav nav-pills">
 <li class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-align-justify"></i></a>
+  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
   <ul class="dropdown-menu">
     <li><a tabindex="-1" href="/welcome">About</a></li>
     <li><a tabindex="-1" href="/todo">Today</a></li>    
@@ -16,7 +13,7 @@
 <li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
 <li class="{{activeHistory}}"><a href="/history"></a></li>
 <li class="{{activeList}}"><a href="">{{label}}</a></li>
-<li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="icon-forward"></i></a></li>
+<li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
 </ul>
 </div>
 </div>
@@ -27,7 +24,7 @@
     <tr ng-repeat="todo in todos">
       <td>
       <span> 
-  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="icon-trash">&nbsp;</i></a>
+  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash">&nbsp;</i></a>
     		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done">&nbsp;&nbsp;</input>
      		<span class="done-{{todo.done}}">&nbsp;{{todo.text}}&nbsp;</span>
       </span>
