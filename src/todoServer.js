@@ -21,6 +21,8 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var userList = require("./user-list");
 
 var nodeProd = ( process.env.NODE_ENV === 'production');
+var nodeEnv = nodeProd ? 'PROD' : 'DEV'; //Anything but production is DEV.
+
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
 var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -98,7 +100,7 @@ passport.use(new LocalStrategy(
         if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
         return done(null, {"email" : user.email, "db" : userList.findByEmail(user.email, function (err, user) {
           return ( user.db );
-        })});
+        }), "env" : nodeEnv });
       })
     });
   }
@@ -130,12 +132,11 @@ passport.use(new GoogleStrategy({
         if (!user) { return done(null, false, { message: 'Unknown user ' + profile._json.email }); }
         return done(null, {"email" : profile._json.email, "db" : userList.findByEmail(profile._json.email, function (err, user) {
           return ( user.db );
-        })});
+        }), "env" : nodeEnv });
       })
     });
   }
 ));
-
 
 var sessionStore = new express.session.MemoryStore();
 var app = express();
@@ -215,9 +216,15 @@ app.get('/logout', ensureAuthRedirect, function(req, res){
   res.redirect('/#welcome');
 });
 
-app.get('/account', ensureAuthRedirect, function(req, res){
-  // console.log(req.user);
-  var userObj = { email: req.user.email, db: req.user.db } ;
+app.get('/account', function(req, res){
+  var userObj = {};
+  if (req.isAuthenticated()) { 
+    userObj = { email : req.user.email, db : req.user.db, env : nodeEnv } ;
+  }
+  else {
+    userObj = {env : nodeEnv};
+  }
+  console.log(userObj);
   res.send(userObj);
 });
 
