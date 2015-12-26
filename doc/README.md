@@ -36,6 +36,7 @@ Replace the weekly task list that I keep on paper.
 #Backlog:
 - Dynamically provision new users.
 - Display helpful message on empty todo or history lists.
+- Add build for 127.0.0.1.
 - Display mongodb host as wells as registered DB on welcome screen.
 - Rename default collection "todo" to "today".
 - Add unit testing.
@@ -55,8 +56,9 @@ Replace the weekly task list that I keep on paper.
 - Added user-list.js module for managing use registration. Retires internal list.
 - Deployed userList collection to mongoLab and externalized userDbName.
 - Require DB authentication in production.
-- Tested registering a db that doesn't exist. Works.
+- Tested registering a db that doesn't exist. Works only with no auth.
 - Fixed (Bug#33) by upgrading to bootstrap to 3.3.6.
+- Deployed to modulus.
 
 ### Version 0.3.4 (12.22.15)
 - Testing on localnet with multiple devices.

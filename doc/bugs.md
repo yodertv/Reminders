@@ -1,11 +1,14 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#34)
+##Open Bugs -- Next: (Bug#35)
 
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#34) Modulus deployment works for yodercode, but not for yoderm01 users. Main differnece is the size number of collections in yoderm01 and their entries in the userList. Thee latter was the problem.
+Closed 12.26.2015
 
 ###(Bug#33) Menu fails on iPhone Safari in Todos. 
 Works for on iPhone for html-todos.

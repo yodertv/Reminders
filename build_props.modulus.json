@@ -4,7 +4,7 @@
 	"name" : "modulus",
 	"ENV" : "PROD",
 
-	"#1_comment" : "Should server log date? On Nodejitsu dates are logged by the application environment.",
+	"#1_comment" : "Should server log date? E.g. On Nodejitsu dates are logged by the application environment.",
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
