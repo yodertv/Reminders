@@ -1,7 +1,9 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#34)
+##Open Bugs -- Next: (Bug#35)
+
+###(Bug#34) Modulus deployment works for yodercode, but not for yoderm01 users. Main differnece is the size number of collections in yoderm01.
 
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
