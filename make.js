@@ -88,6 +88,9 @@ var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
 
+// Files into which to bake the @USERDBNAME@
+var USERDB_FILES = [DIST_PATH + '/' + "todoServer.js"];
+
 _shell.config.fatal = false;
 
 // Global options
@@ -269,6 +272,10 @@ function prep(env){
 
 	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
 		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, ANG_FILES[i]);	
+	};
+
+	for (var i 	= USERDB_FILES.length - 1; i >= 0; i--) {
+		_shell.sed('-i', /@USERDBNAME@/g, _props.userDbName, USERDB_FILES[i]);	
 	};
 }
 
