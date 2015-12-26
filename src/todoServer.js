@@ -16,9 +16,15 @@ var mongojs = require("mongojs");
 var express = require("express");
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 var userList = require("./user-list");
 
 var nodeProd = ( process.env.NODE_ENV === 'production');
+// API Access link for creating client ID and secret:
+// https://code.google.com/apis/console/
+var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 var userOptions = {
   'dbUrl' : '@USERDBNAME@',
@@ -26,21 +32,6 @@ var userOptions = {
 }
 
 userList.getUserList(userOptions);
-
-// This list should be replaced with my user db and seperated into it own module.
-/*
-var dblist = {
-  //'test-todo' : 'yodertv:sugmag@ds045907.mongolab.com:45907/test-todo',
-  'test-todo-macbook' : 'Katrinas-Macbook-Air.local:27017/test-todo', // Used to test mongo db v2.6.5
-  'test-todo' : 'localhost:27017/test-todo',
-  'test-todo-1' : 'localhost:27017/test-todo-1',
-  'todo_new_test' : 'localhost:27017/todo_new_test',
-  'bobs_local' : 'localhost:27017/bobstodos',
-  'bobstodos' : 'yodertv:sugmag@ds049467.mongolab.com:49467/bobstodos',
-  'frankstodos' : 'yodertv:sugmag@ds047057.mongolab.com:47057/frankstodos',
-  'yodertvtodo' : 'yodertv:sugmag@ds043047.mongolab.com:43047/yodertvtodo' // my production db
-}
-*/
 
 var dbs = []; // Array of db connections
 
@@ -113,6 +104,39 @@ passport.use(new LocalStrategy(
   }
 ));
 
+// Use the GoogleStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Google
+//   profile), and invoke a callback with a user object.
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: nodeURL + "auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      // console.log(profile);
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+
+      // Here's where we can detect a new user. They won't be found in the user list below
+
+      userList.findByEmail(profile._json.email, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false, { message: 'Unknown user ' + profile._json.email }); }
+        return done(null, {"email" : profile._json.email, "db" : userList.findByEmail(profile._json.email, function (err, user) {
+          return ( user.db );
+        })});
+      })
+    });
+  }
+));
+
+
 var sessionStore = new express.session.MemoryStore();
 var app = express();
 express.logger.token('user', function(req, res)
@@ -143,18 +167,48 @@ app.configure(function() {
   app.use(app.router);
 });
 
-// POST /login
+// POST /login for local auth
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 //
 //   curl -v -d "username=bob&password=secret" http://localhost:8080/auth/local
-app.post('/auth/local', express.bodyParser(),
-  passport.authenticate('local', { failureRedirect: '/#authfailed' }),
+if (!nodeProd) { // Never use this route in production.
+  app.post('/auth/local', express.bodyParser(),
+    passport.authenticate('local', { failureRedirect: '/#authfailed' }),
+    function(req, res) {
+      res.redirect('/#todo');
+    }
+  );
+}
+
+// GET /auth/google
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Google authentication will involve
+//   redirecting the user to google.com.  After authorization, Google
+//   will redirect the user back to this application at /auth/google/callback.
+//   This route won't work on localnet or localhost because of security on the apis.
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+});
+
+// GET /auth/google/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/#todo');
-  });
+    // console.log(req.user.email);
+    setTimeout(listSessions,1000); // Print sessions in one sec.
+    res.redirect('/#todo'); 
+});
   
 app.get('/logout', ensureAuthRedirect, function(req, res){
   req.logout();
@@ -529,7 +583,9 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   });   
 });
 
-// console.log("process.env.PORT=", process.env.PORT);
+app.all('*', function(req, res) {
+  res.redirect("/#welcome");
+});
 
 http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
