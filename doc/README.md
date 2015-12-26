@@ -35,6 +35,7 @@ Replace the weekly task list that I keep on paper.
 
 #Backlog:
 - Dynamically provision new users.
+- Display helpful message on empty todo or history lists.
 - Display mongodb host as wells as registered DB on welcome screen.
 - Rename default collection "todo" to "today".
 - Add unit testing.
