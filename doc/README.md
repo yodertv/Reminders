@@ -50,7 +50,10 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Version 0.4.0 (12.26.15)
+### Version 0.4.1 Under Construction (12.26.2015)
+- Add google auth for production.
+
+### Version 0.4.0 (12.26.2015)
 - Seperated bugs and resolution info into bugs.md
 - Fixed intercept function for auth failure in XHR calls.
 - Added user-list.js module for managing use registration. Retires internal list.
