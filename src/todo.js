@@ -88,11 +88,12 @@ function buildArchiveList(data, scope, name) {
 	var nextIndex = scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
 
 	if (nextIndex >= scope.archives.length) {
-		scope.showNext="show-false" // Hide the next button on the last archive
+		console.log("Hide Next.");
+		scope.showNext="hidden" // Hide the next button on the last archive
 	} 
 	else {
 		scope.nextArchiveName = scope.archives[nextIndex].archiveName;
-		scope.showNext="show-true";
+		scope.showNext="visible";
 	};
 }
 
@@ -132,12 +133,13 @@ function HistoryCtrl($scope, $location, Todo) {
 	  			$scope.nextArchiveName = $scope.archives[0].archiveName;
   			} else { 
   			    $scope.nextArchiveName == undefined;
-  				$scope.showNext="show-false";
+  				$scope.showNext="hidden";
   			}
   		}
   	}
-	$scope.showNext="show-false";
+	$scope.showNext="hidden";
 	$scope.showDelete = false;
+	$scope.activeHistory = "active";
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
@@ -210,9 +212,9 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 
 	$scope.showDelete = false; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
 	$scope.showList = true;
-	$scope.activeHome = ""; 
+	$scope.activeHome = "visible"; 
 	$scope.activeList = "active";
-	$scope.activeHistory = "show-false";
+	$scope.activeHistory = "hidden";
 	$scope.showNewTask = false;
 }
 
@@ -293,7 +295,7 @@ function TodoCtrl($scope, Todo) {
 				"date" : today
 			})
 			$scope.nextArchiveName = archiveName; // Update nextArchiveName to be this new one.
-			$scope.showNext = "show-true"; // Force on the next button.
+			$scope.showNext = "visible"; // Force the next button to be visible.
 		}	
 		
 		// Remove the completed tasks by erasing the list of todos and copying only the not done tasks from oldTodos.
@@ -308,12 +310,12 @@ function TodoCtrl($scope, Todo) {
 		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
   	} 
 	
-	$scope.activeList = "show-false";
+	$scope.activeList = "hidden";
 	$scope.activeHome = "active";
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
  	$scope.todos = Todo.getList();
- 	$scope.showNext="show-false";
+ 	$scope.showNext="hidden";
 
 	Todo.getArchiveList(function(data) {
 		buildArchiveList(data, $scope); // Needed to support the next button.
