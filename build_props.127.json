@@ -1,0 +1,16 @@
+{
+	"#0_comment" : "Build poperties for localhost deployment and testing.",
+	
+	"name" : "localhost",
+	"ENV" : "DEV",
+
+	"#1_comment" : "Should server log date?",
+	"logDate" : "true",
+
+	"#2_comment" : "Deployment details. Local area network node address.",
+	"nodeURL" : "http://127.0.0.1:8080/",
+	"apiPath" : "api/todos/",
+	"angularRoot" : "js/",
+	"userDbName" : "localhost:27017/users"
+}
+
