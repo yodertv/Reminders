@@ -30,10 +30,13 @@ exports.findByEmail = function(email, fn) {
 exports.getUserList = function (options) {
 
   // Get user list objects from users collection of users DB. Using mongojs api and the options
-  // specifying the dbUrl and collectionName.
+  // specifying the dbUrl and collectionName. 
 
   var nodeProd = ( process.env.NODE_ENV === 'production' );
-  var dbName = options.dbUrl;  
+  var dbName = options.dbUrl;
+
+  // Assume produciton has db authernitcation on. Has desirable side effect of failing to connect
+  // on DBs without authentication enabled.
   var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
