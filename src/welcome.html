@@ -14,17 +14,21 @@
 <li><a href="/todo">Todos @VERSION@</a></li>
 </ul>
 Thanks for trying this simple Todos app.<br>
--Mike <br><br>
+-Mike <br>
+<div ng-show="!production">
 <div ng-show="authFailed">
-	<font color="red"> {{authFailedMsg}}.</font>
+	<font color="red"><strong>{{authFailedMsg}}</strong></font>
 </div>
 <div ng-hide="authenticated">
 	<form name="input" action="auth/local" method="post">
 		&nbsp;&nbsp;User ID: &nbsp;&nbsp;<input type="text" name="username"><br>
-		Password: <input type="password" name="password"><br>
+		Password: <input type="password" name="password">
 		&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Enter">
 	</form>
-	<br><a href="/auth/google">Login with Google</a><br>
+</div>
+</div>
+<div ng-show="production">
+<a href="/auth/google" target="_self">Login with Google</a><br>
 </div>
 <div ng-show="authenticated">
 	<br> Authenticated as:  <strong>{{user.email}}</strong>
@@ -35,7 +39,7 @@ Thanks for trying this simple Todos app.<br>
 	<a href="/todo" class="btn btn-default">Continue</a> |
 	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
 	</strong>
-	<input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input>
+	<span><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
 </div>
 <br>
 <strong>Todos @VERSION@</strong><br>

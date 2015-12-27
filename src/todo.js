@@ -48,9 +48,9 @@ function WelcomeCtrl($scope, $location, UserService) {
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;
 	$scope.registered = false;
-	if ($location.path() == '/authfailed') { 
+	if ($location.path() == '/authfailed') {
 		$scope.authFailed = true;
-		$scope.authFailedMsg = "User or password incorect. Try again."
+		$scope.authFailedMsg = "User ID or password incorect. Try again."
 	 };
 }
 
