@@ -28,7 +28,7 @@ Thanks for trying this simple Todos app.<br>
 </div>
 </div>
 <div ng-show="production">
-<a href="/auth/google" target="_self">Login with Google</a><br>
+<a ng-hide= "authenticated" href="/auth/google" target="_self" class="btn btn-default">Login with Google</a><br>
 </div>
 <div ng-show="authenticated">
 	<br> Authenticated as:  <strong>{{user.email}}</strong>
