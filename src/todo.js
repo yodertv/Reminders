@@ -34,6 +34,16 @@ function WelcomeCtrl($scope, $location, UserService) {
   		});
   	}
 
+	// console.log("location=", $location.path());
+	$scope.production = true;
+	$scope.logoutfromgoogle = false;
+	$scope.authenticated = false;
+	$scope.registered = false;
+	if ($location.path() == '/authfailed') {
+		$scope.authFailed = true;
+		$scope.authFailedMsg = "User ID or password incorect. Try again."
+	 };
+
 	$scope.user = UserService.get( function(user){
 		console.log(user);
 		$scope.authenticated = (user.email != undefined);
@@ -43,15 +53,6 @@ function WelcomeCtrl($scope, $location, UserService) {
 		// console.log("registered=", $scope.registered);
 		// console.log("failedCount=", $scope.failedCount);
 	});
-
-	// console.log("location=", $location.path());
-	$scope.logoutfromgoogle = false;
-	$scope.authenticated = false;
-	$scope.registered = false;
-	if ($location.path() == '/authfailed') {
-		$scope.authFailed = true;
-		$scope.authFailedMsg = "User ID or password incorect. Try again."
-	 };
 }
 
 function buildArchiveList(data, scope, name) { 
