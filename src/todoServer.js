@@ -224,7 +224,7 @@ app.get('/account', function(req, res){
   else {
     userObj = {env : nodeEnv};
   }
-  console.log(userObj);
+  // console.log(userObj);
   res.send(userObj);
 });
 
