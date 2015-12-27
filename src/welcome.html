@@ -39,7 +39,7 @@ Thanks for trying this simple Todos app.<br>
 	<a href="/todo" class="btn btn-default">Continue</a> |
 	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
 	</strong>
-	<span><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
+	<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
 </div>
 <br>
 <strong>Todos @VERSION@</strong><br>
