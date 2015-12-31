@@ -53,6 +53,8 @@ Replace the weekly task list that I keep on paper.
 ### Version 0.4.1 Under Construction (12.26.2015)
 - Add google auth for production.
 - Externalize GOOGLE api credentials.
+- Tested Auth switching between environments.
+- Sends server environment to the client with the /acount method.
 
 ### Version 0.4.0 (12.26.2015)
 - Seperated bugs and resolution info into bugs.md
