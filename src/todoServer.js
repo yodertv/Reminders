@@ -5,7 +5,6 @@ var nodeDesc = "Todo Server v@VERSION@";
 var nodeURL = "@NODEURL@";        // URL of the deployed server.
 var apiPath = '/' + "@APIPATH@";  // The path to the XHR API
 var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged for us.
-var DBKey = "50a2a0e3e4b0cd0bfc12435d";
 
 'use strict';
 
