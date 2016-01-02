@@ -47,7 +47,7 @@ myMod.factory('UserService', function($window, $resource, $http, $location) {
 });
 
 myMod.factory('Todo', function($resource, $http, $log) {
-    $log.info("TodoServices.js: ", nodeURL, resURL);
+    // $log.info("TodoServices.js: ", nodeURL, resURL);
     var Todo = $resource(resURL + ':todo/:id', null,
       {
         update: { method: 'PUT' }
