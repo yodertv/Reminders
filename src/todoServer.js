@@ -52,7 +52,7 @@ var localUsers = [
   , { username: 'mike', password: 'secret', email: 'yoderm01@gmail.com'}
   , { username: 'test', password: 'secret', email: 'test@example.com'}
   , { username: 'code', password: 'secret', email: 'yodercode@gmail.com'}
-  , { username: 'bobby', password: 'secret', email: 'bobby@example.com'}
+  , { username: 'junk', password: 'secret', email: 'junk@gmail.com'}
   , { username: 'frank', password: 'secret', email: 'frank@example.com'}
 ];
 
@@ -595,7 +595,7 @@ app.all('*', function(req, res) {
 
 http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
-console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nnodeEnv = " + nodeEnv );
+console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode environment = " + nodeEnv );
 console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
