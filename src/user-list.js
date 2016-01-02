@@ -42,7 +42,7 @@ exports.getUserList = function (options) {
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   var collectionName = options.collectionName;
   
-  console.log("Get User List opening DB: " + options.dbUrl);
+  // console.log("Get User List opening DB: " + options.dbUrl);
   userDb = new mongojs(dbUrl, [collectionName], {authMechanism: 'ScramSHA1'});
   userDb.on('error',function(err) {
     console.log('userDb database error', err);

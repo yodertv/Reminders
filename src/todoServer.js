@@ -595,8 +595,9 @@ app.all('*', function(req, res) {
 
 http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
-console.log(nodeDesc + " running on " + os.hostname() + " at port " + port);
-console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown");
+console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nnodeEnv = " + nodeEnv );
+console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
+console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
 // interval_example(); // Turn this on to look see the session leak.
 

@@ -45,7 +45,7 @@ function WelcomeCtrl($scope, $location, UserService) {
 	 };
 
 	$scope.user = UserService.get( function(user){
-		console.log(user);
+		// console.log(user);
 		$scope.authenticated = (user.email != undefined);
 		$scope.registered = (user.db != undefined);
 		$scope.production = (user.env != "DEV")

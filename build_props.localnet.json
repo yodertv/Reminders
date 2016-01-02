@@ -8,7 +8,7 @@
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://kitchen-mac.local:8080/",
+	"nodeURL" : "http://kats-air.local:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
 	"userDbName" : "localhost:27017/users"

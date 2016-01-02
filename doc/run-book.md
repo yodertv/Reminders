@@ -29,7 +29,7 @@ from build directory
 % modulus deploy todos -p "Todos"
 ```
 
-Environment variables required for security credentials in production:
+## Environment variables required for security credentials in production:
 ```
 Kats-Air:todo mike$ modulus env list -p <modulus project>
 Welcome to Modulus
@@ -44,5 +44,6 @@ GOOGLE_CLIENT_SECRET = <googleClientSecret>
 GOOGLE_CLIENT_ID = <googleClientId>
 Kats-Air:todo mike$
 ```
-
+The MONGO variables depend on the userDbName in build_props.
+The GOOGLE variables depend on the NODE_ENV=PROD.
 

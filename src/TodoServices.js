@@ -25,7 +25,7 @@ myMod.factory('UserService', function($window, $resource, $http, $location) {
   
   var UserService = $resource(nodeURL + 'account', null, null);
   
-  console.log("In UserService"); 
+  // console.log("In UserService"); 
   // We use the get() me
   
   UserService.logout = function(logOutFromGoogle, cb) {
