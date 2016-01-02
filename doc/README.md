@@ -34,7 +34,7 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab for production and local mongodb for dev.
 
 #Backlog:
-- Dynamically provision new users.
+- Dynamically provision new users. This is hard in the cloud. Need a level of service that allows creation of new DBs.
 - Display helpful message on empty todo or history lists.
 - Add build for 127.0.0.1.
 - Display mongodb host as wells as registered DB on welcome screen.
@@ -50,11 +50,13 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Version 0.4.1 Under Construction (12.26.2015)
+### Version 0.4.1 Under Construction (1.1.2016)
 - Add google auth for production.
 - Externalize GOOGLE api credentials.
 - Tested Auth switching between environments.
 - Sends server environment to the client with the /acount method.
+- Cleaned-up cosole log messages.
+- Testing new DBs on modulus.
 
 ### Version 0.4.0 (12.26.2015)
 - Seperated bugs and resolution info into bugs.md

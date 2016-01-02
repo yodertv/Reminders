@@ -46,4 +46,5 @@ Kats-Air:todo mike$
 ```
 The MONGO variables depend on the userDbName in build_props.
 The GOOGLE variables depend on the NODE_ENV=PROD.
+NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
 
