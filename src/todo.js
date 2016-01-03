@@ -90,7 +90,7 @@ function buildArchiveList(data, scope, name) {
 	var nextIndex = scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
 
 	if (nextIndex >= scope.archives.length) {
-		console.log("Hide Next.");
+		// console.log("Hide Next.");
 		scope.showNext="hidden" // Hide the next button on the last archive
 	} 
 	else {

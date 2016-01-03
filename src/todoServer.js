@@ -272,9 +272,8 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
 
-  // Assume produciton has db authenitcation on. Has desirable side effect of failing to connect
-  // on DBs without authentication enabled.
-  var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+  // Use authentication when MONGO_USER has a value.
+  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
@@ -312,9 +311,8 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
 
-  // Assume produciton has db authenitcation on. Has desirable side effect of failing to connect
-  // on DBs without authentication enabled.
-  var dbUrl = nodeProd ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+  // Use authentication when MONGO_USER has a value.
+  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
