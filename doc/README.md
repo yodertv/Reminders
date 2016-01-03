@@ -36,11 +36,8 @@ Replace the weekly task list that I keep on paper.
 #Backlog:
 - Dynamically provision new users. This is hard in the cloud. Need a level of service that allows creation of new DBs.
 - Display helpful message on empty todo or history lists.
-- Add build for 127.0.0.1.
-- Display mongodb host as wells as registered DB on welcome screen.
 - Rename default collection "todo" to "today".
 - Add unit testing.
-- Upgrade Bootstrap.
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
@@ -54,6 +51,7 @@ Replace the weekly task list that I keep on paper.
 - Add google auth for production.
 - Externalize GOOGLE api credentials.
 - Tested Auth switching between environments.
+- Added build for 127.0.0.1 to support local testing with google auth.
 - Sends server environment to the client with the /acount method.
 - Cleaned-up cosole log messages.
 - Testing new DBs on modulus.
@@ -63,6 +61,7 @@ Replace the weekly task list that I keep on paper.
 - Fixed intercept function for auth failure in XHR calls.
 - Added user-list.js module for managing use registration. Retires internal list.
 - Deployed userList collection to mongoLab and externalized userDbName.
+- Display mongodb host as wells as registered DB on welcome screen.
 - Require DB authentication in production.
 - Tested registering a db that doesn't exist. Works only with no auth.
 - Fixed (Bug#33) by upgrading to bootstrap to 3.3.6.
