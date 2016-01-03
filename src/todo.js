@@ -125,7 +125,7 @@ function HistoryCtrl($scope, $location, Todo) {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item.archiveName;
-  		console.log("In HistoryCtrl delete method. Deleting:", arch);
+  		// console.log("In HistoryCtrl delete method. Deleting:", arch);
   		$scope.archives.splice(index,1); // Remove it from the model.
   		Todo.dropArchive(arch, function() {
   			// console.log("dropArchive returned");
