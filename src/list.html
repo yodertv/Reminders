@@ -19,7 +19,7 @@
 </div>
 </div>
 
-<table class="table table-striped">  
+<table ng-show="todos[0]" class="table table-striped">  
 	<tbody>  
     <tr ng-repeat="todo in todos">
       <td>
@@ -36,8 +36,10 @@
   </tbody>
 </table>
 
-<form ng-submit="addTodo()">
-  <span class="show-{{showNewTask}}" >
-    <input type="text" ng-model="todoText" size=30 placeholder="Add new task here."></input>
-  </span>
-</form>
+<table ng-hide="todos[0]" class="table table-striped">  
+  <tbody>  
+    <tr>
+      <td>&nbsp;&nbsp;No tasks in this archive. Consider deleting from history.</td>
+    </tr>
+  </tbody>  
+</table>

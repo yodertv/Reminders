@@ -68,6 +68,11 @@ myMod.factory('Todo', function($resource, $http, $log) {
       return Todo.query({todo : name, id : undefined});
     }
 
+    Todo.getTodos = function(name, cb) {
+      console.log("getTodos ", name)
+      http.get(resURL + name).success(cb);
+    }
+
     Todo.saveTodos = function(todos, name) {
       if(name == null) { name = 'todo'; };      
       // console.log("saveTodos :\n", todos);

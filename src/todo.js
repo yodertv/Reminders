@@ -69,8 +69,8 @@ function buildArchiveList(data, scope, name) {
 	// The data has all collections in the DB. So we filter for only the collections that start w/ todo using regex.
 	var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
 
-	scope.archives=[]; // Zero out the current array of archives in scope.
-
+	// Zero out the current array of archives in scope.
+	scope.archives=[];
 	for (var i=0;i<archs.length;i++) {
 		var archstr = archs[i].replace("todo", ""); 
 
@@ -142,6 +142,8 @@ function HistoryCtrl($scope, $location, Todo) {
 	$scope.showNext="hidden";
 	$scope.showDelete = false;
 	$scope.activeHistory = "active";
+	$scope.archives=[];
+	$scope.archives[0] = { archiveName : "", displayName : "..loading.." } ; 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
@@ -173,6 +175,8 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 		$scope.todos.splice(index,1);
 		// Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id});
+		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
+
 	};
 
 	$scope.remaining = function() {
@@ -202,6 +206,9 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 			$scope.showDelete = false; 
 		}
 	};
+
+	$scope.todos = [];
+ 	$scope.todos[0] = { done : false, text : "...loading..." };
 
   	var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
 	
@@ -239,6 +246,9 @@ function TodoCtrl($scope, Todo) {
 		$scope.todos.splice(index,1); // remove from memory
 		// Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db line had to be changed.
 		Todo.remove({todo : "todo", id : this.todo._id}); // remove from db
+		// Leave edit mode when no more todos.
+		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
+
 	};
 
 	$scope.update = function() {
@@ -316,6 +326,10 @@ function TodoCtrl($scope, Todo) {
 	$scope.activeHome = "active";
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
+ 	
+ 	$scope.todos = [];
+ 	$scope.todos[0] = { done : false, text : "...loading..." };
+
  	$scope.todos = Todo.getList();
  	$scope.showNext="hidden";
 
