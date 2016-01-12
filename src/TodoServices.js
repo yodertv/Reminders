@@ -70,7 +70,7 @@ myMod.factory('Todo', function($resource, $http, $log) {
 
     Todo.getTodos = function(name, cb) {
       console.log("getTodos ", name)
-      http.get(resURL + name).success(cb);
+      $http.get(resURL + name).success(cb);
     }
 
     Todo.saveTodos = function(todos, name) {

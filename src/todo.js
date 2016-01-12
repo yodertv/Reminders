@@ -330,7 +330,12 @@ function TodoCtrl($scope, Todo) {
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
 
- 	$scope.todos = Todo.getList();
+// 	$scope.todos = Todo.getList();
+
+	Todo.getTodos('todo', function(data){
+		$scope.todos = data;
+	})
+
  	$scope.showNext="hidden";
 
 	Todo.getArchiveList(function(data) {
