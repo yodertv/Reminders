@@ -47,6 +47,9 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
+### Version 0.4.2 Under Construction (1.13.2016)
+- Added loading message while todo lists load.
+
 ### Version 0.4.1 Under Construction (1.1.2016)
 - Add google auth for production.
 - Externalize GOOGLE api credentials.

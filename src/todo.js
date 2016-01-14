@@ -156,7 +156,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
   		// Print this archive list.
   		console.log("Print called.")
   	}
-	
+	/*
 	$scope.getList = function(name) {
  		if(name == null) { return name; };
  		$scope.todos = Todo.getList(name);
@@ -169,7 +169,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 			$scope.label = d.toDateString();
 		}
 	}
-
+	*/
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
 		$scope.todos.splice(index,1);
@@ -212,7 +212,20 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 
   	var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
 	
-	$scope.getList(name);
+	//$scope.getList(name);
+
+	Todo.getTodos(name, function(data){
+		$scope.todos = data;
+	})
+	
+	$scope.archiveName = name;
+	var d = new Date(name.replace(/todo/,"").replace(/-/," "));
+	var today = new Date();
+	if (d.getFullYear() == today.getFullYear()) {
+		$scope.label = d.toDateString().replace(d.getFullYear(), "");
+	} else {
+		$scope.label = d.toDateString();
+	}
 
 	// $scope.getArchives(name);
 	Todo.getArchiveList(function(data) {
