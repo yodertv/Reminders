@@ -49,8 +49,9 @@ Replace the weekly task list that I keep on paper.
 
 ### Version 0.4.2 Under Construction (1.13.2016)
 - Added loading message while todo lists load.
+- Remove day of week from last year's archives.
 
-### Version 0.4.1 Under Construction (1.1.2016)
+### Version 0.4.1 (1.1.2016)
 - Add google auth for production.
 - Externalize GOOGLE api credentials.
 - Tested Auth switching between environments.

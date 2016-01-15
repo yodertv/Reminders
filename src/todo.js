@@ -224,7 +224,7 @@ function ListCtrl($scope, $location, $routeParams, Todo) {
 	if (d.getFullYear() == today.getFullYear()) {
 		$scope.label = d.toDateString().replace(d.getFullYear(), "");
 	} else {
-		$scope.label = d.toDateString();
+		$scope.label = d.toDateString().slice(4,d.length);
 	}
 
 	// $scope.getArchives(name);
