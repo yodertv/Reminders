@@ -1,7 +1,17 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#35)
+##Open Bugs -- Next: (Bug#36)
+
+###(Bug#35) Todo server doesn't handle timeout when.
+Condition is after being idle over night.
+```
+Fri, 15 Jan 2016 10:49:19 GMT [yodercode@gmail.com@::ffff:192.168.0.5]POST /auth/local 302 56 1 ms
+DB_FIND_ERR: { [MongoError: server ds045907-a.mongolab.com:45907 received an error {"name":"MongoError","message":"read ETIMEDOUT"}]
+  name: 'MongoError',
+  message: 'server ds045907-a.mongolab.com:45907 received an error {"name":"MongoError","message":"read ETIMEDOUT"}' }
+DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 received an error {"name":"MongoError","message":"read ETIMEDOUT"}
+```
 
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 

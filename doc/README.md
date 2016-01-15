@@ -50,6 +50,7 @@ Replace the weekly task list that I keep on paper.
 ### Version 0.4.2 Under Construction (1.13.2016)
 - Added loading message while todo lists load.
 - Remove day of week from last year's archives.
+- Documented (Bug#35) Todo server doesn't handle timeout.
 
 ### Version 0.4.1 (1.1.2016)
 - Add google auth for production.
