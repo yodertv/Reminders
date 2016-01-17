@@ -22,6 +22,7 @@ Replace the weekly task list that I keep on paper.
 - ImplRest apiPath is configurable.
 - Login to /auth/local, with failure notification
 - Logs user name using a custom token of express (connect) logger.
+- Displays a helpful message on empty todo or history lists.
 
 #Deployments:
 - TodoServer can be hosted on localhost, localnet and Modulus.
@@ -29,13 +30,12 @@ Replace the weekly task list that I keep on paper.
 - All deployment knowledge is in make.js and build_props_files.
 
 #Dependancies:
-- Client depends on bootstrap, angular, and jquery.
+- Client depends on glyphicons, bootstrap, angular, and jquery.
 - Server depends on express, passport, http, and mongojs.
-- DB depends on MongoLab for production and local mongodb for dev.
+- DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
 - Dynamically provision new users. This is hard in the cloud. Need a level of service that allows creation of new DBs.
-- Display helpful message on empty todo or history lists.
 - Rename default collection "todo" to "today".
 - Add unit testing.
 - Consider making the build manifest in JSON notation rather than string.
@@ -48,7 +48,7 @@ Replace the weekly task list that I keep on paper.
 - Print a digest from the History page.
 
 ### Version 0.4.2 Under Construction (1.13.2016)
-- Added loading message while todo lists load.
+- Added '...loading...' message while todo lists, and history load.
 - Remove day of week from last year's archives.
 - Documented (Bug#35) Todo server doesn't handle timeout.
 
