@@ -97,9 +97,21 @@ passport.use(new LocalStrategy(
         if (err) { return done(err); }
         if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
         if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
-        return done(null, {"email" : user.email, "db" : userList.findByEmail(user.email, function (err, user) {
-          return ( user.db );
-        }), "env" : nodeEnv });
+        
+        // Now search the userList for their registered DB, if not found allocate one.        
+        user = userList.findByEmail(user.email, function (err, user) {
+          if (err) { return done(err); }
+          if (!user) {
+            var brokenUser = {};
+            brokenUser.email = username;
+            brokenUser.db = 'No registered database.';
+            console.log('No registered database for user ' + username );
+            return ( brokenUser ); 
+          }
+          return ( user );
+        });
+        user.env = nodeEnv;
+        return done(null, user);
       })
     });
   }
@@ -597,7 +609,7 @@ console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode en
 console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
-// interval_example(); // Turn this on to look see the session leak.
+// interval_example(); // Turn this on to observe the session table leak.
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
