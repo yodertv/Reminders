@@ -6,6 +6,7 @@ var mongojs = require('mongojs');
 
 var userauths = 0;
 var userDb = undefined;
+var userCol = undefined;
 var unassignedValue ="UNASSIGNED_DB";
 
 exports.ul = undefined;
@@ -30,8 +31,8 @@ exports.assignDb = function (email) {
   console.log("Assinging db...");
   var user = exports.findByEmail("UNASSIGNED_DB", function c(err, user) {return user});
   user.email = email; 
-  //storeUserList();
-  return (user); 
+  storeUser(user);
+  return (user);
 }
 
 exports.findByEmail = function(email, fn) {
@@ -56,18 +57,18 @@ exports.loadUserList = function (options) {
   var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
-  var collectionName = options.collectionName;
+  userCol = options.collectionName;
   
   // console.log("Get User List opening DB: " + options.dbUrl);
   if (userDb == null) {
-    userDb = new mongojs(dbUrl, [collectionName], {authMechanism: 'ScramSHA1'});
+    userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'ScramSHA1'});
     userDb.on('error',function(err) {
       console.log('userDb database error', err);
       throw err;
     });
   }
   
-  userDb.collection(collectionName).find( function( err, myDocs ){
+  userDb.collection(userCol).find( function( err, myDocs ){
     if (err != null) {
       console.log("USER_DB_ERR:", err);
     }
@@ -78,27 +79,14 @@ exports.loadUserList = function (options) {
   });
 };
 
-exports.storeUserList = function (options, arrayToStore) {
-
-  // Store (replace) user list objects in the named collection of the DB identified by the dbURL option. 
-  // Uses mongojs api and the options specifying the dbUrl and collectionName.
-
-  var dbName = options.dbUrl;
-
-  // Assume produciton has db authernitcation on. Has desirable side effect of failing to connect
-  // on DBs without authentication enabled.
-  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
-  // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
-  var collectionName = options.collectionName;
-  
-  // console.log("Get User List opening DB: " + options.dbUrl);
-  userDb = new mongojs(dbUrl, [collectionName], {authMechanism: 'ScramSHA1'});
-  userDb.on('error',function(err) {
-    console.log('userDb database error', err);
-    throw err;
-  });
-
-  // Need to write the code to store users back to db.
-
- };
+var storeUser = function (userToStore) {
+  // Store (replace) user object in the named collection of the DB identified by the dbURL option. 
+  // Assuem usee db is opened for use by loadUserList.
+  console.log(userToStore);
+  userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToStore._id) }, userToStore, { upsert: false }, function(err, doc) {
+    if (err != null) {
+      var errString = err.toString();
+      console.log("USER_UPDATE_ERR:", errString);
+    }
+  });  
+}; 
