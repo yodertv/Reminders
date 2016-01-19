@@ -32,7 +32,7 @@ var userOptions = {
   'collectionName' : 'userList'
 }
 
-userList.getUserList(userOptions);
+userList.loadUserList(userOptions);
 
 var dbs = []; // Array of db connections
 
@@ -99,16 +99,20 @@ passport.use(new LocalStrategy(
         if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
         
         // Now search the userList for their registered DB, if not found allocate one.        
-        user = userList.findByEmail(user.email, function (err, user) {
+        user = userList.findByEmail(user.email, function (err, dbUser) {
           if (err) { return done(err); }
-          if (!user) {
-            var brokenUser = {};
-            brokenUser.email = username;
-            brokenUser.db = 'No registered database.';
-            console.log('No registered database for user ' + username );
-            return ( brokenUser ); 
+          if (!dbUser) {
+            user = userList.assignDb(user.email);
+            if (!user) { // Unable to assugn DB.
+              var brokenUser = {};
+              brokenUser.email = username;
+              brokenUser.db = 'No registered database.';
+              console.log('No registered database for user ' + username );
+              return ( brokenUser ); 
+            }
+            return ( user ); // Just assigned.
           }
-          return ( user );
+          return ( dbUser ); // Previously assinged.
         });
         user.env = nodeEnv;
         return done(null, user);
@@ -609,7 +613,7 @@ console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode en
 console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
-// interval_example(); // Turn this on to observe the session table leak.
+interval_example(); // Turn this on to observe the session table leak.
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
@@ -639,9 +643,8 @@ function interval_example() {
     var difference = end_time.getTime() - start_time.getTime();
     console.log("Tick no. " + count + " after " + Math.round(difference/1000) + " seconds");
     count++;
-
     listSessions();
-    
+    userList.logUserList();
   }, 30000);
 }
 
