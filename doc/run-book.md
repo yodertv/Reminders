@@ -7,18 +7,33 @@ Start mongo db:
 % pushd ~/mongowrk/ ; nohup mongod & popd
 ```
 
-Run Todo server:
+## Run Todo server:
 ```
 % cd ./build ; node ./todoServer.js & cd ..
 ```
 
-Connect to mongod with repl interface:
+## Connect to mongod with repl interface:
 ```
 % mongo
 ```
-Create new DBs:
-- Copy an existing template using dump and restore.
-- Commands are documented in README.md of project testMongo.
+
+## Create new DBs for to be assigned to users:
+- Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db.
+- Note the mongo connection string. Looks something like ds047057.mongolab.com:47057/frankstodos.
+- Create the user in the DB for authentication. Must be the same user and password of every db.
+- Test the auth by connecting like:
+```
+% mongo -u <user> -p <password> apollo.modulusmongo.net:27017/riZ2ezip
+MongoDB shell version: 3.0.1
+connecting to: apollo.modulusmongo.net:27017/riZ2ezip
+mod-mongo-aws-east-1a:PRIMARY> 
+```
+- Connect to the user database and insert the new db into the userList collection as follows:
+```
+mod-mongo-aws-east-1a:PRIMARY> db.userList.insert({"email" : "UNASSIGNED_DB", "db" : "ds049467.mongolab.com:49467/bobstodos"})
+WriteResult({ "nInserted" : 1 })
+mod-mongo-aws-east-1a:PRIMARY>
+```
 
 ## deploy to modulus
 ```

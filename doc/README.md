@@ -1,4 +1,4 @@
-Todos v0.3.4
+Todos v0.4.2
 ============
 #Objective:
 Replace the weekly task list that I keep on paper.
@@ -13,16 +13,18 @@ Replace the weekly task list that I keep on paper.
 - Delete icon - Deletes a task from the list. Delete icon and complete checkbox are hidden or shown based on (edit==true).
 - Displays total and remaing task counts.
 - Welcome page for login and current user info.
+- Dynamically assigns new users from a pool of pre-allocated DBs.
 - Tested on: nook browser, iTouch, Safari, iPhone, chrome on Mac, chrome on widows, and IE.
 - Responsive to three device sizes. Uses pills for navigation and a small menu.
 - Has a conditional forward button that takes you to the next older archive if it exists.
 - Routing supports browser back and deep linking to archives and any page. 
 - Editing and deleting items in an archive.
 - Editing and deleting archives.
-- ImplRest apiPath is configurable.
-- Login to /auth/local, with failure notification
+- Rest apiPath is configurable.
+- Login to /auth/local, with failure notification.
 - Logs user name using a custom token of express (connect) logger.
 - Displays a helpful message on empty todo or history lists.
+- Displays a ```...loading...``` message while fetching data. 
 
 #Deployments:
 - TodoServer can be hosted on localhost, localnet and Modulus.
@@ -35,7 +37,6 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
-- Dynamically provision new users. This is hard in the cloud. Need a level of service that allows creation of new DBs.
 - Rename default collection "todo" to "today".
 - Add unit testing.
 - Consider making the build manifest in JSON notation rather than string.
