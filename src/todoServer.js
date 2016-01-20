@@ -613,7 +613,7 @@ console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode en
 console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
 console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
-interval_example(); // Turn this on to observe the session table leak.
+// interval_example(); // Turn this on to observe the session table leak.
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
