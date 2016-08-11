@@ -1,7 +1,9 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#36)
+##Open Bugs -- Next: (Bug#37)
+
+###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth
 
 ###(Bug#35) Todo server doesn't handle timeout when.
 Condition is after being idle over night.

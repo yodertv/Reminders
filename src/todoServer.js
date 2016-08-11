@@ -14,6 +14,7 @@ var http = require("http");
 var mongojs = require("mongojs");
 var express = require("express");
 var passport = require('passport');
+var cookieSession = require('cookie-session');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -153,7 +154,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-var sessionStore = new express.session.MemoryStore();
+//  var sessionStore = new express.session.MemoryStore();
 var app = express();
 express.logger.token('user', function(req, res)
   { 
@@ -174,7 +175,8 @@ app.configure(function() {
   app.use(express.static(__dirname + '/static'));
   app.use(express.cookieParser());
   app.use(express.methodOverride());  
-  app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
+  //app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
+  app.use(cookieSession({ secret: 'keyboard cat' }));
 
   // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
