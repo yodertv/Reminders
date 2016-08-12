@@ -39,6 +39,7 @@ Replace the weekly task list that I keep on paper.
 #Backlog:
 - Rename default collection "todo" to "today".
 - Add unit testing.
+- Upgrade to mongojs 2.0
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.

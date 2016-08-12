@@ -1,6 +1,11 @@
 
 # run-book.md
 
+## build the project:
+```
+% ./make.js --silent install localhost
+```
+
 ## localhost and localnet 
 Start mongo db:
 ```

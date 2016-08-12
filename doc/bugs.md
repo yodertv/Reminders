@@ -1,7 +1,81 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#37)
+##Open Bugs -- Next: (Bug#40)
+###(Bug#39) -- Users with anassigned DBs cause bogus mongo errors. Should have better handling of unassigned case. 
+```
+Fri, 12 Aug 2016 06:11:48 GMT [undefined@::1]GET /account 200 18 1 ms
+Assinging db...
+Sorry, no available databases for user frank
+Fri, 12 Aug 2016 06:12:06 GMT [frank@::1]POST /auth/local 302 56 2 ms
+Opening DB Sorry, no available databases. via DB_FIND
+DB_FIND_ERR: { [MongoError: Invalid ns [Sorry, no available databases..todo]]
+  name: 'MongoError',
+  message: 'Invalid ns [Sorry, no available databases..todo]',
+  '$err': 'Invalid ns [Sorry, no available databases..todo]',
+  code: 16256 }
+DB_GETCOLLECTIONNAMES_ERR: MongoError: Invalid ns [Sorry, no available databases..system.namespaces]
+Fri, 12 Aug 2016 06:12:06 GMT [frank@::1]GET /api/todos/ 500 - 9 ms
+Fri, 12 Aug 2016 06:12
+```
+
+###(Bug#38) -- No proper error when no more databases are found.
+```
+mikes-air:Todos mike$ cd ./build ; node ./todoServer.js ; cd ..
+Get User List opening DB: localhost:27017/users
+Todo Server v0.4.2
+Running on mikes-air.local:8080
+Node environment = DEV
+User store = localhost:27017/users[userList]
+Use http://localhost:8080
+CTRL + C to shutdown
+i  email          db
+0 bob@example.com   localhost:27017/bobstodos
+1 yoderm01@gmail.com    localhost:27017/todo_new_test
+2 test@example.com  localhost:27017/test-todo
+Fri, 12 Aug 2016 05:21:10 GMT [undefined@::1]GET /account 200 18 9 ms
+Assinging db...
+/Users/mike/src/Todos/build/user-list.js:33
+  user.email = email; 
+             ^
+
+TypeError: Cannot set property 'email' of null
+    at Object.exports.assignDb (/Users/mike/src/Todos/build/user-list.js:33:14)
+    at /Users/mike/src/Todos/build/todoServer.js:106:29
+    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:45:10)
+    at /Users/mike/src/Todos/build/todoServer.js:103:25
+    at findByUsername (/Users/mike/src/Todos/build/todoServer.js:64:14)
+    at /Users/mike/src/Todos/build/todoServer.js:97:7
+    at doNTCallback0 (node.js:419:9)
+    at process._tickCallback (node.js:348:13)
+mikes-air:Todos mike$ git status
+```
+
+###(Bug#37) -- When load userlist fails, e.g. when no mongod is running. todoServer exits. Should have a helpful error message.
+- Looks like the solution is to upgrade to mongojs 2.0
+```
+mikes-air:Todos mike$ cd ./build ; node ./todoServer.js ; cd ..
+Todo Server v0.4.2
+Running on mikes-air.local:8080
+Node environment = DEV
+User store = localhost:27017/users[userList]
+Use http://localhost:8080
+CTRL + C to shutdown
+    Fri, 12 Aug 2016 04:37:01 GMT [undefined@::1]GET /account 200 18 7 ms
+/Users/mike/src/Todos/build/user-list.js:39
+  for (var i = 0, len = exports.ul.length; i < len; i++) {
+                                  ^
+
+TypeError: Cannot read property 'length' of undefined
+    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:39:35)
+    at /Users/mike/src/Todos/build/todoServer.js:103:25
+    at findByUsername (/Users/mike/src/Todos/build/todoServer.js:64:14)
+    at /Users/mike/src/Todos/build/todoServer.js:97:7
+    at doNTCallback0 (node.js:419:9)
+    at process._tickCallback (node.js:348:13)
+mikes-air:Todos mike$ 
+
+```
 
 ###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth
 

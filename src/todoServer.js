@@ -107,9 +107,9 @@ passport.use(new LocalStrategy(
             if (!user) { // Unable to assugn DB.
               var brokenUser = {};
               brokenUser.email = username;
-              brokenUser.db = 'No registered database.';
-              console.log('No registered database for user ' + username );
-              return ( brokenUser ); 
+              brokenUser.db = 'Sorry, no available databases.';
+              console.log('Sorry, no available databases for user ' + username );
+              return ( brokenUser );
             }
             return ( user ); // Just assigned.
           }

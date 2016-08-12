@@ -29,9 +29,14 @@ exports.closeUserList = function () {
 exports.assignDb = function (email) {
   // Set the email value of an UNASSIGNED one and store it back for the future.
   console.log("Assinging db...");
-  var user = exports.findByEmail("UNASSIGNED_DB", function c(err, user) {return user});
-  user.email = email; 
-  storeUser(user);
+  var user = exports.findByEmail("UNASSIGNED_DB", function c(err, user) {
+    if (err) { return 0 } // Not found
+      else {    return user }
+  });
+  if (user) { 
+    user.email = email; 
+    storeUser(user);
+  }
   return (user);
 }
 
@@ -63,6 +68,7 @@ exports.loadUserList = function (options) {
   if (userDb == null) {
     userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'ScramSHA1'});
     userDb.on('error',function(err) {
+      // This never runs. Bug#37
       console.log('userDb database error', err);
       throw err;
     });
