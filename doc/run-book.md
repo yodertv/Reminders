@@ -4,7 +4,7 @@
 ## build the project:
 ```
 % ./make.js --silent install localhost
-```
+```	
 
 ## localhost and localnet 
 Start mongo db:
@@ -41,11 +41,18 @@ mod-mongo-aws-east-1a:PRIMARY>
 ```
 
 ## deploy to modulus
+
+build for modulus:
+```
+% ./make.js --silent install localhost
+```	
+
+Create a project on mondulus
 ```
 % modulus project create
 ```
 
-from build directory
+from build directory deploy by
 ```
 % modulus deploy todos -p "Todos"
 ```
