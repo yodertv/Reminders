@@ -39,6 +39,10 @@ mod-mongo-aws-east-1a:PRIMARY> db.userList.insert({"email" : "UNASSIGNED_DB", "d
 WriteResult({ "nInserted" : 1 })
 mod-mongo-aws-east-1a:PRIMARY>
 ```
+- Restart the todoServer so it reads the updated user table.
+```
+% modulus project restart -p Todos
+```
 
 ## deploy to modulus
 
@@ -54,7 +58,7 @@ Create a project on mondulus
 
 from build directory deploy by
 ```
-% modulus deploy todos -p "Todos"
+% modulus deploy -p "Todos"
 ```
 
 ## Environment variables required for security credentials in production:
