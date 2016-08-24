@@ -143,16 +143,27 @@ passport.use(new GoogleStrategy({
 
       // Here's where we can detect a new user. They won't be found in the user list below
 
-      userList.findByEmail(profile._json.email, function(err, user) {
+      var user = userList.findByEmail(profile._json.email, function(err, dbUser) {
         if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Unknown user ' + profile._json.email }); }
-        return done(null, {"email" : profile._json.email, "db" : userList.findByEmail(profile._json.email, function (err, user) {
-          return ( user.db );
-        }), "env" : nodeEnv });
-      })
+        if (!dbUser) { // Not found
+          dbUser = userList.assignDb(profile._json.email);
+          if (!dbUser) { // Unable to assugn DB.
+              var brokenUser = {};
+              brokenUser.email = profile._json.email;
+              brokenUser.db = 'Sorry, no available databases.';
+              console.log('Sorry, no available databases for user ' + profile._json.email );
+              return ( brokenUser );
+            }
+            return ( dbUser ); // Just assigned.
+          }
+          return ( dbUser ); // Previously assinged.
+      });
+
+      user.env = nodeEnv;
+      return done(null, user);
     });
   }
-));
+));    
 
 //  var sessionStore = new express.session.MemoryStore();
 var app = express();
@@ -176,7 +187,7 @@ app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.methodOverride());  
   //app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
-  app.use(cookieSession({ secret: 'keyboard cat' }));
+  app.use(cookieSession({ name: 'cookie-session', secret: 'keyboard cat', maxAge: 2.592e+8 })); // 72 hours
 
   // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
@@ -224,7 +235,7 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
     // console.log(req.user.email);
-    setTimeout(listSessions,1000); // Print sessions in one sec.
+    // setTimeout(listSessions,1000); // Print sessions in one sec.
     res.redirect('/#todo'); 
 });
   
@@ -624,13 +635,13 @@ console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdow
 //   login page.
 function ensureAuthRedirect(req, res, next) { // Use this for routes called by the browser.
   if (req.isAuthenticated()) { return next(); }
-  setTimeout(listSessions,1000); // Print sessions in one sec.
+  // setTimeout(listSessions,1000); // Print sessions in one sec.
   res.redirect('/#welcome')
 }
 
 function ensureAuth401(req, res, next) {  // Use this for routes consumed by XHR.
   if (req.isAuthenticated()) { return next(); }
-  setTimeout(listSessions,1000); // Print sessions in one sec.
+  // setTimeout(listSessions,1000); // Print sessions in one sec.
   res.send(401);
 }
 
@@ -650,7 +661,8 @@ function interval_example() {
   }, 30000);
 }
 
-// Log the current sessions. Called periodically by interval_example
+// Log the current sessions. Called periodically by interval_example.
+// Currently will not work with cookie-session.
 function listSessions() {
 
   sessionStore.all(function(n, s) {

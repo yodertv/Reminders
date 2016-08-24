@@ -2,7 +2,8 @@ Todos Bug List
 ==============
 
 ##Open Bugs -- Next: (Bug#40)
-###(Bug#39) -- Users with anassigned DBs cause bogus mongo errors. Should have better handling of unassigned case. 
+
+###(Bug#39) -- Users with unassigned DBs cause bogus mongo errors. Should have better handling of unassigned case. 
 ```
 Fri, 12 Aug 2016 06:11:48 GMT [undefined@::1]GET /account 200 18 1 ms
 Assinging db...
@@ -77,8 +78,6 @@ mikes-air:Todos mike$
 
 ```
 
-###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth
-
 ###(Bug#35) Todo server doesn't handle timeout when.
 Condition is after being idle over night.
 ```
@@ -92,6 +91,8 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth. Fixed in GoogleAuth handler to use user-list.assignDb().
 
 ###(Bug#34) Modulus deployment works for yodercode, but not for yoderm01 users. Main differnece is the size number of collections in yoderm01 and their entries in the userList. Thee latter was the problem.
 Closed 12.26.2015
