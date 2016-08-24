@@ -1,6 +1,7 @@
-Todos v0.4.2
+Todos v0.4.3
 ============
 #Objective:
+
 Replace the weekly task list that I keep on paper.
 
 #Curently demonstrates the following key features:
@@ -49,7 +50,12 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Version 0.4.2 Under Construction (1.13.2016)
+### Version 0.4.3 (8.23.2016)
+- Properly assign new DBs in GoogleStrategy handler
+- Updated run-book with more details.
+- Replaced memoryStore with cookie-session. Sessions maxAge =  72 hrs.
+
+### Version 0.4.2 (1.13.2016)
 - Added '...loading...' message while todo lists, and history load.
 - Remove day of week from last year's archives.
 - Documented (Bug#35) Todo server doesn't handle timeout.

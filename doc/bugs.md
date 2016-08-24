@@ -93,6 +93,7 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ##Closed Bugs
 
 ###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth. Fixed in GoogleAuth handler to use user-list.assignDb().
+Closed 8.23.2016 (d103d63) 
 
 ###(Bug#34) Modulus deployment works for yodercode, but not for yoderm01 users. Main differnece is the size number of collections in yoderm01 and their entries in the userList. Thee latter was the problem.
 Closed 12.26.2015
