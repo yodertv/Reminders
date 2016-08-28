@@ -12,7 +12,7 @@
     "passport": "0.2.1",
     "passport-local": "1.0.0",
     "passport-google-oauth": "0.1.5",
-    "mongojs": "1.4.1",
+    "mongojs": "2.1.0",
     "bootstrap": "3.3.6",
     "cookie-session": "1.2.0"
   },

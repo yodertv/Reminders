@@ -1,7 +1,22 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#40)
+##Open Bugs -- Next: (Bug#41)
+
+###(Bug#40) -- todoServer doesn't handle DB Connection is destroyed error on modulus using mlab db for my big yodertvtodo db.
+```
+✓] Log streaming started (ctrl-c to exit)...
+Sat, 27 Aug 2016 12:46:10 GMT [yoderm01@gmail.com@::ffff:52.73.230.93]GET /account 200 90 - ms
+DB_FIND_ERR: { [MongoError: connection to host ds043047.mongolab.com:43047 was destroyed]
+  name: 'MongoError',
+  message: 'connection to host ds043047.mongolab.com:43047 was destroyed' }
+DB_GETCOLLECTIONNAMES_ERR: MongoError: connection to host ds043047.mongolab.com:43047 was destroyed
+Sat, 27 Aug 2016 12:46:32 GMT [yoderm01@gmail.com@::ffff:52.73.230.93]GET /api/todos/ 500 - 1 ms
+Sat, 27 Aug 2016 12:46:32 GMT [yoderm01@gmail.com@::ffff:52.73.230.93]GET /account 200 90 1 ms
+DB_FIND_ERR: { [MongoError: connection to host ds043047.mongolab.com:43047 was destroyed]
+  name: 'MongoError',
+  message: 'connection to host ds043047.mongolab.com:43047 was destroyed' } 
+```
 
 ###(Bug#39) -- Users with unassigned DBs cause bogus mongo errors. Should have better handling of unassigned case. 
 ```
