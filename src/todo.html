@@ -18,6 +18,9 @@
 
 <table ng-show="todos[0]" class="table table-striped">  
 	<tbody>  
+    <tr>
+      <td>({{remaining()}}/{{todos.length}}) <span> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+    </tr>
     <tr ng-repeat="todo in todos">
       <td>
       <span> 
@@ -26,9 +29,6 @@
      		<span class="done-{{todo.done}}">&nbsp;{{todo.text}}&nbsp;</span>
       </span>
       </td>
-    </tr>
-    <tr>
-      <td>({{remaining()}}/{{todos.length}}) <span> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr>
   </tbody>
 </table>

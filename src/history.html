@@ -19,14 +19,14 @@
 </div>
 <table ng-show="archives[0]" class="table table-striped">  
   <tbody>  
+  <tr>
+    <td>({{archives.length}}) <span> [ <a href="" ng-click="print()">Print</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+  </tr> 
     <tr ng-repeat="item in archives">
     	<td><span><a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;</a>
       <a href="/list/:{{item.archiveName}}">&nbsp;{{item.displayName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
     </td>  
     </tr>
-  <tr>
-    <td>({{archives.length}}) <span> [ <a href="" ng-click="print()">Print</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
-  </tr> 
   </tbody>  
 </table>
 <table ng-hide="archives[0]" class="table table-striped">  
