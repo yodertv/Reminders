@@ -265,9 +265,17 @@ function TodoCtrl($scope, Todo) {
 	};
 
 	$scope.update = function() {
-		// console.log("Update :", this.todo);
+		console.log("Update :", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
 		Todo.update({todo : "todo", id : this.todo._id}, angular.extend({}, this.todo, {_id : undefined}));
+		this.todo.showInView = true;
+	};
+
+	$scope.showTaskItem = function(item) {
+		// Logic to show and hide items in the view.
+		if ( item.showInView || !item.done ) return true; // Allways show not done items
+		// return showCompleted;
+		return $scope.showCompleted;
 	};
 
 	$scope.editClick = function() {
@@ -280,6 +288,17 @@ function TodoCtrl($scope, Todo) {
 		}
 	};
 	
+	$scope.togleShowCompleted = function() {
+		// Switch Delete mode when going between edit and home.
+		if (!$scope.showCompleted) {		
+			angular.forEach($scope.todos, function(todo) {
+				if ( todo.done == true ) {
+					todo.showInView = false;
+				}
+			});
+		}
+	};
+
 	$scope.homeClick = function() {
 		// Switch Delete mode when going between edit and home.
 		if ($scope.showDelete) { 
@@ -290,7 +309,9 @@ function TodoCtrl($scope, Todo) {
 	$scope.remaining = function() {
 		var count = 0;
 		angular.forEach($scope.todos, function(todo) {
-			count += todo.done ? 0 : 1;
+			if ( todo.done == false ) {
+				count += 1;
+			}
 		});
 		return count;
 	};
@@ -339,6 +360,7 @@ function TodoCtrl($scope, Todo) {
 	$scope.activeHome = "active";
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
+ 	$scope.showCompleted = false;
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };

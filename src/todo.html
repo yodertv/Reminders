@@ -19,9 +19,9 @@
 <table ng-show="todos[0]" class="table table-striped">  
 	<tbody>  
     <tr>
-      <td>({{remaining()}}/{{todos.length}}) <span> [ <a href="" ng-click="archive()">Archive</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+      <td>{{remaining()}} <span>  <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr>
-    <tr ng-repeat="todo in todos">
+    <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
       <span> 
   			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash">&nbsp;</i></a>
