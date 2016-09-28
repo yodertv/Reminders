@@ -38,6 +38,8 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
+- Refactor changing archives to lists, and show completed, new list creation instead of archive button
+- Search feature
 - Rename default collection "todo" to "today".
 - Add unit testing.
 - Upgrade to mongojs 2.0
@@ -49,6 +51,9 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 - Print a digest from the History page.
+
+### Version 0.4.x (9.27.2016)
+- Working version of showing and hiding todos in todo controler.
 
 ### Version 0.4.3 (8.23.2016)
 - Properly assign new DBs in GoogleStrategy handler

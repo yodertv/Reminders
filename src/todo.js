@@ -245,11 +245,11 @@ function TodoCtrl($scope, Todo) {
 	// This is the home page. Show current Todos. Hide other stuff	
 
 	$scope.addTodo = function() {
-		var obj = {text:$scope.todoText, done:false};
+		var obj = { text:$scope.todoText, done:false, showInView:true };
 		$scope.todoText = ''; // clear text field for next todo
 		Todo.save({todo:"todo"}, obj,  function(returnObj, httpHeader) {
 			// console.log(returnObj);		
-			$scope.todos.push({"text" : returnObj.text, "done" : returnObj.done, "_id" : returnObj._id});
+			$scope.todos.push({"text" : returnObj.text, "done" : returnObj.done, "showInView" : returnObj.showInView, "_id" : returnObj._id});
     	});
 	};	
 		
@@ -265,17 +265,20 @@ function TodoCtrl($scope, Todo) {
 	};
 
 	$scope.update = function() {
+		// showInView allows the checked item to remain in view even though it is done. Cleared when showCompleted is toggled.
+		// this.todo.showInView = true; 
 		console.log("Update :", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
 		Todo.update({todo : "todo", id : this.todo._id}, angular.extend({}, this.todo, {_id : undefined}));
-		this.todo.showInView = true;
 	};
 
 	$scope.showTaskItem = function(item) {
 		// Logic to show and hide items in the view.
-		if ( item.showInView || !item.done ) return true; // Allways show not done items
-		// return showCompleted;
-		return $scope.showCompleted;
+		if ( $scope.showCompleted ) {
+			return true;
+		} else {
+			return item.showInView;
+		}	
 	};
 
 	$scope.editClick = function() {
@@ -289,12 +292,10 @@ function TodoCtrl($scope, Todo) {
 	};
 	
 	$scope.togleShowCompleted = function() {
-		// Switch Delete mode when going between edit and home.
+		// Clear the completed tasks from view when showCompleted is off.
 		if (!$scope.showCompleted) {		
 			angular.forEach($scope.todos, function(todo) {
-				if ( todo.done == true ) {
-					todo.showInView = false;
-				}
+				todo.showInView = !todo.done;
 			});
 		}
 	};
@@ -369,6 +370,9 @@ function TodoCtrl($scope, Todo) {
 
 	Todo.getTodos('todo', function(data){
 		$scope.todos = data;
+		angular.forEach($scope.todos, function(todo) {
+      		if (!todo.done) todo.showInView = true;
+    	});
 	})
 
  	$scope.showNext="hidden";
