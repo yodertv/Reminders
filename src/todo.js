@@ -292,12 +292,23 @@ function TodoCtrl($scope, Todo) {
 	};
 	
 	$scope.togleShowCompleted = function() {
-		// Clear the completed tasks from view when showCompleted is off.
+		// Clear the completed tasks from view and move them to the end when showCompleted is false.
+
 		if (!$scope.showCompleted) {		
-			angular.forEach($scope.todos, function(todo) {
+			var oldTodos = $scope.todos;
+			var lastNotCompletedItemIndex = 0;
+			$scope.todos = [];
+
+			angular.forEach(oldTodos, function(todo) {
 				todo.showInView = !todo.done;
+				if (!todo.done) {
+					$scope.todos.splice(lastNotCompletedItemIndex++, 0, todo);
+				} else {
+					$scope.todos.push(todo);
+				}
 			});
-			// Write the this list back to the server.
+
+			// Write the this new list back to the server.
 			Todo.saveTodos($scope.todos);		
 		}
 	};
@@ -354,7 +365,7 @@ function TodoCtrl($scope, Todo) {
       		if (!todo.done) $scope.todos.push(todo);
     	});
 
-    	// Here's where I'll add back in the default items.
+    	// Here's where I might add back in the default items.
 		
 		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
   	} 
