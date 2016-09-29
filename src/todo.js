@@ -249,7 +249,12 @@ function TodoCtrl($scope, Todo) {
 		$scope.todoText = ''; // clear text field for next todo
 		Todo.save({todo:"todo"}, obj,  function(returnObj, httpHeader) {
 			// console.log(returnObj);		
-			$scope.todos.push({"text" : returnObj.text, "done" : returnObj.done, "showInView" : returnObj.showInView, "_id" : returnObj._id});
+			$scope.todos.splice($scope.addIndex, 0, {	
+				"text" : returnObj.text, 
+				"done" : returnObj.done, 
+				"showInView" : returnObj.showInView, 
+				"_id" : returnObj._id
+			});
     	});
 	};	
 		
@@ -296,13 +301,13 @@ function TodoCtrl($scope, Todo) {
 
 		if (!$scope.showCompleted) {		
 			var oldTodos = $scope.todos;
-			var lastNotCompletedItemIndex = 0;
+			$scope.addIndex = 0;
 			$scope.todos = [];
 
 			angular.forEach(oldTodos, function(todo) {
 				todo.showInView = !todo.done;
 				if (!todo.done) {
-					$scope.todos.splice(lastNotCompletedItemIndex++, 0, todo);
+					$scope.todos.splice($scope.addIndex++, 0, todo);
 				} else {
 					$scope.todos.push(todo);
 				}
@@ -322,9 +327,12 @@ function TodoCtrl($scope, Todo) {
 	
 	$scope.remaining = function() {
 		var count = 0;
+		var index = 0;
 		angular.forEach($scope.todos, function(todo) {
+			index++;
 			if ( todo.done == false ) {
-				count += 1;
+				count++;
+				$scope.addIndex = index; // Set the addTodo insert point at the last uncompleted task in the list.
 			}
 		});
 		return count;
@@ -375,6 +383,7 @@ function TodoCtrl($scope, Todo) {
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
  	$scope.showCompleted = false;
+ 	$scope.addIndex = 0;
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
@@ -382,10 +391,15 @@ function TodoCtrl($scope, Todo) {
 // 	$scope.todos = Todo.getList();
 
 	Todo.getTodos('todo', function(data){
-		$scope.todos = data;
-		angular.forEach($scope.todos, function(todo) {
-      		if (!todo.done) todo.showInView = true;
-    	});
+		$scope.todos = [];
+		$scope.addIndex = 0;
+		angular.forEach(data, function(todo) {
+			if (todo.showInView) {
+				$scope.todos.splice($scope.addIndex++, 0, todo);
+			} else {
+				$scope.todos.push(todo);
+			}
+		});	
 	})
 
  	$scope.showNext="hidden";
