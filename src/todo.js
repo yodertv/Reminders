@@ -249,7 +249,7 @@ function TodoCtrl($scope, Todo) {
 		$scope.todoText = ''; // clear text field for next todo
 		Todo.save({todo:"todo"}, obj,  function(returnObj, httpHeader) {
 			// console.log(returnObj);		
-			$scope.todos.splice($scope.addIndex, 0, {	
+			$scope.todos.splice($scope.addIndex++, 0, {	
 				"text" : returnObj.text, 
 				"done" : returnObj.done, 
 				"showInView" : returnObj.showInView, 
@@ -327,12 +327,12 @@ function TodoCtrl($scope, Todo) {
 	
 	$scope.remaining = function() {
 		var count = 0;
-		var index = 0;
+//		var index = 0;
 		angular.forEach($scope.todos, function(todo) {
-			index++;
+//			index++;
 			if ( todo.done == false ) {
 				count++;
-				$scope.addIndex = index; // Set the addTodo insert point at the last uncompleted task in the list.
+//				$scope.addIndex = index; // Set the addTodo insert point at the last uncompleted task in the list.
 			}
 		});
 		return count;
