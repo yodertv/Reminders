@@ -297,6 +297,8 @@ function TodoCtrl($scope, Todo) {
 			angular.forEach($scope.todos, function(todo) {
 				todo.showInView = !todo.done;
 			});
+			// Write the this list back to the server.
+			Todo.saveTodos($scope.todos);		
 		}
 	};
 

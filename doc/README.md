@@ -5,7 +5,7 @@ Todos v0.4.3
 Replace the weekly task list that I keep on paper.
 
 #Curently demonstrates the following key features:
-- Manages a list of Todos (aka tasks).
+- Manages lists of Todos (aka tasks, or reminders).
 - Persists Todo data on mongodb using angular's ngResource, $http service and mongojs.
 - Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
 - Add - Adds a new task to the list with done:false; Saves the new task to the DB.
@@ -54,6 +54,7 @@ Replace the weekly task list that I keep on paper.
 
 ### Version 0.4.x (9.27.2016)
 - Working version of showing and hiding todos in todo controler.
+- Need to make db update when toggling show completed.
 
 ### Version 0.4.3 (8.23.2016)
 - Properly assign new DBs in GoogleStrategy handler
