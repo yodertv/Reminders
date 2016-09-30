@@ -1,4 +1,38 @@
 /* todo css stylesheet */
+html {
+  height: 100%;
+}
+html body {
+  height: 100%;
+  overflow: hidden;
+}
+html body .container-fluid.body-content {
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  right: 0;
+  left: 0;
+  overflow-y: auto;
+/*  background-color:#dcdcdc; */
+}
+
+header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-color: #4C4;
+    height: 50px;
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4C4;
+    height: 50px;
+}
 
 .done-true {
   text-decoration: line-through;
@@ -13,12 +47,14 @@
 	display: inline;
 }
 
+/*
 body {
 	padding-top:2%;
 	padding-left:2%;
 	padding-right:2%;
   background-color:#dcdcdc;
 }
+*/
 
 .table td {
   padding: 3px;
@@ -28,10 +64,12 @@ body {
   border-top: 1px solid #dddddd;
 }
 
+/*
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
 }
+*/
 
 h1
 {

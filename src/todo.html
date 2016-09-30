@@ -1,7 +1,9 @@
 <!-- Todo.html v2.2 -->	 
+<header></header>
+<div class="container-fluid body-content">
 <ul class="nav nav-pills">
 <li class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
   <ul class="dropdown-menu">
     <li><a tabindex="-1" href="/welcome">About</a></li>
     <li><a tabindex="-1" href="/todo">Today</a></li>    
@@ -19,7 +21,7 @@
 <table ng-show="todos[0]" class="table table-striped">  
 	<tbody>  
     <tr>
-      <td>{{remaining()}} <span>  <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+      <td><span class="badge">{{remaining()}}</span> <span>  <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
@@ -36,13 +38,15 @@
 <table ng-hide="todos[0]" class="table table-striped">  
   <tbody>  
     <tr>
-      <td>&nbsp;&nbsp;Nothing to do? Add tasks below.</td>
+      <td>&nbsp;&nbsp;Nothing to do?</td>
     </tr>
   </tbody>  
 </table>
-
-<form ng-submit="addTodo()">
-  <span class="show-{{showNewTask}}" >
-    <input type="text" ng-model="todoText" size=30 placeholder="Add new task here."></input>
-  </span>
-</form>
+</div>
+<footer>
+  <form ng-submit="addTodo()">
+    <span class="show-{{showNewTask}}" >
+      <input type="text" ng-model="todoText" size=30 placeholder="Add new task here."></input>
+    </span>
+  </form>
+</footer>
