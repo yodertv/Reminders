@@ -52,7 +52,8 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Version 0.4.x (9.27.2016)
+### Currrent  Work (10.1.2016)
+- Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
 - Working version of showing and hiding todos in todo controler.
 - Need to make db update when toggling show completed.
 
