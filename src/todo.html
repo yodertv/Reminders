@@ -1,6 +1,5 @@
 <!-- Todo.html v2.2 -->	 
-<header></header>
-<div class="container-fluid body-content">
+<header>
 <ul class="nav nav-pills">
 <li class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
@@ -12,16 +11,19 @@
     <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
   </ul>
 </li>
+<li class="badge">{{remaining()}}</li>
 <li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
 <li class="{{activeHistory}}"><a href="/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
 <li class="{{activeList}}"><a href="">{{label}}</a></li>
 <li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
 </ul>
+</header>
 
+<div class="container-fluid body-content">
 <table ng-show="todos[0]" class="table table-striped">  
 	<tbody>  
     <tr>
-      <td><span class="badge">{{remaining()}}</span> <span>  <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
+      <td>[ <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
     </tr>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
@@ -43,10 +45,13 @@
   </tbody>  
 </table>
 </div>
+
 <footer>
   <form ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
       <input type="text" ng-model="todoText" class="form-control" placeholder=" + "></input>
+      <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> 
+      <!-- [<a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">Edit</a>] -->
     </span>
   </form>
 </footer>

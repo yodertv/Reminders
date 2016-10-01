@@ -8,8 +8,8 @@ html body {
 }
 html body .container-fluid.body-content {
   position: absolute;
-  top: 50px;
-  bottom: 50px;
+  top: 40px;
+  bottom: 60px;
   right: 0;
   left: 0;
   overflow-y: auto;
@@ -22,7 +22,7 @@ header {
     right: 0;
     top: 0;
     background-color: #dcdcdc;
-    height: 50px;
+    height: 40px;
 }
 
 footer {
@@ -31,7 +31,7 @@ footer {
     right: 0;
     bottom: 0;
     background-color: #dcdcdc;
-    height: 50px;
+    height: 60px;
 }
 
 form input {
