@@ -12,7 +12,7 @@ todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.
       		when('/todo',              {templateUrl: 'todo.html', controller: TodoCtrl}).
-  	  		when('/list/:archiveName', {templateUrl: 'list.html', controller: ListCtrl}).
+  	  		when('/list/:archiveName', {templateUrl: 'todo.html', controller: TodoCtrl}).
       		when('/history',           {templateUrl: 'history.html', controller: HistoryCtrl}).
       		when('/welcome',           {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		when('/authfailed',		   {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
@@ -149,98 +149,7 @@ function HistoryCtrl($scope, $location, Todo) {
 	});
 }
 
-function ListCtrl($scope, $location, $routeParams, Todo) {  
-	// Uses list.html
-
- 	$scope.print = function() {
-  		// Print this archive list.
-  		console.log("Print called.")
-  	}
-	/*
-	$scope.getList = function(name) {
- 		if(name == null) { return name; };
- 		$scope.todos = Todo.getList(name);
- 		$scope.archiveName = name;
-		var d = new Date(name.replace(/todo/,"").replace(/-/," "));
-		var today = new Date();
-		if (d.getFullYear() == today.getFullYear()) {
-			$scope.label = d.toDateString().replace(d.getFullYear(), "");
-		} else {
-			$scope.label = d.toDateString();
-		}
-	}
-	*/
-	$scope.delete = function() {
-		var index = $scope.todos.indexOf(this.todo);
-		$scope.todos.splice(index,1);
-		// Todo.remove({todo: $scope.archiveName, id: this.todo._id.$oid});
-		Todo.remove({todo : $scope.archiveName, id : this.todo._id});
-		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
-
-	};
-
-	$scope.remaining = function() {
-		var count = 0;
-		angular.forEach($scope.todos, function(todo) {
-			count += todo.done ? 0 : 1;
-		});
-		return count;
-	};
-
-	$scope.update = function() {
-		// console.log("Update", this.todo);
-		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-		Todo.update({todo : $scope.archiveName, id : this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
-	};
-
-	$scope.homeClick = function() {
-		$location.path('/todo');
-	};
-
-	$scope.editClick = function() {
-		// Edit button toggles between edit and not.
-		if (!$scope.showDelete) { // If not in edit mode switch to it.
-			$scope.showDelete = true;
-		}
-		else {
-			$scope.showDelete = false; 
-		}
-	};
-
-	$scope.todos = [];
- 	$scope.todos[0] = { done : false, text : "...loading..." };
-
-  	var name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
-	
-	//$scope.getList(name);
-
-	Todo.getTodos(name, function(data){
-		$scope.todos = data;
-	})
-	
-	$scope.archiveName = name;
-	var d = new Date(name.replace(/todo/,"").replace(/-/," "));
-	var today = new Date();
-	if (d.getFullYear() == today.getFullYear()) {
-		$scope.label = d.toDateString().replace(d.getFullYear(), "");
-	} else {
-		$scope.label = d.toDateString().slice(4,d.length);
-	}
-
-	// $scope.getArchives(name);
-	Todo.getArchiveList(function(data) {
-		buildArchiveList(data, $scope, name);
-	});
-
-	$scope.showDelete = false; // Put us in delete mode so we remove items from history. Shouldn't change that it's done.
-	$scope.showList = true;
-	$scope.activeHome = "visible"; 
-	$scope.activeList = "active";
-	$scope.activeHistory = "hidden";
-	$scope.showNewTask = false;
-}
-
-function TodoCtrl($scope, Todo) {
+function TodoCtrl($scope, $routeParams, Todo) {
 	// Uses todo.html
 	// This is the home page. Show current Todos. Hide other stuff	
 
@@ -263,18 +172,16 @@ function TodoCtrl($scope, Todo) {
 		//	console.log(index)
 		$scope.todos.splice(index,1); // remove from memory
 		// Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db line had to be changed.
-		Todo.remove({todo : "todo", id : this.todo._id}); // remove from db
+		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
 
 	};
 
 	$scope.update = function() {
-		// showInView allows the checked item to remain in view even though it is done. Cleared when showCompleted is toggled.
-		// this.todo.showInView = true; 
-		console.log("Update :", this.todo);
+		// console.log("Update", this.todo);
 		// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-		Todo.update({todo : "todo", id : this.todo._id}, angular.extend({}, this.todo, {_id : undefined}));
+		Todo.update({todo : $scope.archiveName, id : this.todo._id}, angular.extend({}, this.todo, {_id:undefined}));
 	};
 
 	$scope.showTaskItem = function(item) {
@@ -340,6 +247,9 @@ function TodoCtrl($scope, Todo) {
 		return count;
 	};
  
+
+ // Need to rewrite as the create new list.
+
 	$scope.archive = function() {
 		if ($scope.todos.length == 0) return;  	
  		var today = new Date();  
@@ -379,9 +289,8 @@ function TodoCtrl($scope, Todo) {
 		
 		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
   	} 
-	
-	$scope.activeList = "hidden";
-	$scope.activeHome = "active";
+	// Initialize scope variables
+	$scope.activeHome = "default";
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
  	$scope.editMode = "default"
@@ -392,11 +301,20 @@ function TodoCtrl($scope, Todo) {
  	$scope.todos[0] = { done : false, text : "...loading..." };
  	$scope.label = "Reminders";
 
-// 	$scope.todos = Todo.getList();
+ 	var name = "todo"; // Defualt reminder list name.
 
-	Todo.getTodos('todo', function(data){
+ 	if ($routeParams.archiveName) {
+	 	name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
+	}
+	$scope.archiveName = name;
+	$scope.label = name;
+
+ 	$scope.showNext="hidden";
+
+	Todo.getTodos(name, function(data){
 		$scope.todos = [];
 		$scope.addIndex = 0;
+
 		angular.forEach(data, function(todo) {
 			if (todo.showInView) {
 				$scope.todos.splice($scope.addIndex++, 0, todo);
@@ -405,8 +323,6 @@ function TodoCtrl($scope, Todo) {
 			}
 		});	
 	})
-
- 	$scope.showNext="hidden";
 
 	Todo.getArchiveList(function(data) {
 		buildArchiveList(data, $scope); // Needed to support the next button.
