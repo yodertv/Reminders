@@ -287,12 +287,14 @@ function TodoCtrl($scope, Todo) {
 	};
 
 	$scope.editClick = function() {
-		// Edit button toggles between Home (Today) and edit.
+		// Edit button toggles between "Edit" and "Done".
 		if (!$scope.showDelete) { // If not in edit mode switch to it.
 			$scope.showDelete = true;
+			$scope.editMode = "active"
 		}
 		else {
 			$scope.showDelete = false; 
+			$scope.editMode = "default" // not active
 		}
 	};
 	
@@ -382,6 +384,7 @@ function TodoCtrl($scope, Todo) {
 	$scope.activeHome = "active";
 	$scope.showNewTask = true;
  	$scope.showDelete = false;
+ 	$scope.editMode = "default"
  	$scope.showCompleted = false;
  	$scope.addIndex = 0;
  	

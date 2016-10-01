@@ -15,16 +15,14 @@
 <li class="{{activeHome}}"><a href="" ng-click="homeClick()">Today</a></li>
 <li class="{{activeHistory}}"><a href="/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
 <li class="{{activeList}}"><a href="">{{label}}</a></li>
+<li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 <li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
 </ul>
 </header>
 
 <div class="container-fluid body-content">
 <table ng-show="todos[0]" class="table table-striped">  
-	<tbody>  
-    <tr>
-      <td>[ <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
-    </tr>
+	<tbody>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
       <span> 
@@ -40,7 +38,7 @@
 <table ng-hide="todos[0]" class="table table-striped">  
   <tbody>  
     <tr>
-      <td>&nbsp;&nbsp;Nothing to do?</td>
+      <td>&nbsp;&nbsp;Nothing to do? Add tasks below...</td>
     </tr>
   </tbody>  
 </table>
