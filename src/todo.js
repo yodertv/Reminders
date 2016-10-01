@@ -390,6 +390,7 @@ function TodoCtrl($scope, Todo) {
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
+ 	$scope.label = "Reminders";
 
 // 	$scope.todos = Todo.getList();
 
