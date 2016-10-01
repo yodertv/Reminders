@@ -17,8 +17,11 @@ test cases:
 	- google auth
 	- Logout from Google too
 - auth/local test login and login failure. Logout from each page menu.
-- Add task
-- Completet task
+- Add task:
+ 	- text input stays below last added until reaching the bottom of the screen. 
+ 	- It should stay there after that
+- Complete task
+- Show Completed / Hide Completed
 - Edit / Delete tasks for todos and archive
 - Archive
 - List Archive

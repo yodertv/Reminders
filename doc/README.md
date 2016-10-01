@@ -4,7 +4,7 @@ Todos v0.4.3
 
 Replace the weekly task list that I keep on paper.
 
-#Curently demonstrates the following key features:
+#Curently demonstrates the following features:
 - Manages lists of Todos (aka tasks, or reminders).
 - Persists Todo data on mongodb using angular's ngResource, $http service and mongojs.
 - Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
