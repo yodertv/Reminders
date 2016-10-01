@@ -263,12 +263,15 @@ app.get(['/welcome', '/authfailed'], function(req, res){
   res.end();
 });
 
+/*
+Shouldn't need this with the merge of listCtlr and todoCtlr
 app.get('/todo', ensureAuthRedirect, function(req, res){
   // Redirect todo route. Allows reload and sharing of todo URL.
   console.log("Redirect /todo.")
   res.writeHead(302, { 'location' : '/#todo' });
   res.end();
 });
+*/
 
 app.get('/history', ensureAuthRedirect, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
@@ -277,7 +280,8 @@ app.get('/history', ensureAuthRedirect, function(req, res) {
   res.end();
 });
 
-app.get('/list/:todo*', ensureAuthRedirect, function(req, res) {
+// this match will need to be unconstrained.
+app.get('/list/:*', ensureAuthRedirect, function(req, res) {
   // Redirect list route. Allows reload and sharing of list URL.
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
