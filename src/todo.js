@@ -55,7 +55,7 @@ function WelcomeCtrl($scope, $location, UserService) {
 	});
 }
 
-function buildArchiveList(data, scope, name) { 
+function buildArchiveList(data, $scope, name) { 
 
     // Builds the sorted list of $scope.archives, sets nextArchiveName and showNext view element 
     // from the set of collections in DBString that start with "todo" for the scope passed in and the current name.
@@ -66,36 +66,32 @@ function buildArchiveList(data, scope, name) {
 	var d = new Date(); // Does putting this constructor out of the loop below have any benefit?
 	var currArchive = {};
 
-	// The data has all collections in the DB. So we filter for only the collections that start w/ todo using regex.
-	var archs = data.filter(function(item){ return /^todo[SMTWF]/.test(item) });
-
+	// The data has all collections in the DB. So we filter out the collections that start w/ "system" using regex.
 	// Zero out the current array of archives in scope.
-	scope.archives=[];
-	for (var i=0;i<archs.length;i++) {
-		var archstr = archs[i].replace("todo", ""); 
+	$scope.archives=[];
+	angular.forEach(data, function(item) {
+		if (/^system./.test(item)) {
+			return;
+		} else {
+			$scope.archives.push({
+			  "archiveName" : item,
+			  "displayName" : item,
+			  "date" : d
+			});
+		}
+	});	
+	
+	// console.log($scope.archives);
 
-		// Only Chrome grocks dashes in date constructor. E.g. Sun-3-dec-2012 fails in most other browsers.
-		d = new Date(archstr.replace(/-/," ")); 
+	var nextIndex = $scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
 
-		scope.archives[i] = {
-		  "archiveName" : archs[i],
-		  "displayName" : d.toDateString().replace(today.getFullYear(), ""),
-		  "date" : d
-		};
-		if (name===archs[i]) { currArchive = scope.archives[i]}; // Find the one we're listing. Name may be undefined.
-	}
-	// Sort by reverse date
-	scope.archives.sort( function(a,b){return b.date - a.date} );
-
-	var nextIndex = scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
-
-	if (nextIndex >= scope.archives.length) {
+	if (nextIndex >= $scope.archives.length) {
 		// console.log("Hide Next.");
-		scope.showNext="hidden" // Hide the next button on the last archive
+		$scope.showNext="hidden" // Hide the next button on the last archive
 	} 
 	else {
-		scope.nextArchiveName = scope.archives[nextIndex].archiveName;
-		scope.showNext="visible";
+		$scope.nextArchiveName = $scope.archives[nextIndex].archiveName;
+		$scope.showNext="visible";
 	};
 }
 
