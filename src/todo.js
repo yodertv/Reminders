@@ -11,11 +11,11 @@ var todo = angular.module('todo', [
 todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.
-      		when('/todo',              {templateUrl: 'todo.html', controller: TodoCtrl}).
   	  		when('/list/:archiveName', {templateUrl: 'todo.html', controller: TodoCtrl}).
       		when('/history',           {templateUrl: 'history.html', controller: HistoryCtrl}).
       		when('/welcome',           {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		when('/authfailed',		   {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
+      		when('/todo',              {redirectTo:  '/list/:todo'}).
       		otherwise(				   {redirectTo:  '/welcome'});
 	}]);
 
@@ -82,8 +82,8 @@ function buildArchiveList(data, $scope, name) {
 	});	
 	
 	// console.log($scope.archives);
-
-	var nextIndex = $scope.archives.indexOf(currArchive) + 1; // Handily, the indexOf an undefined object is -1
+	// Now that the default list is part of the archive need to point to the next one. 
+	var nextIndex = $scope.archives.indexOf(currArchive) + 2; // Handily, the indexOf an undefined object is -1. 
 
 	if (nextIndex >= $scope.archives.length) {
 		// console.log("Hide Next.");

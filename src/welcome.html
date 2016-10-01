@@ -4,14 +4,14 @@
   <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
   <ul class="dropdown-menu">
     <li><a tabindex="-1" href="/welcome">About</a></li>
-    <li><a tabindex="-1" href="/todo">Today</a></li>    
+    <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
     <li><a tabindex="-1" href="/history">History</a></li>
     <li class="divider"></li>
     <li><a tabindex="-1" href="" ng-click="logout()">Logout</a></li>
   </ul>
 </li>
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
-<li><a href="/todo">Todos @VERSION@</a></li>
+<li><a href="/list/:todo">Todos @VERSION@</a></li>
 </ul>
 Thanks for trying this simple Todos app.<br>
 -Mike <br>
@@ -36,7 +36,7 @@ Thanks for trying this simple Todos app.<br>
 	Registered DB:  <strong>{{user.db}}</strong><br><br>
 	</div>
 	<strong>
-	<a href="/todo" class="btn btn-default">Continue</a> |
+	<a href="/list/:todo" class="btn btn-default">Continue</a> |
 	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
 	</strong>
 	<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
