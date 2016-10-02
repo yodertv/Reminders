@@ -1,7 +1,11 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#41)
+##Open Bugs -- Next: (Bug#42)
+
+###(Bug#41) -- Lists with the archive name structure like todoSat-Aug-27-2016 don't load or save.
+- Now that I merged TodoCtrl w ListCtrl the todo's with dates in the name fail to work.
+- Basically I'm not done merging yet
 
 ###(Bug#40) -- todoServer doesn't handle DB Connection is destroyed error on modulus using mlab db for my big yodertvtodo db.
 ```
