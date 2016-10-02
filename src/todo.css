@@ -13,7 +13,6 @@ html body .container-fluid.body-content {
   right: 0;
   left: 0;
   overflow-y: auto;
-/*  background-color:#dcdcdc; */
 }
 
 header {
@@ -51,35 +50,19 @@ form input {
 	display: inline;
 }
 
-/*
 body {
 	padding-top:2%;
 	padding-left:2%;
 	padding-right:2%;
   background-color:#dcdcdc;
 }
-*/
 
 .table td {
-  padding: 3px;
-  line-height: 20px;
   text-align: left;
   vertical-align: top;
-  border-top: 1px solid #dddddd;
 }
 
-/*
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
-}
-*/
-
-h1
-{
-background-color:#00ff00;
-}
-p
-{
-background-color:rgb(255,0,255);
 }

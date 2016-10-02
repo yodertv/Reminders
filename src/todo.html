@@ -1,7 +1,10 @@
 <!-- Todo.html v3.0 -->	 
 <header>
 <ul class="nav nav-pills">
-  <li class="{{activeHome}}"> <a href="" ng-click="homeClick()"> {{label}} <span class="badge">{{remaining()}}</span></a></li>
+  <li class="{{activeHome}}"> <a 
+    style="display:block; width:260px;"
+    href="" 
+    ng-click="homeClick()"> {{label}} <span class="badge" style="float:right;">{{remaining()}}</span></a></li>
   <li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
 </header>
@@ -12,9 +15,9 @@
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
       <span> 
-  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash">&nbsp;</i></a>
+  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash"></i></a>
     		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done">&nbsp;&nbsp;</input>
-     		<span class="done-{{todo.done}}">&nbsp;{{todo.text}}&nbsp;</span>
+     		<span class="done-{{todo.done}}">{{todo.text}}</span>
       </span>
       </td>
     </tr>
