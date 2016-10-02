@@ -1,19 +1,8 @@
-<!-- Todo.html v2.2 -->	 
+<!-- Todo.html v3.0 -->	 
 <header>
 <ul class="nav nav-pills">
-<li class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
-  <ul class="dropdown-menu">
-    <li><a tabindex="-1" href="/welcome">About</a></li>
-    <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
-    <li><a tabindex="-1" href="/history">History</a></li>
-    <li class="divider"></li>
-    <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
-  </ul>
-</li>
-<li class="{{activeHome}}"> <a href="" ng-click="homeClick()"> {{label}} <span class="badge">{{remaining()}}</span></a></li>
-<li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
-<li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
+  <li class="{{activeHome}}"> <a href="" ng-click="homeClick()"> {{label}} <span class="badge">{{remaining()}}</span></a></li>
+  <li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
 </header>
 
@@ -45,8 +34,20 @@
   <form ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
       <input type="text" ng-model="todoText" class="form-control" placeholder="+"></input>
-      <button type="button" ng-click="togleShowCompleted()">{{showCompletedLabel}}</button> 
-      <!-- [<a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">Edit</a>] -->
     </span>
   </form>
+  <ul class="nav nav-pills dropup">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
+      <ul class="dropdown-menu">
+        <li><a tabindex="-1" href="/welcome">About</a></li>
+        <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
+        <li><a tabindex="-1" href="/history">History</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
+      </ul>
+    </li>
+    <li><a ng-click="togleShowCompleted()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{showCompletedLabel}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li> 
+    <li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
+  </ul>
 </footer>
