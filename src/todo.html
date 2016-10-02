@@ -15,8 +15,10 @@
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
       <span> 
-  			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash"></i></a>
-    		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done">&nbsp;&nbsp;</input>
+        <span style="display:inline-block; width:20px;" >
+    			<a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash"></i></a>
+      		<input class="show-{{!showDelete}}" ng-click="update()" type="checkbox" ng-model="todo.done"></input>
+        </span>  
      		<span class="done-{{todo.done}}">{{todo.text}}</span>
       </span>
       </td>
