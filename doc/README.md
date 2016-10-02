@@ -38,6 +38,8 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
+- Capture creation datetime and store with task
+- Support scheduled tasks
 - Refactor changing archives to lists, and show completed, new list creation instead of archive button
 - Search feature
 - Rename default collection "todo" to "today".
