@@ -44,8 +44,8 @@
 <footer>
   <form ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
-      <input type="text" ng-model="todoText" class="form-control" placeholder=" + "></input>
-      <input ng-click="togleShowCompleted()" type="checkbox" ng-model="showCompleted"> Show Completed?&nbsp;&nbsp;</input> 
+      <input type="text" ng-model="todoText" class="form-control" placeholder="+"></input>
+      <button type="button" ng-click="togleShowCompleted()">{{showCompletedLabel}}</button> 
       <!-- [<a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">Edit</a>] -->
     </span>
   </form>

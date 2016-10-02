@@ -11,12 +11,12 @@ var todo = angular.module('todo', [
 todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.
-  	  		when('/list/:archiveName', {templateUrl: 'todo.html', controller: TodoCtrl}).
-      		when('/history',           {templateUrl: 'history.html', controller: HistoryCtrl}).
-      		when('/welcome',           {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
-      		when('/authfailed',		   {templateUrl: 'welcome.html', controller: WelcomeCtrl}).
-      		when('/',	            	{redirectTo:  '/list/:todo'}).
-      		otherwise(				   {redirectTo:  '/welcome'});
+  	  		when('/list/:archiveName', 	{templateUrl: 'todo.html', controller: TodoCtrl}).
+      		when('/history',           	{templateUrl: 'history.html', controller: HistoryCtrl}).
+      		when('/welcome',           	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
+      		when('/authfailed',		   	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
+      		when('/',            		{redirectTo:  '/list/:todo'}).
+      		otherwise(				   	{redirectTo:  '/welcome'});
 	}]);
 
 todo.config(function($locationProvider){ $locationProvider.html5Mode(true) });
@@ -202,13 +202,14 @@ function TodoCtrl($scope, $routeParams, Todo) {
 	};
 	
 	$scope.togleShowCompleted = function() {
-		// Clear the completed tasks from view and move them to the end when showCompleted is false.
-
+		// Change the flag, and 
+		$scope.showCompleted = !$scope.showCompleted;
+		// Clear any completed tasks from view and move them to the end when we turn showCompleted off.
 		if (!$scope.showCompleted) {		
 			var oldTodos = $scope.todos;
 			$scope.addIndex = 0;
 			$scope.todos = [];
-
+			$scope.showCompletedLabel = "Show Completed";
 			angular.forEach(oldTodos, function(todo) {
 				todo.showInView = !todo.done;
 				if (!todo.done) {
@@ -219,7 +220,10 @@ function TodoCtrl($scope, $routeParams, Todo) {
 			});
 
 			// Write the this new list back to the server.
-			Todo.saveTodos($scope.todos);		
+			Todo.saveTodos($scope.todos);
+		}
+		else {
+			$scope.showCompletedLabel = "Hide Completed";
 		}
 	};
 
@@ -291,6 +295,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
  	$scope.showDelete = false;
  	$scope.editMode = "default"
  	$scope.showCompleted = false;
+ 	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
  	
  	$scope.todos = [];
