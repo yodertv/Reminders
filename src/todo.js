@@ -227,13 +227,6 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		}
 	};
 
-	$scope.homeClick = function() {
-		// Switch Delete mode when going between edit and home.
-		if ($scope.showDelete) { 
-			$scope.showDelete = false;
-		}
-	};
-	
 	$scope.remaining = function() {
 		var count = 0;
 //		var index = 0;
