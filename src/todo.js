@@ -154,8 +154,8 @@ function TodoCtrl($scope, $routeParams, Todo) {
 	$scope.addTodo = function() {
 		var obj = { text:$scope.todoText, done:false, showInView:true };
 		$scope.todoText = ''; // clear text field for next todo
-		Todo.save({todo:"todo"}, obj,  function(returnObj, httpHeader) {
-			// console.log(returnObj);		
+		Todo.save({todo: $scope.archiveName }, obj,  function(returnObj, httpHeader) {
+			// 	console.log(returnObj);		
 			$scope.todos.splice($scope.addIndex++, 0, {	
 				"text" : returnObj.text, 
 				"done" : returnObj.done, 
@@ -169,7 +169,6 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		var index = $scope.todos.indexOf(this.todo);
 		//	console.log(index)
 		$scope.todos.splice(index,1); // remove from memory
-		// Todo.remove({todo: "todo", id: this.todo._id.$oid}); // remove from db line had to be changed.
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
@@ -222,7 +221,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
 			});
 
 			// Write the this new list back to the server.
-			Todo.saveTodos($scope.todos);
+			Todo.saveTodos($scope.todos, $scope.archiveName);
 		}
 		else {
 			$scope.showCompletedLabel = "Hide Completed";
@@ -255,8 +254,9 @@ function TodoCtrl($scope, $routeParams, Todo) {
 			//merge done items into nextArchive;
 			angular.forEach(oldTodos, function(todo) {
 	      		if (todo.done) {
+
 	      			// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-					// Todo.update({todo: archiveName, id: todo._id.$oid}, angular.extend({}, todo, {_id:undefined}));
+
 	      			Todo.update({todo : archiveName, id : todo._id}, angular.extend({}, todo, {_id : undefined}));
       			}
 	      	})
