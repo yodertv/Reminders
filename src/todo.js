@@ -98,13 +98,12 @@ function buildArchiveList(data, $scope, name) {
 function HistoryCtrl($scope, $location, Todo) {  
 	// Uses history.html.
 
-	$scope.print = function() {
-  		// Print this archive list.
-  		console.log("Print called.")
-  	}
-	
-	$scope.homeClick = function() {
-		$location.path('/');
+	$scope.searchTodos = function() {
+		console.log("searchTodos called with search string: ", $scope.todoSearchText);
+	};
+
+	$scope.addNewList = function() {
+		console.log("addNewList called with new name: ", $scope.newListText);
 	};
 
 	$scope.editClick = function() {
@@ -117,7 +116,7 @@ function HistoryCtrl($scope, $location, Todo) {
 		}
 	};
 
-	$scope.delete = function() {
+	$scope.deleteList = function() {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item.archiveName;
@@ -135,10 +134,13 @@ function HistoryCtrl($scope, $location, Todo) {
   			}
   		}
   	}
+	$scope.footerSize = 40;
 	$scope.showNext="hidden";
 	$scope.showDelete = false;
 	$scope.activeHistory = "active";
 	$scope.archives=[];
+	$scope.newListText = "";
+	$scope.todoSearchText = "";
 	$scope.archives[0] = { archiveName : "", displayName : "..loading.." } ; 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
@@ -290,6 +292,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
  	$scope.showCompleted = false;
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
+ 	$scope.footerSize = 80;
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };

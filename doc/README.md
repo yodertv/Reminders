@@ -54,10 +54,11 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 - Print a digest from the History page.
 
-### Currrent  Work (10.1.2016)
+### Currrent  Work (10.6.2016)
+- TodoCtrl and ListCtrl are still not completely merged yet.
+- Have history paging working as a list of lists with UI elements for search and add list.
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
 - Working version of showing and hiding todos in todo controler.
-- Need to make db update when toggling show completed.
 
 ### Version 0.4.3 (8.23.2016)
 - Properly assign new DBs in GoogleStrategy handler

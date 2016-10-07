@@ -2,14 +2,11 @@
 html {
   height: 100%;
 }
-html body {
-  height: 100%;
-  overflow: hidden;
-}
-html body .container-fluid.body-content {
+
+body .container-fluid.body-content {
   position: absolute;
   top: 40px;
-  bottom: 60px;
+  bottom: 80px;
   right: 0;
   left: 0;
   overflow-y: auto;
@@ -30,7 +27,7 @@ footer {
     right: 0;
     bottom: 0;
     background-color: #dcdcdc;
-    height: 70px;
+    height: 80px;
 }
 
 form input {

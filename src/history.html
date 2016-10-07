@@ -1,31 +1,25 @@
 <!-- History.html -->
+<header>
 <ul class="nav nav-pills">
-<li class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-  <ul class="dropdown-menu">
-    <li><a tabindex="-1" href="/welcome">About</a></li>
-    <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
-    <li><a tabindex="-1" href="/history">History</a></li>
-    <li class="divider"></li>
-    <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
-  </ul>
-</li>
-<li><a href="/list/:todo">Today</a></li>
-<li class="{{activeHistory}}"><a href="/history">&nbsp;&nbsp;History&nbsp;&nbsp;&nbsp;</a></li>
-<li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-</ul> 
-</div>
-</div>
-</div>
-<table ng-show="archives[0]" class="table table-striped">  
+  <li class="{{activeHome}}" style="display:inline-block; width:260px;"> <form ng-submit="searchTodos()">
+    <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search todos..."></input></span>
+    </form>
+  </li>
+  <li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
+</ul>
+</header>
+
+<div class="container-fluid body-content">
+<table ng-show="archives[0]" class="table table-striped"> 
   <tbody>  
-  <tr>
-    <td>({{archives.length}}) <span> [ <a href="" ng-click="print()">Print</a> ] [ <a <a class="show-{{showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Done&nbsp;&nbsp;</a><a class="show-{{!showDelete}}" href="" ng-click="editClick()">&nbsp;&nbsp;Edit&nbsp;&nbsp;</a> ]</span></td>
-  </tr> 
     <tr ng-repeat="item in archives">
-    	<td><span><a class="show-{{showDelete}}" href="" ng-click="delete()"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;</a>
-      <a href="/list/:{{item.archiveName}}">&nbsp;{{item.displayName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
-    </td>  
+    	<td>
+        <ul class="nav nav-pills">
+          <li><span><a class="show-{{showDelete}}" href="" ng-click="deleteList()"><i class="glyphicon glyphicon-trash"></i></a>
+            <a href="/list/:{{item.archiveName}}">{{item.displayName}}</a></span>
+          </li>
+        </ul>
+      </td>
     </tr>
   </tbody>  
 </table>
@@ -36,3 +30,21 @@
     </tr>
   </tbody>  
 </table>
+</div>
+
+<footer style="height: 40px">
+  <ul class="nav nav-pills dropup">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
+      <ul class="dropdown-menu">
+        <li><a tabindex="-1" href="/welcome">About</a></li>
+        <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
+        <li><a tabindex="-1" href="/history">History</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
+      </ul>
+    </li>
+    <li><form ng-submit="addNewList()" style="display:inline-block; width:260px;">
+    <input type=text ng-model="newListText" class="form-control" placeholder="+"></input></form></li>
+  </ul>
+</footer>
