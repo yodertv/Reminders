@@ -64,10 +64,10 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li>
+    <li style="display:inline-block; width: calc(100% - 125px);text-align: center;">
   		<a href="/list/:todo">Reminders</a>
 		</li>	
-		<li>
+		<li style="float:right">
 			<a href="" ng-click="logout()">Logout</a>
 			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
     </li>
