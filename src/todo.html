@@ -1,11 +1,9 @@
 <!-- Todo.html v3.0 -->	 
 <header>
 <ul class="nav nav-pills">
-  <li class="{{activeHome}}"> <a 
-    style="display:inline-block; width:260px;"
-    href="/history"> <img src="img/favicon.ico" type="image/x-icon" ><img> {{label}} 
+  <li style="display:inline-block; width: calc(100% - 47px);" ><a href="/history"> <img src="img/favicon.ico" type="image/x-icon"></img> {{label}} 
     <span class="badge" style="float:right;"> {{remaining()}}</span></a></li>
-  <li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
+  <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
 </header>
 
@@ -52,7 +50,7 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li><a style="display:inline-block; width:212px;text-align: center;" ng-click="togleShowCompleted()">{{showCompletedLabel}}</a></li> 
-    <li class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
+    <li style="display:inline-block; width: calc(100% - 94px);text-align: center;"><a ng-click="togleShowCompleted()">{{showCompletedLabel}}</a></li> 
+    <li style="float:right" class="{{showNext}}"><a href="/list/:{{nextArchiveName}}"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
   </ul>
 </footer>
