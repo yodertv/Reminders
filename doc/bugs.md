@@ -3,10 +3,6 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#42)
 
-###(Bug#41) -- Lists with the archive name structure like todoSat-Aug-27-2016 don't load or save.
-- Now that I merged TodoCtrl w ListCtrl the todo's with dates in the name fail to work.
-- Basically I'm not done merging yet
-
 ###(Bug#40) -- todoServer doesn't handle DB Connection is destroyed error on modulus using mlab db for my big yodertvtodo db.
 ```
 ✓] Log streaming started (ctrl-c to exit)...
@@ -110,6 +106,11 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#41) -- Lists with the archive name structure like todoSat-Aug-27-2016 don't load or save.
+- Now that I merged TodoCtrl w ListCtrl the todo's with dates in the name fail to work.
+- Basically I'm not done merging yet
+Closed 10.8.2016 (d5315f2)
 
 ###(Bug#36) -- On 8/6/16 Erik failed to login using Google Auth. Fixed in GoogleAuth handler to use user-list.assignDb().
 Closed 8.23.2016 (d103d63) 
