@@ -70,6 +70,7 @@ var VER_FILES = [
 	DIST_STATIC + '/' + 'TodoServices.js', 
 	DIST_STATIC + '/' + 'index.html',
 	DIST_STATIC + '/' + 'welcome.html',
+	DIST_STATIC + '/' + 'history.html',
 	DIST_PATH + '/' + 'todoServer.js'
 ];
 
