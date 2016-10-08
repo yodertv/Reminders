@@ -12,10 +12,10 @@ todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.
   	  		when('/list/:archiveName', 	{templateUrl: 'todo.html', controller: TodoCtrl}).
+  	  		when('/', 					{templateUrl: 'todo.html', controller: TodoCtrl}).
       		when('/history',           	{templateUrl: 'history.html', controller: HistoryCtrl}).
       		when('/welcome',           	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		when('/authfailed',		   	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
-      		when('/',            		{redirectTo:  '/list/:todo'}).
       		otherwise(				   	{redirectTo:  '/welcome'});
 	}]);
 
