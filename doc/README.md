@@ -38,6 +38,8 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
+- Split welcome paage so all info that doesn't require auth is shown.
+- Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
 - Refactor changing archives to lists, and show completed, new list creation instead of archive button
@@ -55,6 +57,7 @@ Replace the weekly task list that I keep on paper.
 - Print a digest from the History page.
 
 ### Currrent  Work (10.6.2016)
+- HTML for the two main pages lists and todos working well enough.
 - TodoCtrl and ListCtrl are still not completely merged yet.
 - Have history paging working as a list of lists with UI elements for search and add list.
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
