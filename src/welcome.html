@@ -33,31 +33,26 @@
 <table class="table table-striped">  
 	<tbody>  
 		<tr>
-			<td> Mike says:</td> <td> <strong>Thanks for using this reminders app!</strong></td>
+			<td> Welcome:</td> <td> Thanks for using this reminders app!</td>
 		</tr>
 		<tr>
-			<td> Login:</td> <td> <strong> {{user.email}}  </strong></td>
+			<td> Login:</td> <td>{{user.email}}</td>
 		</tr>
 		<tr>
-			<td	ng-show="registered">	Data store: </td><td><strong>{{user.db}}</strong></td>
+			<td	ng-show="registered">Data:</td><td>{{user.db}}</td>
 		</tr>
 		<tr>
-			<td> Thanks to: </td><td> <strong>Angular, Node, Bootstrap, Mongodb, Express, Passport, and Glyphicons.</strong></td>
+			<td> Credit: </td><td> Angular, Node, Bootstrap, Mongodb, Express, Passport, and Glyphicons.</td>
 		</tr>
 		<tr>
-			<td> Hosted by: </td><td><strong>Modulus and MongoLab. </strong></td>
+			<td> Hosted:</td><td>Modulus and MongoLab.</td>
 		</tr>
 	</tbody>  
 </table>
-	<strong>
-	<a href="/list/:todo" class="btn btn-default">Continue</a> |
-	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
-	</strong>
-	<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
 </div>
 </div>
 
-<footer style="height: 40px">
+<footer>
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
@@ -69,7 +64,15 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li style="display:inline-block; width: calc(100% - 47px);"><strong>Todos @VERSION@</strong>Copyright 2015 Yoder Code. <br>
-</li>
+    <li>
+  		<a href="/list/:todo">Reminders</a>
+		</li>	
+		<li>
+			<a href="" ng-click="logout()">Logout</a>
+			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
+    </li>
   </ul>
+  <span> Todos @VERSION@</span> 
+  	<span style="float:right"><i class="glyphicon glyphicon-copyright-mark"></i>2016 Yoder Code</span>
+	</span>
 </footer>

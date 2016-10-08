@@ -10,6 +10,10 @@ body .container-fluid.body-content {
   right: 0;
   left: 0;
   overflow-y: auto;
+  padding-top:2%;
+  padding-left:2%;
+  padding-right:2%;
+  background-color:#dcdcdc;
 }
 
 header {
@@ -27,6 +31,8 @@ footer {
     right: 0;
     bottom: 0;
     background-color: #dcdcdc;
+    padding-left:2%;
+    padding-right:2%;
     height: 80px;
 }
 
@@ -45,13 +51,6 @@ form input {
 
 .show-true {
 	display: inline;
-}
-
-body {
-	padding-top:2%;
-	padding-left:2%;
-	padding-right:2%;
-  background-color:#dcdcdc;
 }
 
 .table td {
