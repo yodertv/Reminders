@@ -8,9 +8,9 @@
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://kats-air.local:8080/",
+	"nodeURL" : "http://mikes-air.local:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
-	"userDbName" : "apollo.modulusmongo.net:27017/riZ2ezip"
+	"userDbName" : "localhost:27017/users"
 }
 
