@@ -13,8 +13,8 @@
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
 <li><a href="/list/:todo">Todos @VERSION@</a></li>
 </ul>
-Thanks for trying this simple Todos app.<br>
--Mike <br>
+
+<div class="container-fluid body-content">
 <div ng-show="!production">
 <div ng-show="authFailed">
 	<font color="red"><strong>{{authFailedMsg}}</strong></font>
@@ -31,20 +31,46 @@ Thanks for trying this simple Todos app.<br>
 <a ng-hide= "authenticated" href="/auth/google" target="_self" class="btn btn-default">Login with Google</a><br>
 </div>
 <div ng-show="authenticated">
-	<br> Authenticated as:  <strong>{{user.email}}</strong>
-	<div ng-show="registered">
-	Registered DB:  <strong>{{user.db}}</strong><br><br>
-	</div>
+<table class="table table-striped">  
+	<tbody>  
+		<tr>
+			<td> Mike says:</td> <td> <strong>Thanks for using this reminders app!</strong></td>
+		</tr>
+		<tr>
+			<td> Login:</td> <td> <strong> {{user.email}}  </strong></td>
+		</tr>
+		<tr>
+			<td	ng-show="registered">	Datastore: </td><td><strong>{{user.db}}</strong></td>
+		</tr>
+		<tr>
+			<td> Thanks to: </td><td> <strong>Angular, Node, Bootstrap, Mongodb, Express, Passport, and Glyphicons.</strong></td>
+		</tr>
+		<tr>
+			<td> Hosted by: </td><td><strong>Modulus and MongoLab. </strong></td>
+		</tr>
+	</tbody>  
+</table>
 	<strong>
 	<a href="/list/:todo" class="btn btn-default">Continue</a> |
 	<a href="" ng-click="logout()" class="btn btn-default">Logout&nbsp;&nbsp;</a>
 	</strong>
 	<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
 </div>
-<br>
-<strong>Todos @VERSION@</strong><br>
-Copyright 2015 Yoder Code. <br>
-<br>
-<strong>Thanks to:</strong> Angular, Node, Bootstrap, Mongodb, Express, Passport, and Glyphicons. <br>
-<br>
-<strong>Hosted by:</strong> Modulus and MongoLab. <br>
+</div>
+
+<footer style="height: 40px">
+  <ul class="nav nav-pills dropup">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
+      <ul class="dropdown-menu">
+        <li><a tabindex="-1" href="/welcome">About</a></li>
+        <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
+        <li><a tabindex="-1" href="/history">History</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
+      </ul>
+    </li>
+    <li style="display:inline-block; width: calc(100% - 47px);"><strong>Todos @VERSION@</strong>Copyright 2015 Yoder Code. <br>
+</li>
+  </ul>
+</footer>
