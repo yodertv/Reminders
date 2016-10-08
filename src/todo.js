@@ -39,6 +39,7 @@ function WelcomeCtrl($scope, $location, UserService) {
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;
 	$scope.registered = false;
+	$scope.noOfLists = 5; // Need to get collections here and count them for this to be correct.
 	if ($location.path() == '/authfailed') {
 		$scope.authFailed = true;
 		$scope.authFailedMsg = "User ID or password incorect. Try again."
