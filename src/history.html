@@ -1,11 +1,11 @@
 <!-- History.html -->
 <header>
 <ul class="nav nav-pills">
-  <li class="{{activeHome}}" style="display:inline-block; width:260px;"> <form ng-submit="searchTodos()">
+  <li  style="display:inline-block; width: calc(100% - 47px);"> <form ng-submit="searchTodos()">
     <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search todos..."></input></span>
     </form>
   </li>
-  <li class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
+  <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
 </header>
 
@@ -44,7 +44,7 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li><form ng-submit="addNewList()" style="display:inline-block; width:260px;">
+    <li style="display:inline-block; width: calc(100% - 47px);"><form ng-submit="addNewList()">
     <input type=text ng-model="newListText" class="form-control" placeholder="+"></input></form></li>
   </ul>
 </footer>
