@@ -2,8 +2,8 @@
 
 <header>
 <ul class="nav nav-pills">
-  <li style="display:inline-block; width: 100%" ><a href="/history"> <img src="img/favicon.ico" type="image/x-icon"></img>
-	  Todos @VERSION@
+  <li style="display:inline-block; width: 100%" ><a href="/list/:Reminders"> <img src="img/favicon.ico" type="image/x-icon"></img>
+	  Reminders @VERSION@
 	  <span class="badge" style="float:right;"> {{noOfLists}}</span></a>
   </li>
   <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
@@ -12,7 +12,7 @@
 
 
 <li class="active"><a href="/welcome">&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;</a></li>
-<li><a href="/list/:todo">Todos @VERSION@</a></li>
+<li><a href="/list/:todo">Reminders @VERSION@</a></li>
 
 <div class="container-fluid body-content">
 <div ng-show="!production">
@@ -66,14 +66,14 @@
       </ul>
     </li>
     <li style="display:inline-block; width: calc(100% - 105px);text-align: center;">
-  		<a href="/list/:Reminders">Reminders</a>
+  		<a href="/history">Lists</a>
 		</li>	
 		<li style="float:right">
 			<a href="" ng-click="logout()"<i class="glyphicon glyphicon-off"></i></a>
 			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
     </li>
   </ul>
-  <span style="font-size:14px;">Todos @VERSION@</span> 
+  <span style="font-size:14px;">Reminders @VERSION@</span> 
     <span style="font-size:14px;float:right"><i class="glyphicon glyphicon-copyright-mark"></i>2016 Yoder Code</span>
   </span>
 </footer>
