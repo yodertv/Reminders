@@ -57,23 +57,23 @@
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
-      <ul class="dropdown-menu">
-        <li><a tabindex="-1" href="/welcome">About</a></li>
-        <li><a tabindex="-1" href="/list/:todo">Today</a></li>    
-        <li><a tabindex="-1" href="/history">History</a></li>
+      <ul class="dropdown-menu" style="font-size:20px;">
+        <li><a tabindex="-1" href="/welcome">Welcome</a></li>
+        <li><a tabindex="-1" href="/list/:Reminders">Reminders</a></li>    
+        <li><a tabindex="-1" href="/history">Lists</a></li>
         <li class="divider"></li>
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
     <li style="display:inline-block; width: calc(100% - 105px);text-align: center;">
-  		<a href="/list/:todo">Reminders</a>
+  		<a href="/list/:Reminders">Reminders</a>
 		</li>	
 		<li style="float:right">
 			<a href="" ng-click="logout()"<i class="glyphicon glyphicon-off"></i></a>
 			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
     </li>
   </ul>
-  <span> Todos @VERSION@</span> 
-  	<span style="float:right"><i class="glyphicon glyphicon-copyright-mark"></i>2016 Yoder Code</span>
-	</span>
+  <span style="font-size:14px;">Todos @VERSION@</span> 
+    <span style="font-size:14px;float:right"><i class="glyphicon glyphicon-copyright-mark"></i>2016 Yoder Code</span>
+  </span>
 </footer>
