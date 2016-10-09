@@ -67,7 +67,7 @@ function buildArchiveList(data, $scope, name) {
 		if (/^system./.test(item)) {
 			return;
 		} else {
-			$scope.archives.push(item);
+			$scope.archives.push(decodeURI(item));
 		}
 	});	
 	
