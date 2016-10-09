@@ -488,7 +488,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   }
 });
 
-app.del(apiPath + 'todo*', ensureAuth401, function(req, res) {
+app.del(apiPath + '*', ensureAuth401, function(req, res) {
   // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
   // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
   // Delete archived collection using mongojs.
@@ -514,7 +514,7 @@ app.del(apiPath + 'todo*', ensureAuth401, function(req, res) {
   });
 });
 
-app.put(apiPath + 'todo*', ensureAuth401, function(req, res) {
+app.put(apiPath + '*', ensureAuth401, function(req, res) {
   // console.log('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
