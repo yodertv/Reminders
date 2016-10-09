@@ -6,7 +6,7 @@ html {
 body .container-fluid.body-content {
   position: absolute;
   top: 40px;
-  bottom: 80px;
+  bottom: 82px;
   right: 0;
   left: 0;
   overflow-y: auto;
@@ -14,6 +14,7 @@ body .container-fluid.body-content {
   padding-left:2%;
   padding-right:2%;
   background-color:#dcdcdc;
+  font-size:20px;
 }
 
 header {
@@ -22,7 +23,8 @@ header {
     right: 0;
     top: 0;
     background-color: #dcdcdc;
-    height: 40px;
+    height: 41px;
+    font-size:24px;
 }
 
 footer {
@@ -33,7 +35,8 @@ footer {
     background-color: #dcdcdc;
     padding-left:2%;
     padding-right:2%;
-    height: 80px;
+    height: 82px;
+    font-size:20px;
 }
 
 form input {

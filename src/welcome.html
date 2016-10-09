@@ -2,9 +2,10 @@
 
 <header>
 <ul class="nav nav-pills">
-  <li style="display:inline-block; width: 100%" ><a href="/history"> <img src="img/favicon.ico" type="image/x-icon"></img> 
-  About:<span style="font-size:20px"> Todos @VERSION@</span>
-    <span class="badge" style="float:right;"> {{noOfLists}}</span></a></li>
+  <li style="display:inline-block; width: 100%" ><a href="/history"> <img src="img/favicon.ico" type="image/x-icon"></img>
+	  Todos @VERSION@
+	  <span class="badge" style="float:right;"> {{noOfLists}}</span></a>
+  </li>
   <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
 </header>
@@ -64,11 +65,11 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li style="display:inline-block; width: calc(100% - 125px);text-align: center;">
+    <li style="display:inline-block; width: calc(100% - 105px);text-align: center;">
   		<a href="/list/:todo">Reminders</a>
 		</li>	
 		<li style="float:right">
-			<a href="" ng-click="logout()">Logout</a>
+			<a href="" ng-click="logout()"<i class="glyphicon glyphicon-off"></i></a>
 			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
     </li>
   </ul>

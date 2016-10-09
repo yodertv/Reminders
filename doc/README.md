@@ -57,8 +57,8 @@ Replace the weekly task list that I keep on paper.
 - Print a digest from the History page.
 
 ### Currrent  Work (10.6.2016)
+- Messing with viewport meta to get the nicest size on the iphone plus. Learned that I got a larger app feel by increasing the font size.
 - HTML for the two main pages lists and todos working well enough.
-- TodoCtrl and ListCtrl are still not completely merged yet.
 - Have history paging working as a list of lists with UI elements for search and add list.
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
 - Working version of showing and hiding todos in todo controler.
