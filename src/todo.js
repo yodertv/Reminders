@@ -133,7 +133,7 @@ function HistoryCtrl($scope, $location, Todo) {
 	$scope.archives=[];
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
-	$scope.archives[0] = { archiveName : "", displayName : "..loading.." } ;
+	$scope.archives[0] = "..loading..";
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
