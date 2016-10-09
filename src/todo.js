@@ -56,13 +56,15 @@ function WelcomeCtrl($scope, $location, UserService) {
 	});
 }
 
-function buildArchiveList(data, $scope, name) { 
+function buildArchiveList(data, $scope) { 
     // Builds the set of lists the user has create and stores them in $scope.archives, sets nextArchiveName and showNext view element 
     // from the set of collections in DBString for the scope passed in and the current name.
     // When no name is included set nextArchiveName to the first archive. Intended to be used in the callback 
     // function for getArchiveList();
 	// The data has all collections in the DB. So we filter out the collections that start w/ "system" using regex.
+	var	nextIndex = 0;
 	$scope.archives=[]; 	// Zero out the current array of archives in scope.
+	
 	angular.forEach(data, function(item) {
 		if (/^system./.test(item)) {
 			return;
@@ -72,14 +74,14 @@ function buildArchiveList(data, $scope, name) {
 	});	
 	
 	// console.log($scope.archives);
-	// Now that the default list is part of the archive need to point to the next one. 
-	var nextIndex = $scope.archives.indexOf($scope.archiveName) + 1; // Handily, the indexOf an undefined object is -1. 
-
-	if (nextIndex >= $scope.archives.length) {
-		// console.log("Hide Next.");
-		$scope.showNext="hidden" // Hide the next button on the last archive
-	} 
+	if ($scope.archives.length <= 1) { 
+		$scope.showNext="hidden" 
+	}		
 	else {
+		var nextIndex = $scope.archives.indexOf($scope.archiveName) + 1;
+		if (nextIndex >= $scope.archives.length) { // Wrap back to the begining.
+			nextIndex = 0;				
+		} 
 		$scope.nextArchiveName = $scope.archives[nextIndex];
 		$scope.showNext="visible";
 	};
@@ -282,11 +284,9 @@ function TodoCtrl($scope, $routeParams, Todo) {
  	$scope.showCompleted = false;
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
- 	$scope.footerSize = 80;
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
- 	$scope.label = "Reminders";
 
  	var name = "todo"; // Defualt reminder list name.
 
@@ -294,8 +294,6 @@ function TodoCtrl($scope, $routeParams, Todo) {
 	 	name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
 	}
 	$scope.archiveName = name;
-	$scope.label = name;
-
  	$scope.showNext="hidden";
 
 	Todo.getTodos(name, function(data){
