@@ -57,41 +57,30 @@ function WelcomeCtrl($scope, $location, UserService) {
 }
 
 function buildArchiveList(data, $scope, name) { 
-
-    // Builds the sorted list of $scope.archives, sets nextArchiveName and showNext view element 
-    // from the set of collections in DBString that start with "todo" for the scope passed in and the current name.
+    // Builds the set of lists the user has create and stores them in $scope.archives, sets nextArchiveName and showNext view element 
+    // from the set of collections in DBString for the scope passed in and the current name.
     // When no name is included set nextArchiveName to the first archive. Intended to be used in the callback 
     // function for getArchiveList();
-
-	var today = new Date();
-	var d = new Date(); // Does putting this constructor out of the loop below have any benefit?
-	var currArchive = {};
-
 	// The data has all collections in the DB. So we filter out the collections that start w/ "system" using regex.
-	// Zero out the current array of archives in scope.
-	$scope.archives=[];
+	$scope.archives=[]; 	// Zero out the current array of archives in scope.
 	angular.forEach(data, function(item) {
 		if (/^system./.test(item)) {
 			return;
 		} else {
-			$scope.archives.push({
-			  "archiveName" : item,
-			  "displayName" : item,
-			  "date" : d
-			});
+			$scope.archives.push(item);
 		}
 	});	
 	
 	// console.log($scope.archives);
 	// Now that the default list is part of the archive need to point to the next one. 
-	var nextIndex = $scope.archives.indexOf(currArchive) + 2; // Handily, the indexOf an undefined object is -1. 
+	var nextIndex = $scope.archives.indexOf($scope.archiveName) + 1; // Handily, the indexOf an undefined object is -1. 
 
 	if (nextIndex >= $scope.archives.length) {
 		// console.log("Hide Next.");
 		$scope.showNext="hidden" // Hide the next button on the last archive
 	} 
 	else {
-		$scope.nextArchiveName = $scope.archives[nextIndex].archiveName;
+		$scope.nextArchiveName = $scope.archives[nextIndex];
 		$scope.showNext="visible";
 	};
 }
@@ -120,7 +109,7 @@ function HistoryCtrl($scope, $location, Todo) {
 	$scope.deleteList = function() {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
-  		var arch = this.item.archiveName;
+  		var arch = this.item;
   		// console.log("In HistoryCtrl delete method. Deleting:", arch);
   		$scope.archives.splice(index,1); // Remove it from the model.
   		Todo.dropArchive(arch, function() {
@@ -128,7 +117,7 @@ function HistoryCtrl($scope, $location, Todo) {
   		}); // Remove it from the DB
   		if ( index == 0 ) { // We deleted the one our next pointer was pointing too.
   			if ($scope.archives.length > 0) {
-	  			$scope.nextArchiveName = $scope.archives[0].archiveName;
+	  			$scope.nextArchiveName = $scope.archives[0];
   			} else { 
   			    $scope.nextArchiveName == undefined;
   				$scope.showNext="hidden";
@@ -142,7 +131,8 @@ function HistoryCtrl($scope, $location, Todo) {
 	$scope.archives=[];
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
-	$scope.archives[0] = { archiveName : "", displayName : "..loading.." } ; 
+	$scope.archives[0] = { archiveName : "", displayName : "..loading.." } ;
+
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
 	});
@@ -151,7 +141,6 @@ function HistoryCtrl($scope, $location, Todo) {
 function TodoCtrl($scope, $routeParams, Todo) {
 	// Uses todo.html
 	// This is the home page. Show current Todos. Hide other stuff	
-
 	$scope.addTodo = function() {
 		var obj = { text:$scope.todoText, done:false, showInView:true };
 		$scope.todoText = ''; // clear text field for next todo
