@@ -96,6 +96,8 @@ function HistoryCtrl($scope, $location, Todo) {
 
 	$scope.addNewList = function() {
 		console.log("addNewList called with new name: ", $scope.newListText);
+		$location.path( '/list/:' + $scope.newListText); // Navigate to the todos page for this list.
+		$scope.newListText = ""; // Clear the imput field.
 	};
 
 	$scope.editClick = function() {
@@ -126,10 +128,10 @@ function HistoryCtrl($scope, $location, Todo) {
   			}
   		}
   	}
+
 	$scope.footerSize = 40;
 	$scope.showNext="hidden";
 	$scope.showDelete = false;
-	$scope.activeHistory = "active";
 	$scope.archives=[];
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
@@ -235,7 +237,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
  
 
  // Need to rewrite as the create new list.
-
+/*
 	$scope.archive = function() {
 		if ($scope.todos.length == 0) return;  	
  		var today = new Date();  
@@ -276,6 +278,9 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		
 		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
   	} 
+
+*/
+
 	// Initialize scope variables
 	$scope.activeHome = "default";
 	$scope.showNewTask = true;
