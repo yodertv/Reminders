@@ -29,6 +29,7 @@ function WelcomeCtrl($scope, $location, UserService) {
   		UserService.logout($scope.logoutfromgoogle, function(){
   			// Clear user data w/o depending on another call to /account.
   			$scope.authenticated = false;
+  			$scope.registered = false;
   			$scope.user = undefined;
   			$scope.failedCount = 0;
   		});
@@ -42,7 +43,7 @@ function WelcomeCtrl($scope, $location, UserService) {
 	$scope.noOfLists = 5; // Need to get collections here and count them for this to be correct.
 	if ($location.path() == '/authfailed') {
 		$scope.authFailed = true;
-		$scope.authFailedMsg = "User ID or password incorect. Try again."
+		$scope.authFailedMsg = "User ID or password incorect."
 	 };
 
 	$scope.user = UserService.get( function(user){

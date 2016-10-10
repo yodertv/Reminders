@@ -38,7 +38,6 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
-- Split welcome paage so all info that doesn't require auth is shown.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
@@ -57,7 +56,9 @@ Replace the weekly task list that I keep on paper.
 - Print a digest from the History page.
 
 ### Currrent  Work (10.6.2016)
-- Messing with viewport meta to get the nicest size on the iphone plus. Learned that I got a larger app feel by increasing the font size.
+- Split welcome paage so all info that doesn't require auth is shown.
+- Messing with viewport meta to get the nicest size on the iphone plus.
+- Learned that I got a larger app feel by increasing the font size.
 - HTML for the two main pages lists and todos working well enough.
 - Have history paging working as a list of lists with UI elements for search and add list.
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
