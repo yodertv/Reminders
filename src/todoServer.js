@@ -207,7 +207,7 @@ if (!nodeProd) { // Never use this route in production.
   app.post('/auth/local', express.bodyParser(),
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
-      res.redirect('/#todo');
+      res.redirect('/#list/:Reminders');
     }
   );
 }
@@ -236,7 +236,7 @@ app.get('/auth/google/callback',
   function(req, res) {
     // console.log(req.user.email);
     // setTimeout(listSessions,1000); // Print sessions in one sec.
-    res.redirect('/#todo'); 
+    res.redirect('/#list/:Reminders'); 
 });
   
 app.get('/logout', ensureAuthRedirect, function(req, res){
@@ -262,16 +262,6 @@ app.get(['/welcome', '/authfailed'], function(req, res){
   res.writeHead(302, { 'location' : '/#welcome' });
   res.end();
 });
-
-/*
-Shouldn't need this with the merge of listCtlr and todoCtlr
-app.get('/todo', ensureAuthRedirect, function(req, res){
-  // Redirect todo route. Allows reload and sharing of todo URL.
-  console.log("Redirect /todo.")
-  res.writeHead(302, { 'location' : '/#todo' });
-  res.end();
-});
-*/
 
 app.get('/history', ensureAuthRedirect, function(req, res) { 
   // Redirect history route. Allows reload and sharing of history URL.
