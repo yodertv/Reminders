@@ -67,7 +67,7 @@ function buildArchiveList(data, $scope) {
 	$scope.archives=[]; 	// Zero out the current array of archives in scope.
 	
 	angular.forEach(data, function(item) {
-		if (/^system./.test(item)) {
+		if (/^system./.test(item) || /^objectlabs./.test(item)) {
 			return;
 		} else {
 			$scope.archives.push(decodeURI(item));
