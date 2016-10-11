@@ -1,7 +1,7 @@
 {
 	"#0_comment" : "Build poperties for localhost deployment and testing.",
 	
-	"name" : "localhost",
+	"name" : "127.0.0.1",
 	"ENV" : "DEV",
 
 	"#1_comment" : "Should server log date?",
@@ -11,6 +11,6 @@
 	"nodeURL" : "http://127.0.0.1:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
-	"userDbName" : "ds043972.mongolab.com:43972/users"
+	"userDbName" : "localhost:27017/users"
 }
 
