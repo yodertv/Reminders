@@ -28,6 +28,10 @@
 		<tr ng-show="registered">
 			<td>Data:</td><td>{{user.db}}</td>
 		</tr>
+		<tr ng-show="authenticated">
+			<td>Option:</td>
+			<td ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle">&nbsp;&nbsp;Logout from Google too?</input></td>
+		</tr>
 	</tbody>  
 </table>
 <div ng-show="production">
@@ -65,7 +69,6 @@
 		</li>	
 		<li style="float:right">
 			<a href="" ng-click="logout()"<i class="glyphicon glyphicon-off"></i></a>
-			<span ng-show="production" ><input type="checkbox" ng-model="logoutfromgoogle"> from Google too?</input></span>
     </li>
   </ul>
   <span style="font-size:14px;">Reminders @VERSION@</span> 
