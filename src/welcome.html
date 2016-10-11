@@ -30,19 +30,22 @@
 		</tr>
 	</tbody>  
 </table>
-<div ng-show="production" ng-show= "!authenticated">
-	<a href="/auth/google" target="_self" class="btn btn-default">Login with Google</a><br>
+<div ng-show="production">
+ 	<div ng-show= "!authenticated">
+		<a href="/auth/google" target="_self" class="btn btn-default">Login with Google</a><br>
+ 	</div>
 </div>
-<div ng-show="!production" ng-show="authFailed">
-	<font color="red"><strong>{{authFailedMsg}}</strong></font>
-</div>
-<div ng-hide="authenticated">
-	<form name="input" action="auth/local" method="post">
-		<span>User ID:<input type="text" name="username"></span>
-		<span>Password:<input type="password" name="password"></span>
-		<input type="submit" class="btn btn-primary" value="Enter">
-	</form>
-</div>
+<div ng-show="!production">
+	<div ng-show="authFailed">
+		<font color="red"><strong>{{authFailedMsg}}</strong></font>
+	</div>
+	<div ng-hide="authenticated">
+		<form name="input" action="auth/local" method="post">
+			<span>User ID:<input type="text" name="username"></span>
+			<span>Password:<input type="password" name="password"></span>
+			<input type="submit" class="btn btn-primary" value="Enter">
+		</form>
+	</div>
 </div>
 
 <footer>
