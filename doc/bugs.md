@@ -1,7 +1,10 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#42)
+##Open Bugs -- Next: (Bug#43)
+
+###(Bug#42) -- Entering a new task on iPhone obscures the entry point of the text for the new task.
+
 
 ###(Bug#40) -- todoServer doesn't handle DB Connection is destroyed error on modulus using mlab db for my big yodertvtodo db.
 ```

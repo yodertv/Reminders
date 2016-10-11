@@ -80,3 +80,25 @@ The MONGO variables depend on the userDbName in build_props.
 The GOOGLE variables are always required at run-time. They are only used when NODE_ENV=production.
 NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
 
+## Testing google auth on loopback (127.0.0.1)
+
+Use build_prop.127.json and set the NODE_ENV to production to test google auth on local host.
+
+```
+$ export NODE_ENV=production
+$ ./make.js --silent install 127
+$ cd ./build ; node ./todoServer.js ; cd ..
+Todo Server v0.4.3
+Running on mikes-air.local:8080
+Node environment = PROD
+User store = localhost:27017/users[userList]
+Use http://127.0.0.1:8080
+CTRL + C to shutdown
+i  email     	  db
+0 bob@example.com	localhost:27017/bobstodos
+1 test@example.com	localhost:27017/test-todo
+2 frank@example.com	localhost:27017/todos-for-frank
+3 yoderm01@gmail.com	localhost:27017/yodertvtodo
+4 yodercode@gmail.com	localhost:27017/todo_new_test
+```
+

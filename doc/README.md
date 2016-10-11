@@ -41,21 +41,21 @@ Replace the weekly task list that I keep on paper.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
-- Refactor changing archives to lists, and show completed, new list creation instead of archive button
 - Search feature
-- Rename default collection "todo" to "today".
 - Add unit testing.
-- Upgrade to mongojs 2.0
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
-- Keep common tasks. These should be replenished everytime the list is archived.
-- Give the user a way to edit the list of repeating tasks.
 - Support addvertisments.
 - Add a print feature.
-- Print a digest from the History page.
 
-### Currrent  Work (10.6.2016)
+### Version 0.5.0 (10.10.2016)
+- Rename default collection "todo" to "Reminders".
+- Keep common tasks. These should be replenished everytime the list is archived. See repeating task below.
+- Give the user a way to edit the list of repeating tasks. Simply uncheck the completed state to bring back an existing task.
+- Fixed (bug#41)
+- Upgrade to mongojs 2.1
+- Refactored by changing archives to lists, and show completed, new list creation instead of archive button
 - Split welcome paage so all info that doesn't require auth is shown.
 - Messing with viewport meta to get the nicest size on the iphone plus.
 - Learned that I got a larger app feel by increasing the font size.
