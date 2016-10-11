@@ -5,7 +5,7 @@ html {
 
 body .container-fluid.body-content {
   position: absolute;
-  top: 40px;
+  top: 41px;
   bottom: 82px;
   right: 0;
   left: 0;
@@ -36,7 +36,6 @@ footer {
     padding-left:2%;
     padding-right:2%;
     height: 82px;
-    font-size:20px;
 }
 
 form input {

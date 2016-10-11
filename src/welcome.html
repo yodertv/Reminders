@@ -4,7 +4,7 @@
 <ul class="nav nav-pills">
   <li style="display:inline-block; width: 100%" ><a href="/list/:Reminders"> <img src="img/favicon.ico" type="image/x-icon"></img>
 	  Reminders @VERSION@
-	  <span class="badge" style="float:right;"> {{noOfLists}}</span></a>
+	  <span class="badge" style="float:right;">{{noOfLists}}</span></a>
   </li>
   <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
@@ -51,6 +51,7 @@
 		</form>
 	</div>
 </div>
+</div>
 
 <footer>
   <ul class="nav nav-pills dropup">
@@ -67,8 +68,8 @@
     <li style="display:inline-block; width: calc(100% - 105px);text-align: center;">
   		<a href="/history">Lists</a>
 		</li>	
-		<li style="float:right">
-			<a href="" ng-click="logout()"<i class="glyphicon glyphicon-off"></i></a>
+		<li style="float:right;">
+			<a href="" ng-click="logout()"><i class="glyphicon glyphicon-off"></i></a>
     </li>
   </ul>
   <span style="font-size:14px;">Reminders @VERSION@</span> 
