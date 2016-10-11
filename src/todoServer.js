@@ -301,7 +301,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
-    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'ScramSHA1'});
+    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
@@ -340,7 +340,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_FIND");
-    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'ScramSHA1'});
+    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;

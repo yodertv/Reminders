@@ -66,7 +66,7 @@ exports.loadUserList = function (options) {
   
   // console.log("Get User List opening DB: " + options.dbUrl);
   if (userDb == null) {
-    userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'ScramSHA1'});
+    userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
     userDb.on('error',function(err) {
       // This never runs. Bug#37
       console.log('userDb database error', err);
