@@ -1,7 +1,17 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#43)
+##Open Bugs -- Next: (Bug#44)
+
+###(Bug#43) -- Got this result somehow with 0.5.0 on my production db yodertvtodo on mLab.
+
+```
+s-ds043047:PRIMARY> db.Reminders.find()
+{ "_id" : ObjectId("57fc6d4f06ed8e00f1ec4d02"), "done" : false, "text" : "...loading...", "showInView" : true }
+{ "_id" : ObjectId("57fc6d4f06ed8e00f1ec4d01"), "done" : false, "text" : "...loading...", "showInView" : true }
+{ "_id" : ObjectId("57fc6db006ed8e00f1ec4d03"), "text" : "New test", "done" : false, "showInView" : true }
+rs-ds043047:PRIMARY> 
+```
 
 ###(Bug#42) -- Entering a new task on iPhone obscures the entry point of the text for the new task.
 
