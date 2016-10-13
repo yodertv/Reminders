@@ -6,7 +6,7 @@ html {
 body .container-fluid.body-content {
   position: absolute;
   top: 41px;
-  bottom: 82px;
+  bottom: 88px;
   right: 0;
   left: 0;
   overflow-y: auto;
@@ -35,11 +35,17 @@ footer {
     background-color: #dcdcdc;
     padding-left:2%;
     padding-right:2%;
-    height: 82px;
+    height: 88px;
+    font-size:24px;
 }
 
 form input {
     width: 100%;
+}
+
+input[type="text"]
+{
+    font-size:24px;
 }
 
 .done-true {
