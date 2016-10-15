@@ -38,6 +38,7 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
+- Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
@@ -49,20 +50,21 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
-### Version 0.5.0 (10.10.2016)
-- Rename default collection "todo" to "Reminders".
-- Keep common tasks. These should be replenished everytime the list is archived. See repeating task below.
-- Give the user a way to edit the list of repeating tasks. Simply uncheck the completed state to bring back an existing task.
+### Version 0.5.* (10.15.2016)
+
+
+### Version 0.5.1 (10.15.2016)
+- Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
+- Working version of showing and hiding todos in todo controler.
+- Renamed default collection "todo" to "Reminders".
+- Ability to reuse common tasks. See repeating task below.
+- Give the user a way to reuse tasks. Simply uncheck the completed state to bring back an existing task.
 - Fixed (bug#41)
 - Upgrade to mongojs 2.1
 - Refactored by changing archives to lists, and show completed, new list creation instead of archive button
-- Split welcome paage so all info that doesn't require auth is shown.
-- Messing with viewport meta to get the nicest size on the iphone plus.
+- Split welcome page so all info that doesn't require auth is shown.
+- Chose font size to get the nicest size on the iphone plus.
 - Learned that I got a larger app feel by increasing the font size.
-- HTML for the two main pages lists and todos working well enough.
-- Have history paging working as a list of lists with UI elements for search and add list.
-- Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
-- Working version of showing and hiding todos in todo controler.
 
 ### Version 0.4.3 (8.23.2016)
 - Properly assign new DBs in GoogleStrategy handler
