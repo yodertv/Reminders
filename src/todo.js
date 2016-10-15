@@ -13,7 +13,7 @@ todo.config(['$routeProvider',
     	$routeProvider.
   	  		when('/list/:archiveName', 	{templateUrl: 'todo.html', controller: TodoCtrl}).
   	  		when('/', 					{templateUrl: 'todo.html', controller: TodoCtrl}).
-      		when('/history',           	{templateUrl: 'history.html', controller: HistoryCtrl}).
+      		when('/list',           	{templateUrl: 'list.html', controller: ListCtrl}).
       		when('/welcome',           	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		when('/authfailed',		   	{templateUrl: 'welcome.html', controller: WelcomeCtrl}).
       		otherwise(				   	{redirectTo:  '/welcome'});
@@ -88,8 +88,8 @@ function buildArchiveList(data, $scope) {
 	};
 }
 
-function HistoryCtrl($scope, $location, Todo) {  
-	// Uses history.html.
+function ListCtrl($scope, $location, Todo) {  
+	// Uses list.html.
 
 	$scope.searchTodos = function() {
 		console.log("searchTodos called with search string: ", $scope.todoSearchText);
@@ -115,7 +115,7 @@ function HistoryCtrl($scope, $location, Todo) {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item;
-  		// console.log("In HistoryCtrl delete method. Deleting:", arch);
+  		// console.log("In ListCtrl delete method. Deleting:", arch);
   		$scope.archives.splice(index,1); // Remove it from the model.
   		Todo.dropArchive(arch, function() {
   			// console.log("dropArchive returned");
@@ -139,7 +139,7 @@ function HistoryCtrl($scope, $location, Todo) {
 	$scope.archives[0] = "..loading..";
 
 	Todo.getArchiveList(function(data) {
-  		buildArchiveList(data, $scope); // These are displayed in HistoryCtrl
+  		buildArchiveList(data, $scope); // These are displayed in ListCtrl
 	});
 }
 
@@ -236,52 +236,6 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		return count;
 	};
  
-
- // Need to rewrite as the create new list.
-/*
-	$scope.archive = function() {
-		if ($scope.todos.length == 0) return;  	
- 		var today = new Date();  
- 		var archiveName = "todo" + today.toDateString().replace(/ /g, "-"); // Build an archive name from today's date.
-		var oldTodos = $scope.todos;
-
-		if ($scope.nextArchiveName == archiveName) { // Today's archive already exists.
-			//merge done items into nextArchive;
-			angular.forEach(oldTodos, function(todo) {
-	      		if (todo.done) {
-
-	      			// Call update for this object ID, after removing the _id from my object using extend. ID will be in the URL.
-
-	      			Todo.update({todo : archiveName, id : todo._id}, angular.extend({}, todo, {_id : undefined}));
-      			}
-	      	})
-      	}
-		else {  // Create a new archive.
-
-			Todo.saveTodos($scope.todos, archiveName);
-			$scope.archives.unshift({
-				"archiveName" : archiveName,
-				"displayName" : today.toDateString().replace(today.getFullYear(), ""),
-				"date" : today
-			})
-			$scope.nextArchiveName = archiveName; // Update nextArchiveName to be this new one.
-			$scope.showNext = "visible"; // Force the next button to be visible.
-		}	
-		
-		// Remove the completed tasks by erasing the list of todos and copying only the not done tasks from oldTodos.
-    	
-    	$scope.todos = [];
-    	angular.forEach(oldTodos, function(todo) {
-      		if (!todo.done) $scope.todos.push(todo);
-    	});
-
-    	// Here's where I might add back in the default items.
-		
-		Todo.saveTodos($scope.todos);	 // Overwrite the todos list with the new lists.
-  	} 
-
-*/
-
 	// Initialize scope variables
 	$scope.activeHome = "default";
 	$scope.showNewTask = true;

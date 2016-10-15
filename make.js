@@ -39,8 +39,7 @@ var _env = undefined;
 var validEnvs = ['localnet','localhost','jitsu','modulus', '127'];
 
 // Client source and lib files to copy to static directory
-var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'history.html',
-				 'list.html', 'index.html', 'todo.css', 'welcome.html'];
+var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'list.html', 'index.html', 'todo.css', 'welcome.html'];
 
 var SRC_FILES = [];
 for (var i = 0; i < SRC_FILES_NAMES.length; i++) {
@@ -70,7 +69,7 @@ var VER_FILES = [
 	DIST_STATIC + '/' + 'TodoServices.js', 
 	DIST_STATIC + '/' + 'index.html',
 	DIST_STATIC + '/' + 'welcome.html',
-	DIST_STATIC + '/' + 'history.html',
+	DIST_STATIC + '/' + 'list.html',
 	DIST_PATH + '/' + 'todoServer.js'
 ];
 

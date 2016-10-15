@@ -263,10 +263,10 @@ app.get(['/welcome', '/authfailed'], function(req, res){
   res.end();
 });
 
-app.get('/history', ensureAuthRedirect, function(req, res) { 
-  // Redirect history route. Allows reload and sharing of history URL.
-  console.log("Redirect /history.")
-  res.writeHead(302, { 'location' : '/#history' });
+app.get('/list', ensureAuthRedirect, function(req, res) { 
+  // Redirect list route. Allows reload and sharing of list URL.
+  console.log("Redirect /list.")
+  res.writeHead(302, { 'location' : '/#list' });
   res.end();
 });
 

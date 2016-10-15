@@ -2,7 +2,7 @@
 <header>
 <ul class="nav nav-pills">
   <li style="display:inline-block; width: calc(100% - 58px);"
-   ><a href="/history"> <img src="img/favicon.ico" type="image/x-icon"></img> {{archiveName}} 
+   ><a href="/list"> <img src="img/favicon.ico" type="image/x-icon"></img> {{archiveName}} 
     <span class="badge" style="float:right;"> {{remaining()}}</span></a></li>
   <li style="float:right" class="{{editMode}}"><a href="" ng-click="editClick()"><i class="glyphicon glyphicon-edit"></i></a></li>
 </ul>
@@ -35,18 +35,20 @@
 </div>
 
 <footer>
+
   <form ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
       <input type="text" ng-model="todoText" class="form-control" placeholder="+"></input>
     </span>
   </form>
+
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
       <ul class="dropdown-menu" style="font-size:20px;">
         <li><a tabindex="-1" href="/welcome">Welcome</a></li>
         <li><a tabindex="-1" href="/list/:Reminders">Reminders</a></li>    
-        <li><a tabindex="-1" href="/history">Lists</a></li>
+        <li><a tabindex="-1" href="/list">Lists</a></li>
         <li class="divider"></li>
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>

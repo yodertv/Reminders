@@ -1,4 +1,4 @@
-Todos v0.4.3
+Todos v0.5.2
 ============
 #Objective:
 
@@ -38,7 +38,6 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
-- Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
@@ -50,8 +49,10 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
-### Version 0.5.* (10.15.2016)
-
+### Version 0.5.2 (10.15.2016)
+- Let's get the footer size to change between pages.
+- Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
+- Refactored file names to reflect the new use case of list instead of history. Eliminated one html file. 
 
 ### Version 0.5.1 (10.15.2016)
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
