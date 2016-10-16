@@ -9,7 +9,7 @@
 </header>
 
 <div class="container-fluid body-content">
-<table ng-show="todos[0]" class="table table-striped">  
+<table class="table table-striped">  
 	<tbody>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
@@ -22,20 +22,18 @@
       </span>
       </td>
     </tr>
-  </tbody>
-</table>
-
-<table ng-hide="todos[0]" class="table table-striped">  
-  <tbody>  
     <tr>
-      <td>&nbsp;&nbsp;Nothing to do? Add tasks below...</td>
+    <td><form ng-submit="addTodo()">
+      <span class="show-{{showNewTask}}" >
+        <input type="text" ng-model="todoText" class="form-control" placeholder="+ Add new task..."></input>
+      </span>
+    </td></form>
     </tr>
-  </tbody>  
+  </tbody>
 </table>
 </div>
 
 <footer>
-
   <form ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
       <input type="text" ng-model="todoText" class="form-control" placeholder="+"></input>
