@@ -53,6 +53,7 @@ Replace the weekly task list that I keep on paper.
 - Let's get the footer size to change between pages.
 - Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
 - Refactored file names to reflect the new use case of list instead of history. Eliminated one html file. 
+- Check on angular version. Angular home page demos use 1.5.8.
 
 ### Version 0.5.1 (10.15.2016)
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
