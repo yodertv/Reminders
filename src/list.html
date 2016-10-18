@@ -1,5 +1,5 @@
 <!-- list.html -->
-<header>
+<header id="header">
 <ul class="nav nav-pills">
   <li  style="display:inline-block; width: calc(100% - 57px);"> <form ng-submit="searchTodos()">
     <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search reminders..."></input></span>
@@ -9,7 +9,7 @@
 </ul>
 </header>
 
-<div class="container-fluid body-content">
+<div id="content-{{footerSize}}" class="container-fluid body-content">
 <table ng-show="archives[0]" class="table table-striped"> 
   <tbody>  
     <tr ng-repeat="item in archives">
@@ -20,6 +20,13 @@
           </li>
         </ul>
       </td>
+    </tr>
+    <tr>
+    <td><form ng-submit="addNewList()">
+      <span>
+        <input type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
+      </span>
+    </form></td>
     </tr>
   </tbody>  
 </table>
@@ -32,7 +39,7 @@
 </table>
 </div>
 
-<footer>
+<footer id="footer-{{footerSize}}">
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
@@ -44,10 +51,9 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li style="display:inline-block; width: calc(100% - 57px);"><form ng-submit="addNewList()">
-    <input type=text ng-model="newListText" class="form-control" placeholder="+ new list..."></input></form></li>
   </ul>
-  <span style="font-size:14px;">Reminders @VERSION@</span> 
-    <span style="font-size:14px;float:right"><i class="glyphicon glyphicon-copyright-mark"></i>2016 Yoder Code</span>
-  </span>
+  <div ng-show="footerSize=='tall'" style="font-size:14px;display:inline-block;">Reminders @VERSION@
+    <p style="float:right">2016 Yoder Code</p>
+    <i style="float:right" class="glyphicon glyphicon-copyright-mark"></i>
+  </div>
 </footer>

@@ -36,6 +36,7 @@ function WelcomeCtrl($scope, $location, UserService) {
   	}
 
 	// console.log("location=", $location.path());
+	$scope.footerSize = 'tall';
 	$scope.production = true;
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;
@@ -128,9 +129,14 @@ function ListCtrl($scope, $location, Todo) {
   				$scope.showNext="hidden";
   			}
   		}
+  		if ($scope.archives.length > 8) {
+  			$scope.footerSize = "short";
+  		} else {
+  			$scope.footerSize = "tall";
+  		}
   	}
 
-	$scope.footerSize = 40;
+	$scope.footerSize = 'tall';
 	$scope.showNext="hidden";
 	$scope.showDelete = false;
 	$scope.archives=[];
@@ -140,6 +146,11 @@ function ListCtrl($scope, $location, Todo) {
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
+		if ($scope.archives.length > 8) {
+			$scope.footerSize = "short";
+		} else {
+			$scope.footerSize = "tall";
+		}
 	});
 }
 
