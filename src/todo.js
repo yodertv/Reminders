@@ -129,7 +129,7 @@ function ListCtrl($scope, $location, Todo) {
   				$scope.showNext="hidden";
   			}
   		}
-  		if ($scope.archives.length > 8) {
+  		if ($scope.archives.length < 4) {
   			$scope.footerSize = "short";
   		} else {
   			$scope.footerSize = "tall";
@@ -146,7 +146,7 @@ function ListCtrl($scope, $location, Todo) {
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
-		if ($scope.archives.length > 8) {
+		if ($scope.archives.length < 4) {
 			$scope.footerSize = "short";
 		} else {
 			$scope.footerSize = "tall";
@@ -154,7 +154,7 @@ function ListCtrl($scope, $location, Todo) {
 	});
 }
 
-function TodoCtrl($scope, $routeParams, Todo) {
+function TodoCtrl($scope, $routeParams, Todo, $timeout) {
 	// Uses todo.html
 	// This is the home page. Show current Todos. Hide other stuff	
 	$scope.addTodo = function() {
@@ -168,6 +168,23 @@ function TodoCtrl($scope, $routeParams, Todo) {
 				"showInView" : returnObj.showInView, 
 				"_id" : returnObj._id
 			});
+			if ($scope.todos.length < 4) {
+				$scope.footerSize = "short";
+				$timeout(function() {
+/*			        var element = $window.document.getElementById(id);
+			        if(element)
+			          element.focus();
+*/
+					console.log('Setting focus short.');
+					angular.element('#focusShort').focus();
+		  		}, 100);
+			} else {
+				$scope.footerSize = "tall";
+				$timeout(function() {
+					console.log('Setting focus tall.');
+					angular.element('#focusTall').focus();
+				}, 100);
+			}
     	});
 	};	
 		
@@ -178,7 +195,11 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
-
+		if ($scope.todos.length < 4) {
+			$scope.footerSize = "short";
+		} else {
+			$scope.footerSize = "tall";
+		}
 	};
 
 	$scope.update = function() {
@@ -213,6 +234,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
 		$scope.showCompleted = !$scope.showCompleted;
 		// Clear any completed tasks from view and move them to the end when we turn showCompleted off.
 		if (!$scope.showCompleted) {		
+			var count = 0;
 			var oldTodos = $scope.todos;
 			$scope.addIndex = 0;
 			$scope.todos = [];
@@ -225,12 +247,23 @@ function TodoCtrl($scope, $routeParams, Todo) {
 					$scope.todos.push(todo);
 				}
 			});
-
 			// Write the this new list back to the server.
 			Todo.saveTodos($scope.todos, $scope.archiveName);
+			// Set footer toggle
+			if ( $scope.addIndex < 4) {
+				$scope.footerSize = "short";
+			} else {
+				$scope.footerSize = "tall";
+			}
 		}
 		else {
 			$scope.showCompletedLabel = "Hide Completed";
+			if ( $scope.todos.length < 4) {
+				$scope.footerSize = "short";
+			} else {
+				$scope.footerSize = "tall";
+			}
+		
 		}
 	};
 
@@ -255,6 +288,7 @@ function TodoCtrl($scope, $routeParams, Todo) {
  	$scope.showCompleted = false;
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
+ 	$scope.footerSize = "tall";
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
@@ -277,7 +311,12 @@ function TodoCtrl($scope, $routeParams, Todo) {
 			} else {
 				$scope.todos.push(todo);
 			}
-		});	
+		});
+		if ($scope.todos.length < 4) {
+			$scope.footerSize = "short";
+		} else {
+			$scope.footerSize = "tall";
+		}
 	})
 
 	Todo.getArchiveList(function(data) {

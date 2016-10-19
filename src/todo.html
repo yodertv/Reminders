@@ -8,7 +8,7 @@
 </ul>
 </header>
 
-<div class="container-fluid body-content">
+<div id="content-{{footerSize}}" class="container-fluid body-content">
 <table class="table table-striped">  
 	<tbody>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
@@ -22,10 +22,10 @@
       </span>
       </td>
     </tr>
-    <tr>
+    <tr ng-show="footerSize=='short'">
     <td><form ng-submit="addTodo()">
       <span class="show-{{showNewTask}}" >
-        <input type="text" ng-model="todoText" class="form-control" placeholder="+ New task..."></input>
+        <input id="#focusShort" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..." autofocus ></input>
       </span>
     </form></td>
     </tr>
@@ -33,10 +33,10 @@
 </table>
 </div>
 
-<footer>
-  <form ng-submit="addTodo()">
+<footer id="footer-{{footerSize}}">
+  <form ng-show="footerSize=='tall'" ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
-      <input type="text" ng-model="todoText" class="form-control" placeholder="+"></input>
+      <input id="#focusTall" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..." autofocus ></input>
     </span>
   </form>
 
