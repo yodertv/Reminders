@@ -21,10 +21,10 @@
         </ul>
       </td>
     </tr>
-    <tr>
+    <tr ng-show="footerSize=='short'">
     <td><form ng-submit="addNewList()">
       <span>
-        <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
+        <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..." autofocus ></input>
       </span>
     </form></td>
     </tr>
@@ -33,6 +33,13 @@
 </div>
 
 <footer id="footer-{{footerSize}}">
+
+  <form ng-show="footerSize=='tall'" ng-submit="addNewList()">
+    <span>
+      <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..." autofocus ></input>
+    </span>
+  </form>
+
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>

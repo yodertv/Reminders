@@ -154,7 +154,7 @@ function ListCtrl($scope, $location, Todo) {
 	});
 }
 
-function TodoCtrl($scope, $routeParams, Todo, $timeout) {
+function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 	// Uses todo.html
 	// This is the home page. Show current Todos. Hide other stuff	
 	$scope.addTodo = function() {
@@ -176,13 +176,13 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout) {
 			          element.focus();
 */
 					console.log('Setting focus short.');
-					angular.element('#focusShort').focus();
+					angular.element($document[0].querySelector('#focusShort')).focus();
 		  		}, 100);
 			} else {
 				$scope.footerSize = "tall";
 				$timeout(function() {
 					console.log('Setting focus tall.');
-					angular.element('#focusTall').focus();
+					angular.element($document[0].querySelector('#focusTall')).focus();
 				}, 100);
 			}
     	});
