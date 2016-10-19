@@ -10,7 +10,7 @@
 </header>
 
 <div id="content-{{footerSize}}" class="container-fluid body-content">
-<table ng-show="archives[0]" class="table table-striped"> 
+<table class="table table-striped"> 
   <tbody>  
     <tr ng-repeat="item in archives">
     	<td>
@@ -24,16 +24,9 @@
     <tr>
     <td><form ng-submit="addNewList()">
       <span>
-        <input type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
+        <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
       </span>
     </form></td>
-    </tr>
-  </tbody>  
-</table>
-<table ng-hide="archives[0]" class="table table-striped">  
-  <tbody>  
-    <tr>
-      <td ng-hide="archives[0]" >&nbsp;&nbsp;No lists.</td>
     </tr>
   </tbody>  
 </table>
