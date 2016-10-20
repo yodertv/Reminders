@@ -318,10 +318,18 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		});
 		if ($scope.todos.length < 4) {
 			$scope.footerSize = "short";
+			$timeout(function() {
+				console.log('Setting focus short.');
+				angular.element($document[0].querySelector('#focusShort')).focus();
+	  		});
 		} else {
 			$scope.footerSize = "tall";
+			$timeout(function() {
+				console.log('Setting focus tall.');
+				angular.element($document[0].querySelector('#focusTall')).focus();
+			});
 		}
-	})
+	});
 
 	Todo.getArchiveList(function(data) {
 		buildArchiveList(data, $scope); // Needed to support the next button.
