@@ -171,19 +171,15 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 			if ($scope.todos.length < 4) {
 				$scope.footerSize = "short";
 				$timeout(function() {
-/*			        var element = $window.document.getElementById(id);
-			        if(element)
-			          element.focus();
-*/
 					console.log('Setting focus short.');
 					angular.element($document[0].querySelector('#focusShort')).focus();
-		  		}, 100);
+		  		});
 			} else {
 				$scope.footerSize = "tall";
 				$timeout(function() {
 					console.log('Setting focus tall.');
 					angular.element($document[0].querySelector('#focusTall')).focus();
-				}, 100);
+				});
 			}
     	});
 	};	
@@ -197,8 +193,16 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
 		if ($scope.todos.length < 4) {
 			$scope.footerSize = "short";
+			$timeout(function() {
+				console.log('Setting focus short.');
+				angular.element($document[0].querySelector('#focusShort')).focus();
+	  		});
 		} else {
 			$scope.footerSize = "tall";
+			$timeout(function() {
+				console.log('Setting focus tall.');
+				angular.element($document[0].querySelector('#focusTall')).focus();
+			});
 		}
 	};
 

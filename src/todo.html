@@ -22,21 +22,19 @@
       </span>
       </td>
     </tr>
-    <tr ng-show="footerSize=='short'">
-    <td><form ng-submit="addTodo()">
-      <span class="show-{{showNewTask}}" >
-        <input id="#focusShort" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..." autofocus ></input>
-      </span>
-    </form></td>
-    </tr>
   </tbody>
 </table>
+<form ng-show="footerSize=='short'" ng-submit="addTodo()">
+  <span>
+    <input id="focusShort" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..." autofocus ></input>
+  </span>
+</form>
 </div>
 
 <footer id="footer-{{footerSize}}">
   <form ng-show="footerSize=='tall'" ng-submit="addTodo()">
     <span class="show-{{showNewTask}}" >
-      <input id="#focusTall" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..." autofocus ></input>
+      <input id="focusTall" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..."></input>
     </span>
   </form>
 
