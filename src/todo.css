@@ -11,8 +11,8 @@ body .container-fluid.body-content {
   left: 0;
   overflow-y: auto;
   padding-top:0%;
-  padding-left:2%;
-  padding-right:2%;
+  padding-left:0%;
+  padding-right:0%;
   background-color:#dcdcdc;
   font-size:20px;
 }
@@ -23,8 +23,8 @@ header {
     right: 0;
     top: 0;
     background-color: #dcdcdc;
-    padding-left:2%;
-    padding-right:2%;
+    padding-left:0%;
+    padding-right:0%;
     height: 54px;
     font-size:24px;
 }
@@ -35,8 +35,8 @@ footer {
     right: 0;
     bottom: 0;
     background-color: #dcdcdc;
-    padding-left:2%;
-    padding-right:2%;
+    padding-left:0%;
+    padding-right:0%;
     height: 108px;
     font-size:24px;
 }
@@ -71,6 +71,12 @@ input[type="text"]
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
+}
+
+#focusTall {
+}
+
+#focusShort {
 }
 
 #content-tall {
