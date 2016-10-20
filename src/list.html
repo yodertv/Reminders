@@ -1,7 +1,7 @@
 <!-- list.html -->
 <header id="header">
 <ul class="nav nav-pills">
-  <li  style="display:inline-block; width: calc(100% - 57px);"> <form ng-submit="searchTodos()">
+  <li  style="width: calc(100% - 57px);padding-top: 2%"> <form ng-submit="searchTodos()">
     <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search reminders..."></input></span>
     </form>
   </li>
@@ -21,25 +21,19 @@
         </ul>
       </td>
     </tr>
-    <tr ng-show="footerSize=='short'">
-    <td><form ng-submit="addNewList()">
-      <span>
-        <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..." autofocus ></input>
-      </span>
-    </form></td>
-    </tr>
   </tbody>  
 </table>
+<form ng-show="footerSize=='short'" ng-submit="addNewList()" style="padding-top: 0px" >
+    <input id="focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
+</form>
 </div>
 
 <footer id="footer-{{footerSize}}">
-
   <form ng-show="footerSize=='tall'" ng-submit="addNewList()">
     <span>
-      <input id="#focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..." autofocus ></input>
+      <input id="focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
     </span>
   </form>
-
   <ul class="nav nav-pills dropup">
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></a>
