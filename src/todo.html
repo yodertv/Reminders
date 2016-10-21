@@ -9,7 +9,7 @@
 </header>
 
 <div id="content-{{footerSize}}" class="container-fluid body-content">
-<table class="table table-striped">  
+<table class="table table-striped" style="border-collapse: collapse;">  
 	<tbody>
     <tr ng-repeat="todo in todos | filter:showTaskItem">
       <td>
@@ -24,6 +24,7 @@
     </tr>
   </tbody>
 </table>
+<p>test</p>
 <form ng-show="footerSize=='short'" ng-submit="addTodo()">
   <span>
     <input id="focusShort" type="text" ng-model="todoText" class="form-control" placeholder="+ New task..."></input>
