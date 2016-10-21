@@ -30,24 +30,25 @@ header {
 }
 
 footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #dcdcdc;
-    padding-left:0%;
-    padding-right:0%;
-    height: 108px;
-    font-size:24px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #dcdcdc;
+  padding-left:0%;
+  padding-right:0%;
+  height: 108px;
+  font-size:24px;
 }
 
 form input {
-    width: 100%;
+  width: 100%;
 }
 
 input[type="text"]
 {
     font-size:24px;
+    line-height: 24px;
 }
 
 .done-true {
@@ -74,9 +75,11 @@ input[type="text"]
 }
 
 #focusTall {
+  line-height: 20px;
 }
 
 #focusShort {
+  line-height: 20px;
 }
 
 #content-tall {

@@ -1,7 +1,7 @@
 <!-- list.html -->
 <header id="header">
 <ul class="nav nav-pills">
-  <li  style="width: calc(100% - 57px);padding-top: 2%"> <form ng-submit="searchTodos()">
+  <li  style="width: calc(100% - 57px);"> <form ng-submit="searchTodos()">
     <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search reminders..."></input></span>
     </form>
   </li>
@@ -24,7 +24,7 @@
   </tbody>  
 </table>
 <form ng-show="footerSize=='short'" ng-submit="addNewList()" style="padding-top: 0px" >
-    <input id="focusShort" type=text ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
+    <input id="focusShort" type="text" ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
 </form>
 </div>
 
