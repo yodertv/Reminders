@@ -136,7 +136,7 @@ function ListCtrl($scope, $location, Todo) {
   		}
   	}
 
-	$scope.footerSize = 'tall';
+	$scope.footerSize = 'short';
 	$scope.showNext="hidden";
 	$scope.showDelete = false;
 	$scope.archives=[];
