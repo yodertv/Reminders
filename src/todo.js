@@ -36,7 +36,7 @@ function WelcomeCtrl($scope, $location, UserService) {
   	}
 
 	// console.log("location=", $location.path());
-	$scope.footerSize = 'tall';
+	$scope.footerSize = 'short';
 	$scope.production = true;
 	$scope.logoutfromgoogle = false;
 	$scope.authenticated = false;

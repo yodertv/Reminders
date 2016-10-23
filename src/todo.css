@@ -6,7 +6,7 @@ html {
 body .container-fluid.body-content {
   position: absolute;
   top: 54px;
-  bottom: 108px;
+  bottom: 54px;
   right: 0;
   left: 0;
   overflow-y: auto;
@@ -37,7 +37,7 @@ footer {
   background-color: #dcdcdc;
   padding-left:0%;
   padding-right:0%;
-  height: 108px;
+  height: 54px;
   font-size:24px;
 }
 
