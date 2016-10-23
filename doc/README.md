@@ -50,11 +50,11 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 
 ### Version 0.5.2 (10.22.2016)
-- Need to calculate number of rows visible and scroll to add index if possible.
+- Need to calculate number of rows visible and scroll to add index if possible. Use varible.
 - Check on angular version. Angular home page demos use 1.5.8.
-- Footer size to changes between pages and based on content size.
+- Footer size changes between pages and based on content size.
 - Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
-- Refactored file names to reflect the new use case of list instead of history. Eliminated one html file. 
+- Refactored file names to reflect the new use case of list instead of history. Eliminated one partial html file. 
 
 ### Version 0.5.1 (10.15.2016)
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
