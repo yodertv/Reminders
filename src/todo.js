@@ -129,7 +129,7 @@ function ListCtrl($scope, $location, Todo) {
   				$scope.showNext="hidden";
   			}
   		}
-  		if ($scope.archives.length < 4) {
+  		if ($scope.archives.length < $scope.tableSize) {
   			$scope.footerSize = "short";
   		} else {
   			$scope.footerSize = "tall";
@@ -143,10 +143,11 @@ function ListCtrl($scope, $location, Todo) {
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
 	$scope.archives[0] = "..loading..";
+	$scope.tableSize = 11; // Todo: content size / table row height.
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
-		if ($scope.archives.length < 4) {
+		if ($scope.archives.length < $scope.tableSize) {
 			$scope.footerSize = "short";
 		} else {
 			$scope.footerSize = "tall";
@@ -168,7 +169,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				"showInView" : returnObj.showInView, 
 				"_id" : returnObj._id
 			});
-			if ($scope.todos.length < 4) {
+			if ($scope.todos.length < $scope.tableSize) {
 				$scope.footerSize = "short";
 				$timeout(function() {
 					console.log('Setting focus short.');
@@ -191,7 +192,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
-		if ($scope.todos.length < 4) {
+		if ($scope.todos.length < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
 				console.log('Setting focus short.');
@@ -254,7 +255,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 			// Write the this new list back to the server.
 			Todo.saveTodos($scope.todos, $scope.archiveName);
 			// Set footer toggle
-			if ( $scope.addIndex < 4) {
+			if ( $scope.addIndex < $scope.tableSize) {
 				$scope.footerSize = "short";
 			} else {
 				$scope.footerSize = "tall";
@@ -262,7 +263,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		}
 		else {
 			$scope.showCompletedLabel = "Hide Completed";
-			if ( $scope.todos.length < 4) {
+			if ( $scope.todos.length < $scope.tableSize) {
 				$scope.footerSize = "short";
 			} else {
 				$scope.footerSize = "tall";
@@ -293,6 +294,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
  	$scope.footerSize = "tall";
+ 	$scope.tableSize = 11; // Todo: content size / table row heigth.
  	
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
@@ -316,7 +318,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				$scope.todos.push(todo);
 			}
 		});
-		if ($scope.todos.length < 4) {
+		if ($scope.todos.length < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
 				console.log('Setting focus short.');

@@ -28,7 +28,7 @@ Replace the weekly task list that I keep on paper.
 - Displays a ```...loading...``` message while fetching data. 
 
 #Deployments:
-- TodoServer can be hosted on localhost, localnet and Modulus.
+- TodoServer can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
 - Mongodb can be hosted on localhost, localnet, and MongoLab.
 - All deployment knowledge is in make.js and build_props_files.
 
@@ -49,11 +49,12 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
-### Version 0.5.2 (10.15.2016)
-- Let's get the footer size to change between pages.
+### Version 0.5.2 (10.22.2016)
+- Need to calculate number of rows visible and scroll to add index if possible.
+- Check on angular version. Angular home page demos use 1.5.8.
+- Footer size to changes between pages and based on content size.
 - Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
 - Refactored file names to reflect the new use case of list instead of history. Eliminated one html file. 
-- Check on angular version. Angular home page demos use 1.5.8.
 
 ### Version 0.5.1 (10.15.2016)
 - Using apple reminders as a model. Have merged TodoCtrl with ListCtrl.
@@ -61,7 +62,7 @@ Replace the weekly task list that I keep on paper.
 - Renamed default collection "todo" to "Reminders".
 - Ability to reuse common tasks. See repeating task below.
 - Give the user a way to reuse tasks. Simply uncheck the completed state to bring back an existing task.
-- Fixed (bug#41)
+- Fixed (bug#41) where old style list names didn't show properly.
 - Upgrade to mongojs 2.1
 - Refactored by changing archives to lists, and show completed, new list creation instead of archive button
 - Split welcome page so all info that doesn't require auth is shown.
