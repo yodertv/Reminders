@@ -81,7 +81,7 @@ input[type="text"]
 }
 
 #content-tall {
-    bottom:108px;   /* Height of the footer element */
+    bottom:90px;   /* Height of the footer element */
 }
 #content-short {
     bottom:54px;   /* Height of the footer element */
@@ -89,7 +89,7 @@ input[type="text"]
 
 #footer-tall {
     width:100%;
-    height:108px;
+    height:90px;
     position:absolute;
     bottom:0;
     left:0;
