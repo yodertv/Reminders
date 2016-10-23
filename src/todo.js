@@ -293,7 +293,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
  	$scope.showCompleted = false;
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
- 	$scope.footerSize = "tall";
+ 	$scope.footerSize = "short";
  	$scope.tableSize = 11; // Todo: content size / table row heigth.
  	
  	$scope.todos = [];
