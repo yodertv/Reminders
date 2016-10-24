@@ -45,8 +45,7 @@ function WelcomeCtrl($scope, $location, UserService) {
 	if ($location.path() == '/authfailed') {
 		$scope.authFailed = true;
 		$scope.authFailedMsg = "User ID or password incorect."
-	 };
-
+ 	};
 	$scope.user = UserService.get( function(user){
 		// console.log(user);
 		$scope.authenticated = (user.email != undefined);
@@ -89,7 +88,7 @@ function buildArchiveList(data, $scope) {
 	};
 }
 
-function ListCtrl($scope, $location, Todo) {  
+function ListCtrl($scope, $location, Todo, $document) {  
 	// Uses list.html.
 
 	$scope.searchTodos = function() {
@@ -143,7 +142,8 @@ function ListCtrl($scope, $location, Todo) {
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
 	$scope.archives[0] = "..loading..";
-	$scope.tableSize = 11; // Todo: content size / table row height.
+ 	$scope.tableSize = Math.trunc(($document.height() - 108) / 48);
+ 	console.log("tableSize=", $scope.tableSize);
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
@@ -294,8 +294,10 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
  	$scope.footerSize = "short";
- 	$scope.tableSize = 11; // Todo: content size / table row heigth.
- 	
+ 	$scope.tableSize = Math.trunc(($document.height() - 108) / 48);
+
+ 	console.log("tableSize=", $scope.tableSize);
+
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
 
