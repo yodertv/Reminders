@@ -169,16 +169,16 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				"showInView" : returnObj.showInView, 
 				"_id" : returnObj._id
 			});
-			if ($scope.todos.length < $scope.tableSize) {
+			if ($scope.addIndex < $scope.tableSize) {
 				$scope.footerSize = "short";
 				$timeout(function() {
-					console.log('Setting focus short.');
+					//console.log('Setting focus short.');
 					angular.element($document[0].querySelector('#focusShort')).focus();
 		  		});
 			} else {
 				$scope.footerSize = "tall";
 				$timeout(function() {
-					console.log('Setting focus tall.');
+					//console.log('Setting focus tall.');
 					angular.element($document[0].querySelector('#focusTall')).focus();
 				});
 			}
@@ -187,21 +187,22 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
-		//	console.log(index)
+		if (index <= $scope.addIndex) { $scope.addIndex-- };
+		// console.log($scope.addIndex);
 		$scope.todos.splice(index,1); // remove from memory
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
-		if ($scope.todos.length < $scope.tableSize) {
+		if ($scope.addIndex < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
-				console.log('Setting focus short.');
+				//console.log('Setting focus short.');
 				angular.element($document[0].querySelector('#focusShort')).focus();
 	  		});
 		} else {
 			$scope.footerSize = "tall";
 			$timeout(function() {
-				console.log('Setting focus tall.');
+				//console.log('Setting focus tall.');
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
 		}
@@ -274,12 +275,9 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 
 	$scope.remaining = function() {
 		var count = 0;
-//		var index = 0;
 		angular.forEach($scope.todos, function(todo) {
-//			index++;
 			if ( todo.done == false ) {
 				count++;
-//				$scope.addIndex = index; // Set the addTodo insert point at the last uncompleted task in the list.
 			}
 		});
 		return count;
@@ -320,16 +318,16 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				$scope.todos.push(todo);
 			}
 		});
-		if ($scope.todos.length < $scope.tableSize) {
+		if ($scope.addIndex < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
-				console.log('Setting focus short.');
+				//console.log('Setting focus short.');
 				angular.element($document[0].querySelector('#focusShort')).focus();
 	  		});
 		} else {
 			$scope.footerSize = "tall";
 			$timeout(function() {
-				console.log('Setting focus tall.');
+				//console.log('Setting focus tall.');
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
 		}
