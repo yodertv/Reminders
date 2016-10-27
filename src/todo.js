@@ -111,7 +111,7 @@ function ListCtrl($scope, $location, Todo, $document) {
 		}
 	};
 
-	$scope.deleteList = function() {
+	$scope.deleteList = function($document) {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item;
@@ -130,8 +130,16 @@ function ListCtrl($scope, $location, Todo, $document) {
   		}
   		if ($scope.archives.length < $scope.tableSize) {
   			$scope.footerSize = "short";
+			$timeout(function() {
+				//console.log('Setting focus short.');
+				angular.element($document[0].querySelector('#focusShort')).focus();
+	  		});
   		} else {
   			$scope.footerSize = "tall";
+			$timeout(function() {
+				//console.log('Setting focus tall.');
+				angular.element($document[0].querySelector('#focusTall')).focus();
+			});
   		}
   	}
 
@@ -149,8 +157,16 @@ function ListCtrl($scope, $location, Todo, $document) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
 		if ($scope.archives.length < $scope.tableSize) {
 			$scope.footerSize = "short";
+			$timeout(function() {
+				//console.log('Setting focus short.');
+				angular.element($document[0].querySelector('#focusShort')).focus();
+	  		});
 		} else {
 			$scope.footerSize = "tall";
+			$timeout(function() {
+				//console.log('Setting focus tall.');
+				angular.element($document[0].querySelector('#focusTall')).focus();
+			});
 		}
 	});
 }
@@ -183,7 +199,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				});
 			}
     	});
-	};	
+	};
 		
 	$scope.delete = function() {
 		var index = $scope.todos.indexOf(this.todo);
@@ -258,16 +274,32 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 			// Set footer toggle
 			if ( $scope.addIndex < $scope.tableSize) {
 				$scope.footerSize = "short";
+				$timeout(function() {
+					//console.log('Setting focus short.');
+					angular.element($document[0].querySelector('#focusShort')).focus();
+		  		});
 			} else {
 				$scope.footerSize = "tall";
+				$timeout(function() {
+					//console.log('Setting focus tall.');
+					angular.element($document[0].querySelector('#focusTall')).focus();
+				});
 			}
 		}
 		else {
 			$scope.showCompletedLabel = "Hide Completed";
 			if ( $scope.todos.length < $scope.tableSize) {
 				$scope.footerSize = "short";
+				$timeout(function() {
+					//console.log('Setting focus short.');
+					angular.element($document[0].querySelector('#focusShort')).focus();
+		  		});
 			} else {
 				$scope.footerSize = "tall";
+				$timeout(function() {
+					//console.log('Setting focus tall.');
+					angular.element($document[0].querySelector('#focusTall')).focus();
+				});
 			}
 		
 		}
