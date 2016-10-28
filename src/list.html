@@ -1,7 +1,7 @@
 <!-- list.html -->
 <header id="header">
 <ul class="nav nav-pills">
-  <li  style="width: calc(100% - 57px);"> <form ng-submit="searchTodos()">
+  <li  style="width: calc(100% - 56px);"> <form ng-submit="searchTodos()">
     <input type="text" ng-model="todoSearchText" class="form-control" placeholder="search reminders..."></input></span>
     </form>
   </li>
@@ -23,7 +23,7 @@
     </tr>
   </tbody>  
 </table>
-<form ng-show="footerSize=='short'" ng-submit="addNewList()" style="padding-top: 0px" >
+<form ng-show="footerSize=='short'" ng-submit="addNewList()">
     <input id="focusShort" type="text" ng-model="newListText" class="form-control" placeholder="+ New list..."></input>
 </form>
 </div>
@@ -45,7 +45,8 @@
         <li><a tabindex="-1" href="/logout" target="_self">Logout</a></li>
       </ul>
     </li>
-    <li style="font-size:16px;width: calc(100% - 120px);padding:2%;padding-top:22px;">Reminders @VERSION@
+    <li style="font-size:16px;width: calc(100% - 120px);padding:2%;padding-top:22px;padding-bottom:0px;">
+      Reminders @VERSION@
       <p style="float:right">2016 Yoder Code</p>
       <i style="float:right" class="glyphicon glyphicon-copyright-mark"></i>
     </li>

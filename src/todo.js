@@ -88,7 +88,7 @@ function buildArchiveList(data, $scope) {
 	};
 }
 
-function ListCtrl($scope, $location, Todo, $document) {  
+function ListCtrl($scope, $location, Todo, $document, $timeout) {  
 	// Uses list.html.
 
 	$scope.searchTodos = function() {
@@ -111,7 +111,7 @@ function ListCtrl($scope, $location, Todo, $document) {
 		}
 	};
 
-	$scope.deleteList = function($document) {
+	$scope.deleteList = function() {
   		// Delete this archive.
   		var index = $scope.archives.indexOf(this.item);
   		var arch = this.item;
