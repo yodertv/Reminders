@@ -150,7 +150,7 @@ function ListCtrl($scope, $location, Todo, $document, $timeout) {
 	$scope.newListText = "";
 	$scope.todoSearchText = "";
 	$scope.archives[0] = "..loading..";
- 	$scope.tableSize = Math.trunc(($document.height() - 108) / 48);
+ 	$scope.tableSize = Math.trunc(($document.height() - 112) / 50);
  	console.log("tableSize=", $scope.tableSize);
 
 	Todo.getArchiveList(function(data) {
@@ -324,7 +324,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
  	$scope.showCompletedLabel = "Show Completed";
  	$scope.addIndex = 0;
  	$scope.footerSize = "short";
- 	$scope.tableSize = Math.trunc(($document.height() - 108) / 48);
+ 	$scope.tableSize = Math.trunc(($document.height() - 112) / 50);
 
  	console.log("tableSize=", $scope.tableSize);
 
