@@ -29,7 +29,7 @@ Replace the weekly task list that I keep on paper.
 
 #Deployments:
 - TodoServer can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
-- Mongodb can be hosted on localhost, localnet, and MongoLab.
+- Mongodb can be hosted on localhost, localnet, and mLab.
 - All deployment knowledge is in make.js and build_props_files.
 
 #Dependancies:
@@ -49,10 +49,10 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
-### Version 0.5.2 (10.22.2016)
+### Version 0.5.2 (10.29.2016)
 - Need to calculate number of rows visible and scroll to add index if possible. Use varible.
 - Check on angular version. Angular home page demos use 1.5.8.
-- Footer size changes between pages and based on content size.
+- Footer size changes between pages and based on content size. Use function to simplify code.
 - Move text input filed to end of list until end of list is obscured. Then dock in the footer as it does now. Should fix Bug(#42).
 - Refactored file names to reflect the new use case of list instead of history. Eliminated one partial html file. 
 

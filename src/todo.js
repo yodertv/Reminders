@@ -57,6 +57,22 @@ function WelcomeCtrl($scope, $location, UserService) {
 	});
 }
 
+function adjustFooterIfNeeded(offset, $scope, $timeout, $document){
+	if (offset < $scope.tableSize) {
+		$scope.footerSize = "short";
+		$timeout(function() {
+			//console.log('Setting focus short.');
+			angular.element($document[0].querySelector('#focusShort')).focus();
+		});
+	} else {
+		$scope.footerSize = "tall";
+		$timeout(function() {
+			//console.log('Setting focus tall.');
+			angular.element($document[0].querySelector('#focusTall')).focus();
+		});
+	}
+}
+
 function buildArchiveList(data, $scope) { 
     // Builds the set of lists the user has create and stores them in $scope.archives, sets nextArchiveName and showNext view element 
     // from the set of collections in DBString for the scope passed in and the current name.
@@ -128,6 +144,9 @@ function ListCtrl($scope, $location, Todo, $document, $timeout) {
   				$scope.showNext="hidden";
   			}
   		}
+  		adjustFooterIfNeeded($scope.archives.length, $scope, $timeout, $document);
+
+/*
   		if ($scope.archives.length < $scope.tableSize) {
   			$scope.footerSize = "short";
 			$timeout(function() {
@@ -141,6 +160,7 @@ function ListCtrl($scope, $location, Todo, $document, $timeout) {
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
   		}
+*/
   	}
 
 	$scope.footerSize = 'short';
@@ -155,6 +175,8 @@ function ListCtrl($scope, $location, Todo, $document, $timeout) {
 
 	Todo.getArchiveList(function(data) {
   		buildArchiveList(data, $scope); // These are displayed in ListCtrl
+  		adjustFooterIfNeeded($scope.archives.length, $scope, $timeout, $document)
+  		/*
 		if ($scope.archives.length < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
@@ -168,6 +190,7 @@ function ListCtrl($scope, $location, Todo, $document, $timeout) {
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
 		}
+		*/
 	});
 }
 
@@ -185,6 +208,8 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				"showInView" : returnObj.showInView, 
 				"_id" : returnObj._id
 			});
+			adjustFooterIfNeeded($scope.addIndex, $scope, $timeout, $document);
+			/*
 			if ($scope.addIndex < $scope.tableSize) {
 				$scope.footerSize = "short";
 				$timeout(function() {
@@ -198,6 +223,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 					angular.element($document[0].querySelector('#focusTall')).focus();
 				});
 			}
+			*/
     	});
 	};
 		
@@ -209,6 +235,8 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 		Todo.remove({todo : $scope.archiveName, id : this.todo._id}); // remove from db
 		// Leave edit mode when no more todos.
 		if ( $scope.todos.length == 0 ) { $scope.showDelete = false };
+		adjustFooterIfNeeded($scope.addIndex, $scope, $timeout, $document);
+		/*
 		if ($scope.addIndex < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
@@ -222,6 +250,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
 		}
+		*/
 	};
 
 	$scope.update = function() {
@@ -272,6 +301,8 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 			// Write the this new list back to the server.
 			Todo.saveTodos($scope.todos, $scope.archiveName);
 			// Set footer toggle
+			adjustFooterIfNeeded($scope.addIndex, $scope, $timeout, $document);
+			/*
 			if ( $scope.addIndex < $scope.tableSize) {
 				$scope.footerSize = "short";
 				$timeout(function() {
@@ -285,9 +316,12 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 					angular.element($document[0].querySelector('#focusTall')).focus();
 				});
 			}
+			*/
 		}
 		else {
 			$scope.showCompletedLabel = "Hide Completed";
+			adjustFooterIfNeeded($scope.todos.length, $scope, $timeout, $document);
+			/*
 			if ( $scope.todos.length < $scope.tableSize) {
 				$scope.footerSize = "short";
 				$timeout(function() {
@@ -301,6 +335,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 					angular.element($document[0].querySelector('#focusTall')).focus();
 				});
 			}
+			*/
 		
 		}
 	};
@@ -350,6 +385,8 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				$scope.todos.push(todo);
 			}
 		});
+		adjustFooterIfNeeded($scope.addIndex, $scope, $timeout, $document);
+		/*
 		if ($scope.addIndex < $scope.tableSize) {
 			$scope.footerSize = "short";
 			$timeout(function() {
@@ -363,6 +400,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
 				angular.element($document[0].querySelector('#focusTall')).focus();
 			});
 		}
+		*/
 	});
 
 	Todo.getArchiveList(function(data) {
