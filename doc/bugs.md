@@ -1,7 +1,9 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#45)
+##Open Bugs -- Next: (Bug#46)
+
+###(Bug#45) -- Made for iPhone 6 plus. Doesn't adjust to iPhone 6 and likely iPhone 5.
 
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
