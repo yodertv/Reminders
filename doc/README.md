@@ -38,6 +38,7 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
+- Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
@@ -48,6 +49,9 @@ Replace the weekly task list that I keep on paper.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+
+### Version 0.5.3 (10.30.2016)
+
 
 ### Version 0.5.2 (10.29.2016)
 - Need to calculate number of rows visible and scroll to add index if possible. Use varible.

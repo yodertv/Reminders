@@ -1,7 +1,9 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#44)
+##Open Bugs -- Next: (Bug#45)
+
+###(Bug#44) -- Insert point in list is obscured when list is long.
 
 ###(Bug#43) -- Got this result somehow with 0.5.0 on my production db yodertvtodo on mLab.
 
@@ -12,9 +14,6 @@ s-ds043047:PRIMARY> db.Reminders.find()
 { "_id" : ObjectId("57fc6db006ed8e00f1ec4d03"), "text" : "New test", "done" : false, "showInView" : true }
 rs-ds043047:PRIMARY> 
 ```
-
-###(Bug#42) -- Entering a new task on iPhone obscures the entry point of the text for the new task.
-
 
 ###(Bug#40) -- todoServer doesn't handle DB Connection is destroyed error on modulus using mlab db for my big yodertvtodo db.
 ```
@@ -119,6 +118,10 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#42) -- Entering a new task on iPhone obscures the entry point of the text for the new task.
+- Partially fixed. Solved for cases where the list is smaller then the view port.
+Closed 8.28.2016 (46ae13a)
 
 ###(Bug#41) -- Lists with the archive name structure like todoSat-Aug-27-2016 don't load or save.
 - Now that I merged TodoCtrl w ListCtrl the todo's with dates in the name fail to work.
