@@ -51,6 +51,7 @@ Replace the weekly task list that I keep on paper.
 - Add a print feature.
 
 ### Version 0.5.3 (11.13.2016)
+- Updated to the latest stable version of angular 1.5.8.
 - Make copyright footer small enough for iphone 5.
 - Fixed related (Bug#45) for smaller screens. 
 

@@ -14,3 +14,15 @@ To add a new target:
 *
 *  To add new src files - Edit the SRC_FILE array.
 */
+
+Changing client side libraries:
+- Test by changing the build_props to use the CDN directly e.g.
+
+"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/",
+
+- Once it looks like it works use npm to download new versions and install locally. E.g. angular
+
+```
+% npm install angular@1.5.8
+% cp -p node_modules/angular/angular.min.js lib/js
+```
