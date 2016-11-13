@@ -3,8 +3,6 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#46)
 
-###(Bug#45) -- Made for iPhone 6 plus. Doesn't adjust to iPhone 6 and likely iPhone 5.
-
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
 ###(Bug#43) -- Got this result somehow with 0.5.0 on my production db yodertvtodo on mLab.
@@ -120,6 +118,9 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#45) -- Made for iPhone 6 plus. Doesn't adjust to iPhone 6 and likely iPhone 5.
+- Used javascript to set the initial scale and width.
 
 ###(Bug#42) -- Entering a new task on iPhone obscures the entry point of the text for the new task.
 - Partially fixed. Solved for cases where the list is smaller then the view port.

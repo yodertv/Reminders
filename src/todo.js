@@ -8,6 +8,16 @@ var todo = angular.module('todo', [
 	'TodoServices'
 ]);	
 
+var viewport = $('meta[name="viewport"]');
+
+if (screen.width <= 320) {
+    viewport.attr("content", "width=320, initial-scale=0.8"); 
+} else if (screen.width <= 980) {
+    viewport.attr("content", "width=device-width, initial-scale=1.0"); 
+} else {
+    viewport.attr("content", "width=980, initial-scale=1.1"); 
+}
+
 todo.config(['$routeProvider',
 	function($routeProvider) {
     	$routeProvider.

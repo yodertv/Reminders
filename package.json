@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node ./todoServer.js"
   },
-  "version": "0.5.2",
+  "version": "0.5.3",
   "engines": {
     "node": "5.1.0"
   },

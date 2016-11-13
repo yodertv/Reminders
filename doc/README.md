@@ -50,8 +50,9 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
-### Version 0.5.3 (10.30.2016)
-
+### Version 0.5.3 (11.13.2016)
+- Make copyright footer small enough for iphone 5.
+- Fixed related (Bug#45) for smaller screens. 
 
 ### Version 0.5.2 (10.29.2016)
 - Need to calculate number of rows visible and scroll to add index if possible. Use varible.
