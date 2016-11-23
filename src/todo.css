@@ -10,9 +10,9 @@ body .container-fluid.body-content {
   right: 0;
   left: 0;
   overflow-y: auto;
-  padding-top:0%;
-  padding-left:0%;
-  padding-right:0%;
+  padding-top:0;
+  padding-left:20%;
+  padding-right:20%;
   background-color:#dcdcdc;
   font-size:20px;
 }
@@ -23,8 +23,8 @@ header {
     right: 0;
     top: 0;
     background-color: #dcdcdc;
-    padding-left:0%;
-    padding-right:0%;
+    padding-left:20%;
+    padding-right:20%;
     height: 54px;
     font-size:24px;
 }
@@ -35,10 +35,34 @@ footer {
   right: 0;
   bottom: 0;
   background-color: #dcdcdc;
-  padding-left:0%;
-  padding-right:0%;
+  padding-left:20%;
+  padding-right:20%;
   height: 54px;
   font-size:24px;
+}
+
+@media only screen and (max-width: 960px) {
+    body .container-fluid.body-content, header, footer {
+/*        background-color:black; */
+        padding-left:10%;
+        padding-right:10%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    body .container-fluid.body-content, header, footer {
+      /*  background-color:lightblue; */
+        padding-left:0px;
+        padding-right:0px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    body.container-fluid.body-content, header, footer {
+        /*background-color:lightgreen; */
+        padding-left:0px;
+        padding-right:0px;
+    }
 }
 
 form input {

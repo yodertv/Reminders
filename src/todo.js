@@ -11,11 +11,11 @@ var todo = angular.module('todo', [
 var viewport = $('meta[name="viewport"]');
 
 if (screen.width <= 320) {
-    viewport.attr("content", "width=320, initial-scale=0.8"); 
-} else if (screen.width <= 980) {
-    viewport.attr("content", "width=device-width, initial-scale=1.0"); 
-} else {
-    viewport.attr("content", "width=980, initial-scale=1.1"); 
+    viewport.attr("content", "initial-scale=0.8"); 
+} else if (screen.width <= 640) {
+    viewport.attr("content", "initial-scale=1.0"); 
+} else if (screen.width <= 960) {
+    viewport.attr("content", "initial-scale=1.2"); 
 }
 
 todo.config(['$routeProvider',
