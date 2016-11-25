@@ -1,6 +1,7 @@
 /* todo css stylesheet */
 html {
   height: 100%;
+  background-color: grey;
 }
 
 body .container-fluid.body-content {
@@ -15,18 +16,20 @@ body .container-fluid.body-content {
   padding-right:20%;
   background-color:#dcdcdc;
   font-size:20px;
+  background-clip: content-box;
 }
 
 header {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    background-color: #dcdcdc;
-    padding-left:20%;
-    padding-right:20%;
-    height: 54px;
-    font-size:24px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: #dcdcdc;
+  padding-left:20%;
+  padding-right:20%;
+  height: 54px;
+  font-size:24px;
+  background-clip: content-box;
 }
 
 footer {
@@ -39,29 +42,20 @@ footer {
   padding-right:20%;
   height: 54px;
   font-size:24px;
+  background-clip: content-box;
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 975px) {
     body .container-fluid.body-content, header, footer {
-/*        background-color:black; */
         padding-left:10%;
         padding-right:10%;
     }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 675px) {
     body .container-fluid.body-content, header, footer {
-      /*  background-color:lightblue; */
-        padding-left:0px;
-        padding-right:0px;
-    }
-}
-
-@media only screen and (max-width: 320px) {
-    body.container-fluid.body-content, header, footer {
-        /*background-color:lightgreen; */
-        padding-left:0px;
-        padding-right:0px;
+        padding-left:0%;
+        padding-right:0%;
     }
 }
 
