@@ -12,7 +12,7 @@ Start mongo db:
 % pushd ~/mongowrk/ ; nohup mongod & popd
 ```
 
-## Run Todo server:
+## Run Todo server on localhost:
 ```
 % cd ./build ; node ./todoServer.js & cd ..
 ```
@@ -22,6 +22,22 @@ Start mongo db:
 % mongo
 ```
 
+## deploy to modulus
+
+build for modulus:
+```
+% ./make.js --silent install localhost
+```	
+
+Create a project on mondulus
+```
+% modulus project create
+```
+
+from build directory deploy by
+```
+% modulus deploy -p "Todos"
+```
 ## Create new DBs for to be assigned to users:
 - Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db.
 - Note the mongo connection string. Looks something like ds047057.mongolab.com:47057/frankstodos.
@@ -44,26 +60,9 @@ mod-mongo-aws-east-1a:PRIMARY>
 % modulus project restart -p Todos
 ```
 
-## deploy to modulus
-
-build for modulus:
-```
-% ./make.js --silent install localhost
-```	
-
-Create a project on mondulus
-```
-% modulus project create
-```
-
-from build directory deploy by
-```
-% modulus deploy -p "Todos"
-```
-
 ## Environment variables required for security credentials in production:
 ```
-Kats-Air:todo mike$ modulus env list -p <modulus project>
+% modulus env list -p <modulus project>
 Welcome to Modulus
 You are logged in as <user>
 Selecting <modulus project>
@@ -74,8 +73,9 @@ MONGO_USER = <dbUserName>
 MONGO_USER_SECRET = <dbUserSecret>
 GOOGLE_CLIENT_SECRET = <googleClientSecret>
 GOOGLE_CLIENT_ID = <googleClientId>
-Kats-Air:todo mike$
+%
 ```
+
 The MONGO variables depend on the userDbName in build_props.
 The GOOGLE variables are always required at run-time. They are only used when NODE_ENV=production.
 NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
@@ -85,9 +85,9 @@ NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
 Use build_prop.127.json and set the NODE_ENV to production to test google auth on loopback.
 
 ```
-$ export NODE_ENV=production
-$ ./make.js --silent install 127
-$ cd ./build ; node ./todoServer.js ; cd ..
+% export NODE_ENV=production
+% ./make.js --silent install 127
+% cd ./build ; node ./todoServer.js ; cd ..
 Todo Server v0.4.3
 Running on mikes-air.local:8080
 Node environment = PROD
@@ -100,5 +100,14 @@ i  email     	  db
 2 frank@example.com	localhost:27017/todos-for-frank
 3 yoderm01@gmail.com	localhost:27017/yodertvtodo
 4 yodercode@gmail.com	localhost:27017/todo_new_test
+
 ```
+
+## Creating a published version for yodertv/Reminders. Assumes that Todos is the name of the project and Reminders is the name of the published version and they are peers in the same directory.
+
+```
+% cd ~/src/Reminders
+% cp -pR ../Todos/src .
+% cp -pR ../Todos/doc .
+% cp -p ../Todos/* .
 
