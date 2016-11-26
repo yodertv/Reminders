@@ -52,6 +52,7 @@ Replace the weekly task list that I keep on paper.
 
 ### Version 0.5.4 (11.25.2016)
 - Delt with layout on bigger screens and handling iPhone 5 size.
+- Turned on https:// at modular.net and did associated google api and build_prop changes.
 
 ### Version 0.5.3 (11.13.2016)
 - Updated to the latest stable version of angular 1.5.8.
