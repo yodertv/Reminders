@@ -180,9 +180,7 @@ function initEnv(env){
 	    					'\n Using package:' + '\n' +
 	    					JSON.stringify(_pkg, null, " ") + '\n' +
 	    					'\n Using properties:' + '\n' +
-	    					JSON.stringify(_props, null, " ") +
-	    					'\n Using process environment:' + '\n' +
-	    					JSON.stringify(process.env, null, " ");
+	    					JSON.stringify(_props, null, " ");
 
 	    if (! program.silent) {
  	       console.log(build_manifest);
