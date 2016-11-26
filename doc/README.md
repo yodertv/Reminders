@@ -50,6 +50,9 @@ Replace the weekly task list that I keep on paper.
 - Support addvertisments.
 - Add a print feature.
 
+### Version 0.5.4 (11.25.2016)
+- Delt with layout on bigger screens and handling iPhone 5 size.
+
 ### Version 0.5.3 (11.13.2016)
 - Updated to the latest stable version of angular 1.5.8.
 - Make copyright footer small enough for iphone 5.
