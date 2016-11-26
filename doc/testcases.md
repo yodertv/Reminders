@@ -1,0 +1,31 @@
+Test Cases
+==========
+
+- Logon
+- Logon with registration
+	- Available DBs
+	- No DBs available
+	- Registered db doesn't exist
+- Welcome/About page logged in
+	- local auth
+	- google auth
+- Welcome/About page logged out
+	- local auth
+	- google auth
+- Menu: Welcome, Reminders, Lists, Logout
+- Logout:
+	- local auth
+	- google auth
+	- Logout from Google too
+	- Logout from each page menu and each logout button
+- Auth/local test login and login failure
+- Add task:
+ 	- text input stays below last added until reaching the bottom of the screen
+ 	- It should stay there after that
+- Complete task checkbox and strike-through decoration
+- Show Completed / Hide Completed
+- Edit / Delete tasks for list items
+- Delete lists
+- Next list navication button ">"
+- Next list button wraps around and continues through each list again
+- Deep linking to lists and welcome page

@@ -1,0 +1,16 @@
+{
+	"#0_comment" : "Build poperties for localnet deployment and testing.",
+	
+	"name" : "localnet",
+	"ENV" : "DEV",
+
+	"#1_comment" : "Should server log date?",
+	"logDate" : "true",
+
+	"#3_comment" : "Deployment details.",
+	"nodeURL" : "http://mikes-air.local:8080/",
+	"apiPath" : "api/todos/",
+	"angularRoot" : "js/",
+	"userDbName" : "ds043972.mongolab.com:43972/users"
+}
+

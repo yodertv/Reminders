@@ -1,0 +1,127 @@
+/* todo css stylesheet */
+html {
+  height: 100%;
+  background-color: grey;
+  background: linear-gradient(grey, lightgrey);
+}
+
+body .container-fluid.body-content {
+  position: absolute;
+  top: 54px;
+  bottom: 54px;
+  right: 20%;
+  left: 20%;
+  overflow-y: auto;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  background-color: #dcdcdc;
+  font-size: 20px;
+  background-clip: content-box;
+}
+
+header {
+  top: 0;
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  background-color: #dcdcdc;
+  height: 54px;
+  font-size: 24px;
+  background-clip: content-box;
+}
+
+footer {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  background-color: #dcdcdc;
+  height: 54px;
+  font-size:24px;
+  background-clip: content-box;
+}
+
+@media only screen and (max-width: 975px) {
+    body .container-fluid.body-content, header, footer {
+        left:10%;
+        right:10%;
+    }
+}
+
+@media only screen and (max-width: 675px) {
+    body .container-fluid.body-content, header, footer {
+        left:0;
+        right:0;
+    }
+}
+
+form input {
+  width: 100%;
+}
+
+input[type="text"]
+{
+    font-size:24px;
+    line-height: 24px;
+}
+
+.done-true {
+  text-decoration: line-through;
+  color: grey	;
+}
+
+.show-false {
+	display: none;
+}
+
+.show-true {
+	display: inline;
+}
+
+.table td {
+  text-align: left;
+  vertical-align: top;
+}
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#content-tall {
+    bottom:90px;   /* Height of the footer element */
+}
+#content-short {
+    bottom:54px;   /* Height of the footer element */
+}
+
+#footer-tall {
+    height:90px;
+    position:absolute;
+    bottom:0;
+}
+
+#footer-short {
+    height:54px;
+    position:absolute;
+    bottom:0;
+}
+
+#versionAndCopyright {
+  display:inline-block; 
+  width: calc(100% - 118px);
+  font-size:14px;
+  padding:2%;
+  padding-top:22px;
+  padding-bottom:0px;
+}
