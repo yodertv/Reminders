@@ -1,36 +1,35 @@
-Todos v0.5.2
-============
-#Objective:
+Reminders
+=========
 
-Replace the weekly task list that I keep on paper.
+Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
+Hosted by Modulus, Google APIs, and mLab.
+
+This cloud hosted [Reminders](https://todos-55911.onmodulus.net/welcome) application manages a user defined set of task lists. I use it to eplace the weekly task lists that I used to keep on paper. This will likely be more interesting to github community as an example of a fully working cloud hosted three tier application.
 
 #Curently demonstrates the following features:
-- Manages lists of Todos (aka tasks, or reminders).
-- Persists Todo data on mongodb using angular's ngResource, $http service and mongojs.
-- Archive - Save's list after removing items where done:true. When current day's archive exists add the done items to it.
-- Add - Adds a new task to the list with done:false; Saves the new task to the DB.
-- Checkbox - When checked: done:true; Item's text is displayed as strike-through; Saves the updated item to the DB.
-- History - Presents the list of archives and allows you to view them.
-- Delete icon - Deletes a task from the list. Delete icon and complete checkbox are hidden or shown based on (edit==true).
-- Displays total and remaing task counts.
-- Welcome page for login and current user info.
-- Dynamically assigns new users from a pool of pre-allocated DBs.
-- Tested on: nook browser, iTouch, Safari, iPhone, chrome on Mac, chrome on widows, and IE.
-- Responsive to three device sizes. Uses pills for navigation and a small menu.
-- Has a conditional forward button that takes you to the next older archive if it exists.
-- Routing supports browser back and deep linking to archives and any page. 
-- Editing and deleting items in an archive.
-- Editing and deleting archives.
+- Manages - lists of Reminders (aka tasks, or todos).
+- Persists - reminder data on mongodb using angular's ngResource, $http service and mongojs.
+- Show Completed - shows all reminders including items where done:true.
+- Hide Completed - hides all reminders where done:true. This also moves the completed items below the last undone item.
+- Add - new task to the list with done:false; Saves the new task to the DB.
+- Checkbox - when checked: done:true; Item's text is displayed as strike-through; Saves the updated item to the DB.
+- Edit icon - shows and hides the complete checkbox or delete icon.
+- Delete icon - trash can deletes a task from a list or a list from the lists.  
+- Welcome - This page gives information about the application and the current user if authenticated, otherwise it provides information about the application and a login dialog screen.
+- Assigns - storage for new users from a pool of pre-allocated DBs.
+- Used on - nook browser, iTouch, Safari, iPhone, Chrome on Mac.
+- Responsive - to three device sizes. Uses pills for navigation and a small menu.
+- Forward button - takes you to the next older archive if it exists.
+- HTM5 and Angular Routing - support browser back and deep linking to archives and any page. 
 - Rest apiPath is configurable.
 - Login to /auth/local, with failure notification.
 - Logs user name using a custom token of express (connect) logger.
-- Displays a helpful message on empty todo or history lists.
 - Displays a ```...loading...``` message while fetching data. 
 
 #Deployments:
-- TodoServer can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
-- Mongodb can be hosted on localhost, localnet, and mLab.
 - All deployment knowledge is in make.js and build_props_files.
+- Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
+- Mongodb can be hosted on localhost, localnet, and mLab.
 
 #Dependancies:
 - Client depends on glyphicons, bootstrap, angular, and jquery.
@@ -38,11 +37,10 @@ Replace the weekly task list that I keep on paper.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
 #Backlog:
-- Scroll to insert point when it is obscured.
+- Search feature- Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
-- Search feature
 - Add unit testing.
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.

@@ -82,7 +82,7 @@ NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
 
 ## Testing google auth on loopback (127.0.0.1)
 
-Use build_prop.127.json and set the NODE_ENV to production to test google auth on local host.
+Use build_prop.127.json and set the NODE_ENV to production to test google auth on loopback.
 
 ```
 $ export NODE_ENV=production

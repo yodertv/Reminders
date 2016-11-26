@@ -98,12 +98,6 @@ input[type="text"]
   margin-left: auto;
 }
 
-#focusTall {
-}
-
-#focusShort {
-}
-
 #content-tall {
     bottom:90px;   /* Height of the footer element */
 }
