@@ -4,7 +4,12 @@ Reminders
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
 Hosted by Modulus, Google APIs, and mLab.
 
-This cloud hosted [Reminders](https://todos-55911.onmodulus.net/welcome) application manages a user defined set of task lists. I use it to eplace the weekly task lists that I used to keep on paper. This will likely be more interesting to github community as an example of a fully working cloud hosted three tier application.
+This cloud hosted [Reminders App](https://todos-55911.onmodulus.net/welcome) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
+
+![alt text](./lib/img/RemindersApp.png "Reminder App")
+
+#Demo
+Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
 
 #Curently demonstrates the following features:
 - Manages - lists of Reminders (aka tasks, or todos).
@@ -231,7 +236,7 @@ This cloud hosted [Reminders](https://todos-55911.onmodulus.net/welcome) applica
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
 
-###1.4:
+###1.4
 - Deleting tasks in archives now works
 - Hosted in node.js StaticServer.js @ http://desk-pc
 - Refactored getArchiveList into it's own function and moved into service, mongolab.js.
