@@ -1,5 +1,5 @@
-
-# run-book.md
+Run-book
+========
 
 ## build the project:
 ```
@@ -22,22 +22,6 @@ Start mongo db:
 % mongo
 ```
 
-## deploy to modulus
-
-build for modulus:
-```
-% ./make.js --silent install localhost
-```	
-
-Create a project on mondulus
-```
-% modulus project create
-```
-
-from build directory deploy by
-```
-% modulus deploy -p "Todos"
-```
 ## Create new DBs for to be assigned to users:
 - Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db.
 - Note the mongo connection string. Looks something like ds047057.mongolab.com:47057/frankstodos.
