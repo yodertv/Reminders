@@ -90,8 +90,9 @@ i  email     	  db
 ## Creating a published version for yodertv/Reminders. Assumes that Todos is the name of the project and Reminders is the name of the published version and they are peers in the same directory.
 
 ```
-% cd ~/src/Reminders
-% cp -pR ../Todos/src .
-% cp -pR ../Todos/doc .
-% cp -p ../Todos/* .
-
+cd ~/src/Reminders
+cp -pR ../Todos/src .
+cp -pR ../Todos/doc .
+cp -p ../Todos/* .
+cp -p ../Todos/lib/img/RemindersApp.png ./lib/img
+```

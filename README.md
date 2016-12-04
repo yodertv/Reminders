@@ -1,4 +1,4 @@
-Reminders 
+Reminders
 =========
 
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
