@@ -1,4 +1,4 @@
-Reminders
+Reminders 
 =========
 
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
@@ -11,7 +11,10 @@ This cloud hosted [Reminders App](https://todos-55911.onmodulus.net/welcome) man
 #Demo
 Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
 
-#Curently demonstrates the following features:
+#Docs
+[Reminders App Documentation](https://github.com/yodertv/Reminders/tree/master/doc) has simple notes for bugs, build, test and run.
+
+#Features
 - Manages - lists of Reminders (aka tasks, or todos).
 - Persists - reminder data on mongodb using angular's ngResource, $http service and mongojs.
 - Show Completed - shows all reminders including items where done:true.
@@ -31,27 +34,34 @@ Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
 - Logs user name using a custom token of express (connect) logger.
 - Displays a ```...loading...``` message while fetching data. 
 
-#Deployments:
+#Deployments
 - All deployment knowledge is in make.js and build_props_files.
 - Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
 - Mongodb can be hosted on localhost, localnet, and mLab.
 
-#Dependancies:
+#Dependancies
 - Client depends on glyphicons, bootstrap, angular, and jquery.
 - Server depends on express, passport, http, and mongojs.
 - DB depends on MongoLab and modulus for production and local mongodb for dev.
 
-#Backlog:
-- Search feature- Scroll to insert point when it is obscured.
+#Backlog
+- Search feature
+- Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
 - Support scheduled tasks
 - Add unit testing.
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
+- Work off-line.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+
+### Version 0.5.5 (11.25.2016)
+- More responsive with better looking boarders.
+- Secured with https.
+- Prepared for publishing as yodertv/Reminders with improved docs and Readme.
 
 ### Version 0.5.4 (11.25.2016)
 - Delt with layout on bigger screens and handling iPhone 5 size.
