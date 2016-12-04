@@ -1,8 +1,7 @@
 /* todo css stylesheet */
 html {
-  height: 100%;
   background-color: grey;
-  background: linear-gradient(grey, lightgrey);
+  background: linear-gradient(lightgrey, grey);
 }
 
 body .container-fluid.body-content {
