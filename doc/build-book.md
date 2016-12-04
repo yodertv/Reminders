@@ -1,10 +1,36 @@
-# build-book.md
+Build Book
+==========
 
-To add a new target:
+## Build
+- Install node.
+- Install npm.
+- Clone yodertv/Reminders from Github.
+- Resolve dependancies by ```npm update```.
+- Make the deployment you want
+
+## Deploy to modulus
+
+Build for modulus:
+```
+% ./make.js --silent install localhost
+```	
+
+Create a project on mondulus
+```
+% modulus project create
+```
+
+From the build directory deploy by
+```
+% modulus deploy -p "Todos"
+```
+
+##Add a new target
 - choose a new {name}.
 - change make.js and add the new target {name}.
 - create a build_props.{name}.json file by coping an existing one.
 
+```
 /**
 * Setting up new environments:
 * 1) Copy existing build_props.<environment name>.json file and change the <environment name> to the new environment.
@@ -14,11 +40,14 @@ To add a new target:
 *
 *  To add new src files - Edit the SRC_FILE array.
 */
+```
 
-Changing client side libraries:
+##Change client side libraries
 - Test by changing the build_props to use the CDN directly e.g.
 
+```
 "angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/",
+```
 
 - Once it looks like it works use npm to download new versions and install locally. E.g. angular
 
