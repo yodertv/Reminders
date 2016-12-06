@@ -168,11 +168,12 @@ function initEnv(env){
 		_props = require(prop_file_name);
 		BLD_FILES.push(prop_file_name);
 
+		var git_log = _shell.exec('git log --graph --oneline --decorate --all -n 5', {'silent':'true'});
+		var git_status = _shell.exec('git status', {'silent':'true'});
 		var build_date = new Date();
 
 		build_manifest = '\n ' + program.name() + ' started with argv="' + process.argv + '"\n' +
-							'\n ' + build_date.toString() + '\n' +  // Includes time.
-							// build_date.toTimeString() + '\n' +
+							'\n ' + build_date.toString() + '\n' + 
 							'\n Target environment=' + _env + '\n' +
 							'\n Build platform=' + process.platform + '\n' +
 							'\n Build host=' + _os.hostname() + '\n ' +
@@ -180,7 +181,11 @@ function initEnv(env){
 	    					'\n Using package:' + '\n' +
 	    					JSON.stringify(_pkg, null, " ") + '\n' +
 	    					'\n Using properties:' + '\n' +
-	    					JSON.stringify(_props, null, " ");
+	    					JSON.stringify(_props, null, " ") + '\n' +
+	    					'\n Using code:' + '\n' +
+	    					git_log.output + '\n' +
+	    					'\n With status:' + '\n' +
+	    					git_status.output;
 
 	    if (! program.silent) {
  	       console.log(build_manifest);
