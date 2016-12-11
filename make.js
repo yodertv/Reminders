@@ -20,6 +20,7 @@ var DIST_PATH = _pkg.build_dir;
 var DIST_STATIC = DIST_PATH + '/static';
 var SRC_PATH = _pkg.src_dir;
 var LIB_PATH = _pkg.lib_dir;
+var NPM_PATH = _pkg.npm_dir;
 var build_manifest = "";
 var _props = undefined;
 var _validCmd = false;
@@ -95,8 +96,8 @@ _shell.config.fatal = false;
 
 // Global options
 program
-  .version('0.0.5')
-  .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
+  .version('0.0.1')
+  .description('A program to build and deploy Reminders.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'suppress log messages');
 
 // In this version commands are install -> build -> prep -> clean. Arrow shows dependancy.

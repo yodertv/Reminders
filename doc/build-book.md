@@ -4,9 +4,12 @@ Build Book
 ## Build
 - Install node.
 - Install npm.
+- Install Mongo.
 - Clone yodertv/Reminders from Github.
 - Resolve dependancies by ```npm update```.
 - Make the deployment you want
+- Allocate mongo dbs in the cloud and/or run mongod locally (see run book)
+- Deploy to a nodejs hosting service in the cloud and/or run the node server locally (see run book)
 
 ## Deploy to modulus
 
