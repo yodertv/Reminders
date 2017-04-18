@@ -173,27 +173,27 @@ Try out [Reminders App](https://reminders.now.sh).
 - Tested w/ Mongodb v3.0.1. Worked with upgraded mongjs.
 - Added db to list for old version of mongo installed on katrinas-macbook-air.
 
-###2.5
+### 2.5
 - Tested quite a bit on Linda's local net. Did not encounter (Bug#17) did git dublicate ID (Bug#18) once.
 - Fixed (Bug#9) New route version doesn't route reloading. History and list pages fail. Adds list to (Bug#7)
 - Fixed (Bug#7) With new angular and locationProvider fails to reload history page. Solved by redirecting to /#history and /#list.
 
-###2.4
+### 2.4
 - Tested localnet build and run on kitchen-mac. Tested iPad, iTouch, IE 9 on windows, Chrome on windows, Chrome on Nook.
 - Enhanced server to start based on nodeURL for port. No longer takes port argument.
 - Server creates hundreds of connections. Fixed by making a global array. Working.
 - Unable to duplicate the two DB bugs on local host in the car to WVA (2.13.15).
 - Changed local host build from 127.0.0.1 to localhost.
 
-###2.3
+### 2.3
 - Fixed (Bug#16) Update of existing todos in history list.
 - Limit file server to only static files. Static server does NOT serve up the server files or the package.json file.
 - Enhanced make.js to support the new file structure.
 
-###2.2
+### 2.2
 - Merged with original 2.2 which added full editing mode in the history.
 
-###2.1.3
+### 2.1.3
 - Use shelljs.sed to "bake" variables into the scripts. Keeping @ANT@ format.
 - Newest bootstrap version 3.3.1. Didn't work. Went back.
 - Further testing found two bugs (Bug#8) and (Bug#9)
@@ -207,14 +207,14 @@ Try out [Reminders App](https://reminders.now.sh).
 - Fixed (Bug#15) The inserted data from the client doesn't preserve the mongo ObjectID.
 - FIxed (Bug#10) two _id forms in db.
 
-###2.1.2
+### 2.1.2
 - Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
 - Had this error https://docs.angularjs.org/error/$location/nobase and fixed it.
 - Refactored module comand for better readability following tutorial examples.
 - Removed extraneous ":" from URLs href'ed by history.html and todo.html.
 - Deployed as yodertst.nodejitsu.com with active snapshot: "0.2.1-7 Sunday, January 11, 2015 15:17:32"
 
-###2.1.1
+### 2.1.1
 - Explored using node as build script. Using commander and shelljs.
 - Created clean, prep, build, install commands framework. See DevNotes for more info.
 - Use package.json file for my two configuration items, src_dir, build_dir and lib_dir
@@ -222,7 +222,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - Upgraded angular to solve :port issue with ngResource. Version 1.3.8
 - Still one bug (Big#??). Today page is blank when routed to from History. -- Fixed by adding '/' after #.
 
-###2.1
+### 2.1
 - Use node-static to serve up my static files.
 - Load css files before scripts fixed BB bug. Found with Chrome audit feature.
 - (Bug#4-Fixed) Nodejitsu hosted version fails the CSS on my BB bold. I believe I'm using the same style sheets as the working version. No way to debug it yet.
@@ -230,7 +230,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - Client sets DB. Query string for archive delete method to pass in the DB name.
 - (Bug#5-Fixed) Still failing on IE 9. IE dev tools don't help with this security error, but google did. Found the trick was to start the app w/ the /#/ version of the URL.
 
-###2.0
+### 2.0
 - Enhanced todoServer.js to proxy mongo's REST api and allow non-CORS compliant browsers to access the data. Still need a place to host todoServer.js on Node. ie 9 can view the data, but it still broken from a style sheet prespective.
 - Fixed (Bug#2) Doesn't work on IE or Nook, likely due to lack of CORS support. 
 - Enhanced ro remove archives from the archive list. I delete collections with mongojs.
@@ -244,14 +244,14 @@ Try out [Reminders App](https://reminders.now.sh).
 - Nodejitsu handles the SSL in their proxy. No need to deploy the above. So it works locally, not in the cloud.
 - Deployed using jitsu deploy. jitsu list, and jitsu logs.
 
-###1.5
+### 1.5
 - Merge Node v0.4 MongoApp drop collection code into StaticServer and rename as todoServer
 - Change mongolab.js to add a dropArchive function.
 - Fixed (Bug#3) Archive forward button isn't pointing to next older archive.
 - This release can't go to production because I need a place to host my node drop function.
 - StaticServer is deco'd
 
-###1.4
+### 1.4
 - Deleting tasks in archives now works
 - Hosted in node.js StaticServer.js @ http://desk-pc
 - Refactored getArchiveList into it's own function and moved into service, mongolab.js.
