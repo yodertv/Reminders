@@ -20,7 +20,6 @@ var DIST_PATH = _pkg.build_dir;
 var DIST_STATIC = DIST_PATH + '/static';
 var SRC_PATH = _pkg.src_dir;
 var LIB_PATH = _pkg.lib_dir;
-var NPM_PATH = _pkg.npm_dir;
 var build_manifest = "";
 var _props = undefined;
 var _validCmd = false;
@@ -37,7 +36,7 @@ var _env = undefined;
 */
 
 // Names of valid environments with definition property files defined
-var validEnvs = ['localnet','localhost','jitsu','modulus', '127'];
+var validEnvs = ['localnet','localhost','jitsu','modulus', '127', 'zeit'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'list.html', 'index.html', 'todo.css', 'welcome.html'];
@@ -62,7 +61,7 @@ for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
 };
 
 // Build files to copy to root directory.
-var BLD_FILES = ['package.json'];
+var BLD_FILES = ['package.json', 'now.json'];
 
 // Files into which to bake the @VERSION@
 var VER_FILES = [
@@ -96,8 +95,8 @@ _shell.config.fatal = false;
 
 // Global options
 program
-  .version('0.0.1')
-  .description('A program to build and deploy Reminders.') // Not sure why this doesn't show in the help output.
+  .version('0.0.5')
+  .description('A program to build and deploy.') // Not sure why this doesn't show in the help output.
   .option('--silent', 'suppress log messages');
 
 // In this version commands are install -> build -> prep -> clean. Arrow shows dependancy.

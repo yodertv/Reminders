@@ -1,0 +1,9 @@
+{
+	"env" : {
+		"NODE_ENV" : "production",
+		"MONGO_USER" : "@mongo_user",
+		"MONGO_USER_SECRET" : "@mongo_user_secret",
+		"GOOGLE_CLIENT_SECRET" : "@google_client_secret",
+		"GOOGLE_CLIENT_ID" : "@google_client_id"
+	}
+}

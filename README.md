@@ -2,14 +2,14 @@ Reminders
 =========
 
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
-Hosted by Modulus, Google APIs, and mLab.
+Hosted by Zeit, Google APIs, and mLab.
 
-This cloud hosted [Reminders App](https://todos-55911.onmodulus.net/welcome) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
+This cloud hosted [Reminders App](https://reminders.now.sh) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
 
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
 #Demo
-Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
+Try out [Reminders App](https://reminders.now.sh).
 
 #Docs
 [Reminders App Documentation](https://github.com/yodertv/Reminders/tree/master/doc) has simple notes for bugs, build, test and run.
@@ -36,13 +36,13 @@ Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
 
 #Deployments
 - All deployment knowledge is in make.js and build_props_files.
-- Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Modulus.
+- Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Zeit.
 - Mongodb can be hosted on localhost, localnet, and mLab.
 
 #Dependancies
 - Client depends on glyphicons, bootstrap, angular, and jquery.
 - Server depends on express, passport, http, and mongojs.
-- DB depends on MongoLab and modulus for production and local mongodb for dev.
+- DB depends on MongoLab for production and local mongodb for dev.
 
 #Backlog
 - Search feature
@@ -57,6 +57,9 @@ Try out [Reminders App](https://todos-55911.onmodulus.net/welcome).
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+
+### Version 0.5.6 (04.14.2017)
+- Changes for migration to zeit now deployment and updated docs and README.
 
 ### Version 0.5.5 (11.25.2016)
 - More responsive with better looking boarders.
