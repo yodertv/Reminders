@@ -8,13 +8,13 @@ This cloud hosted [Reminders App](https://reminders.now.sh) manages a user defin
 
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
-#Demo
+## Demo
 Try out [Reminders App](https://reminders.now.sh).
 
-#Docs
+## Docs
 [Reminders App Documentation](https://github.com/yodertv/Reminders/tree/master/doc) has simple notes for bugs, build, test and run.
 
-#Features
+## Features
 - Manages - lists of Reminders (aka tasks, or todos).
 - Persists - reminder data on mongodb using angular's ngResource, $http service and mongojs.
 - Show Completed - shows all reminders including items where done:true.
@@ -34,17 +34,17 @@ Try out [Reminders App](https://reminders.now.sh).
 - Logs user name using a custom token of express (connect) logger.
 - Displays a ```...loading...``` message while fetching data. 
 
-#Deployments
+## Deployments
 - All deployment knowledge is in make.js and build_props_files.
 - Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Zeit.
 - Mongodb can be hosted on localhost, localnet, and mLab.
 
-#Dependancies
+## Dependancies
 - Client depends on glyphicons, bootstrap, angular, and jquery.
 - Server depends on express, passport, http, and mongojs.
 - DB depends on MongoLab for production and local mongodb for dev.
 
-#Backlog
+## Backlog
 - Search feature
 - Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
@@ -57,6 +57,8 @@ Try out [Reminders App](https://reminders.now.sh).
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+
+## History
 
 ### Version 0.5.6 (04.14.2017)
 - Changes for migration to zeit now deployment and updated docs and README.

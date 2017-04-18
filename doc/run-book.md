@@ -23,8 +23,7 @@ Start mongo db:
 ```
 
 ## Create new DBs for to be assigned to users:
-- Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db.
-- Note the mongo connection string. Looks something like ds047057.mongolab.com:47057/frankstodos.
+- Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db. Note the mongo connection string. Looks something like: ```ds047057.mongolab.com:47057/frankstodos```
 - Create the user in the DB for authentication. Must be the same user and password of every db.
 - Test the auth by connecting like:
 ```
@@ -33,25 +32,33 @@ MongoDB shell version: 3.0.1
 connecting to: ds043972.mongolab.com:43972/users
 mod-mongo-aws-east-1a:PRIMARY> 
 ```
+
 - Connect to the user database and insert the new db into the userList collection as follows:
 ```
 mod-mongo-aws-east-1a:PRIMARY> db.userList.insert({"email" : "UNASSIGNED_DB", "db" : "ds049467.mongolab.com:49467/bobstodos"})
 WriteResult({ "nInserted" : 1 })
 mod-mongo-aws-east-1a:PRIMARY>
 ```
+
 - Restart the todoServer so it reads the updated user table.
 ```
-% now 
+% now
 % now alias set https://reminders-kevovklwel.now.sh reminders
 ```
 
-## Environment variables required for security credentials in production:
+## Environment Variables and Secrets
+These are required for security credentials in production.
 ```
 NODE_ENV = {production|dev}
 MONGO_USER = <dbUserName>
 MONGO_USER_SECRET = <dbUserSecret>
 GOOGLE_CLIENT_SECRET = <googleClientSecret>
 GOOGLE_CLIENT_ID = <googleClientId>
+```
+Zeit supports a ```secret``` command to add and name secrets. Then set environment variables to refernce a secret as follows.
+```
+$ now secrets add my-secret "my value"
+$ now -e MY_SECRET=@my-secret
 ```
 
 The MONGO variables depend on the userDbName in build_props.
@@ -79,14 +86,4 @@ i  email     	  db
 3 yoderm01@gmail.com	localhost:27017/yodertvtodo
 4 yodercode@gmail.com	localhost:27017/todo_new_test
 
-```
-
-## Creating a published version for yodertv/Reminders. Assumes that Todos is the name of the project and Reminders is the name of the published version and they are peers in the same directory.
-
-```
-cd ~/src/Reminders
-cp -pR ../Todos/src .
-cp -pR ../Todos/doc .
-cp -p ../Todos/* .
-cp -p ../Todos/lib/img/RemindersApp.png ./lib/img
 ```
