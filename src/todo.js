@@ -379,7 +379,7 @@ function TodoCtrl($scope, $routeParams, Todo, $timeout, $document) {
  	$scope.todos = [];
  	$scope.todos[0] = { done : false, text : "...loading..." };
 
- 	var name = "todo"; // Defualt reminder list name.
+ 	var name = "Reminders"; // Defualt reminder list name.
 
  	if ($routeParams.archiveName) {
 	 	name = $routeParams.archiveName.replace(/:/,""); // Didn't expect the ":"
