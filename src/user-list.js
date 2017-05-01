@@ -2,6 +2,8 @@
 //
 'use strict';
 
+var log = require('./logger.js').log;
+
 var mongojs = require('mongojs');
 
 var userauths = 0;
@@ -66,7 +68,8 @@ exports.loadUserList = function (options) {
   
   // console.log("Get User List opening DB: " + options.dbUrl);
   if (userDb == null) {
-    userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
+    // userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
+    userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
       console.log('userDb database error', err);
@@ -76,7 +79,7 @@ exports.loadUserList = function (options) {
   
   userDb.collection(userCol).find( function( err, myDocs ){
     if (err != null) {
-      console.log("USER_DB_ERR:", err);
+      log.error(err, "USER_DB_ERR");
     }
     else {
       exports.ul = myDocs;

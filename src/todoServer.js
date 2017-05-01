@@ -18,6 +18,11 @@ var cookieSession = require('cookie-session');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+// var bunyan = require('bunyan');
+
+var log = require('./logger.js').log
+// var log = bunyan.createLogger({name: 'todoServer'});
+
 var userList = require("./user-list");
 
 var nodeProd = ( process.env.NODE_ENV === 'production');
@@ -301,7 +306,8 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
-    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+//    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+    dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
@@ -340,7 +346,8 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
     console.log("Opening DB " + dbName + " via DB_FIND");
-    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+//    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+    dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       console.log('database error', err);
       throw err;
@@ -616,9 +623,9 @@ app.all('*', function(req, res) {
 
 http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
-console.log(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode environment = " + nodeEnv );
-console.log("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
-console.log("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
+log.info(nodeDesc + "\nRunning on " + os.hostname() + ":" + port + "\nNode environment = " + nodeEnv );
+log.info("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
+log.info("Use " + nodeURL.slice(0, nodeURL.length-1) + "\nCTRL + C to shutdown" );
 
 // interval_example(); // Turn this on to observe the session table leak.
 

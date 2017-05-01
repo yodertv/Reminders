@@ -23,7 +23,9 @@
     "angular": "1.5.8",
     "angular-resource": "1.5.8",
     "angular-route": "1.5.8",
-    "cookie-session": "1.2.0"
+    "cookie-session": "1.2.0",
+    "bunyan": "^1.8.10",
+    "bunyan-middleware": "^0.6.0"
   },
   "devDependencies": {
     "commander" : "2.6.0",

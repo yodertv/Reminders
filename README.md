@@ -57,6 +57,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+- Add proper logging on the server side.
 
 ## History
 
