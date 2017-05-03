@@ -90,6 +90,8 @@ passport.deserializeUser(function(obj, done) {
 //   credentials (in this case, a username and password), and invoke a callback
 //   with a user object.  In the real world, this would query a database;
 //   however, in this example we are using a baked-in set of users.
+
+if (!nodeProd) {
 passport.use(new LocalStrategy(
   function(username, password, done) {
     // asynchronous verification, for effect...
@@ -126,7 +128,7 @@ passport.use(new LocalStrategy(
     });
   }
 ));
-
+} else {
 // Use the GoogleStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and Google
@@ -169,6 +171,7 @@ passport.use(new GoogleStrategy({
     });
   }
 ));    
+}
 
 //  var sessionStore = new express.session.MemoryStore();
 var app = express();
