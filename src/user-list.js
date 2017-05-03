@@ -16,13 +16,15 @@ exports.userauths = userauths;
 
 exports.logUserList = function () {
 
-  var ulString = 'i  \t  email     \t  db\n';
+  var ulString =        'Index\tEmail       \t\t\t\tDB Name\n';
+  ulString = ulString + '-----\t-----       \t\t\t\t-------\n';
 
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
-    ulString = ulString + i + '  \t' + user.email + '\t' + user.db + '\n';
+    ulString = ulString + i + '\t\t' + user.email + '  \t\t\t' + user.db + '\n';
   }
-  log.info('User List:\n', ulString);
+  log.info('User Table:\n' + ulString);
+  log.trace({"user-list" : exports.ul});
 };
 
 exports.closeUserList = function () {
