@@ -70,13 +70,13 @@ exports.loadUserList = function (options) {
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   userCol = options.collectionName;
   
-  log.trace("Get User List opening DB: " + options.dbUrl);
+  log.trace("Get User List opening DB: %s", options.dbUrl);
   if (userDb == null) {
     // userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
-      log.error(err, 'userDb database error');
+      log.fatal(err, 'USER_DB_ERR: Failed to open database %s', dbName);
       throw err;
     });
   }
@@ -84,7 +84,7 @@ exports.loadUserList = function (options) {
   userDb.collection(userCol).find( function( err, myDocs ){
     if (err != null) {
       log.fatal(err, "USER_DB_ERR: Failed to load users.");
-      throw(err);
+      throw err;
     }
     else {
       exports.ul = myDocs;
@@ -100,7 +100,7 @@ var storeUser = function (userToStore) {
   userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToStore._id) }, userToStore, { upsert: false }, function(err, doc) {
     if (err != null) {
       // var errString = err.toString();
-      log.error(err, "USER_UPDATE_ERR faild to store %s", userToStore);
+      log.error(err, "USER_UPDATE_ERR failed to store %s", userToStore);
     }
   });
 };
