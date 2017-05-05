@@ -2,7 +2,9 @@
 //
 'use strict';
 
-var log = require('./logger.js').log;
+var log = require('./logger.js').log.child({module:'user-list'});
+
+log.trace("log Level set to %d.", log.level())
 
 var mongojs = require('mongojs');
 
@@ -23,8 +25,8 @@ exports.logUserList = function () {
     var user = exports.ul[i];
     ulString = ulString + i + '\t\t' + user.email + '  \t\t\t' + user.db + '\n';
   }
-  log.info('User Table:\n' + ulString);
-  log.trace({"user-list" : exports.ul});
+  log.info('User List:\n' + ulString);
+  log.trace({"user-list": exports.ul });
 };
 
 exports.closeUserList = function () {
@@ -70,20 +72,20 @@ exports.loadUserList = function (options) {
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   userCol = options.collectionName;
   
-  log.trace("Get User List opening DB: %s", options.dbUrl);
+  log.trace("Get User List opening DB: %s.", options.dbUrl);
   if (userDb == null) {
     // userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
-      log.fatal(err, 'USER_DB_ERR: Failed to open database %s', dbName);
+      log.fatal(err, 'USER_DB_OPEN_ERR: Failed to open database %s.', dbName);
       throw err;
     });
   }
   
   userDb.collection(userCol).find( function( err, myDocs ){
     if (err != null) {
-      log.fatal(err, "USER_DB_ERR: Failed to load users.");
+      log.fatal(err, "USER_DB_FIND_ERR: Failed to loadUserList.");
       throw err;
     }
     else {
@@ -96,11 +98,11 @@ exports.loadUserList = function (options) {
 var storeUser = function (userToStore) {
   // Store (replace) user object in the named collection of the DB identified by the dbURL option. 
   // Assuem usee db is opened for use by loadUserList.
-  log.info("User to store:", userToStore);
+  log.info("User to store: %s.", userToStore);
   userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToStore._id) }, userToStore, { upsert: false }, function(err, doc) {
     if (err != null) {
       // var errString = err.toString();
-      log.error(err, "USER_UPDATE_ERR failed to store %s", userToStore);
+      log.error(err, "USER_DB_UPDATE_ERR failed to store %s.", userToStore);
     }
   });
 };

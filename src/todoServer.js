@@ -11,6 +11,7 @@ var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged
 var os = require("os");
 var url = require("url");
 var http = require("http");
+var logger = require('./logger.js');
 var mongojs = require("mongojs");
 var express = require("express");
 var passport = require('passport');
@@ -18,10 +19,8 @@ var cookieSession = require('cookie-session');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-var logger = require('./logger.js');
 var log = logger.log;
 var bunyan = logger.bunyan;
-var userList = require("./user-list");
 
 var nodeProd = ( process.env.NODE_ENV === 'production');
 var nodeEnv = nodeProd ? 'PROD' : 'DEV'; //Anything but production is DEV.
@@ -29,6 +28,8 @@ var logLevel = process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info";
 
 log.level(logLevel);
 log.trace("Logging level set to", bunyan.INFO);
+
+var userList = require("./user-list");
 
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
@@ -81,10 +82,13 @@ function findByUsername(username, fn) {
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
 passport.serializeUser(function(user, done) {
+  log.trace({ user: user}, "serializing user.");
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
+  obj.views = (obj.views || 0) + 1;
+  log.trace({ user: obj}, "deserializing user.");
   done(null, obj);
 });
 
@@ -253,14 +257,20 @@ app.get('/auth/google/callback',
 });
 
 app.get('/logout', ensureAuthRedirect, function(req, res){
+  delete dbs[req.user.db];
   req.logout();
   res.redirect('/#welcome');
 });
 
 app.get('/account', function(req, res){
   var userObj = {};
-  if (req.isAuthenticated()) { 
-    userObj = { email : req.user.email, db : req.user.db, env : nodeEnv } ;
+  if (req.isAuthenticated()) {
+    userObj = { email : req.user.email, db : req.user.db, env : nodeEnv, views : req.user.views } ;
+    var user = userList.findByEmail(req.user.email, function (err, dbUser) {
+        if (err) { return done(err); }
+        dbUser.views = req.user.views;
+        return ( dbUser );
+    })
   }
   else {
     userObj = {env : nodeEnv};
@@ -271,7 +281,7 @@ app.get('/account', function(req, res){
 
 app.get(['/welcome', '/authfailed'], function(req, res){
   // Redirect welcome route. Allows reload and sharing of welcome URL.
-  log.trace("Redirect /welcome.");
+  log.trace("Redirect /welcome or /authfailed.");
   res.writeHead(302, { 'location' : '/#welcome' });
   res.end();
 });
@@ -356,7 +366,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
 //    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      log.error(err, 'Error opening database');
+      log.error(err, 'Error opening database!');
       return err;
     });
   }
