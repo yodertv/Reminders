@@ -24,6 +24,7 @@
     "angular-resource": "1.5.8",
     "angular-route": "1.5.8",
     "cookie-session": "1.2.0",
+    "sprintf-js" : "1.0.3",
     "bunyan": "^1.8.10",
     "bunyan-middleware": "^0.6.0"
   },

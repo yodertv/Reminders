@@ -44,7 +44,6 @@ var userOptions = {
 userList.loadUserList(userOptions);
 
 var dbs = []; // Array of db connections
-var users = []; // Array of user session
 
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
@@ -130,7 +129,8 @@ passport.use(new LocalStrategy(
           return ( dbUser ); // Previously assinged.
         });
         user.env = nodeEnv;
-        users[username] = user;
+        user.views = 0;
+        // Consider counting and remembering logins here.
         log.trace("Local Auth", user);
         return done(null, user);
       })
@@ -333,10 +333,9 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 
   dbs[dbName].getCollectionNames( function( err, myColls ){
     if (err != null) {
-        var errString = err.toString();
-        log.info("DB_GETCOLLECTIONNAMES_ERR:", errString);
+        log.error(err, "DB_GETCOLLECTIONNAMES_ERR:");
         res.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
-        res.end(errString);
+        res.end(err.toString());
     }
     else {
       log.trace("GET COLLECTIONS:\n", myColls);
@@ -424,7 +423,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         if (err != null) {
           log.error(err, "DB_FINDONE_ERR:");
           response.writeHead(500, "DB_FINDONE_ERR", {'Content-Type': 'text/html'});
-          response.end(errString);
+          response.end(err);
           return err;
         }
         else { 
@@ -456,13 +455,12 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
           _id:mongojs.ObjectId(objID)
         }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
           if (err != null) {
-            var errString = err.toString();
-            log.info("DB_UPDATE_ERR:", errString);
+            log.error(err, "DB_UPDATE_ERR:");
             response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
-            response.end(errString);
+            response.end(err);
           }
           else { 
-            log.info("Updated doc:\n" +  JSON.stringify(doc));
+            log.trace({"updated-doc": doc});
             response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -479,7 +477,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         if (err != null) {
           log.error(err, "DB_DELETE_ERR:");
           response.writeHead(500, "DB_DELET_ERR", {'Content-Type': 'text/html'});
-          response.end(errString);
+          response.end(err);
         }
         else { 
           log.trace("Deleted : " +  objID);
@@ -491,7 +489,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     break;
     
     default:
-      log.info(err, "OBJ_ERR");
+      log.error(err, "OBJ_ERR");
       response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
       response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
   }
@@ -507,14 +505,14 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
   var collectionName = uri.slice(apiPath.length); // Get collection name from URI
-  // console.log("dbUrl=", dbUrl, "collectionName=", collectionName);
+  
+  log.trace("dbUrl=", dbUrl, "collectionName=", collectionName);
 
   dbs[dbName].collection(collectionName).drop( function(err) {
     if (err != null) {
-      var errString = err.toString();
-      console.log("DB_DROP_COLLECTION_ERR:", errString);
+      log.error(err, "DB_DROP_COLLECTION_ERR:");
       res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
-      res.end(errString);
+      res.end(err.toString());
     }
     else { // Send a success response.
       res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
@@ -524,7 +522,7 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 });
 
 app.put(apiPath + '*', ensureAuth401, function(req, res) {
-  // console.log('PUT NEW COLLECTION:', uri);
+  log.trace('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
   // Makes a new collection if it doesn't exist.
@@ -540,11 +538,11 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    // console.log("Received body data : ");
-    // console.log(chunk.toString());
+    log.trace("Received body data : ");
+    log.trace(chunk.toString());
   });
   req.on('end', function() {
-    // console.log("PUT Collection Received : ", fullBody.length);
+    log.trace("PUT Collection Received : ", fullBody.length);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
@@ -554,23 +552,20 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
     // dbs[dbName].collection(collectionName).drop();
     
     dbs[dbName].collection(collectionName).drop( function(err) {
-      /*if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
-        var errString = err.toString();
-        console.log("DB_PUT_DROP_COLLECTION_ERR:", errString);
+      if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
+        log.error(err, "DB_PUT_DROP_COLLECTION_ERR:");
         res.writeHead(500, "DB_PUT_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
-        res.end(errString);
+        res.end(err.toString());
       }
-      else */
-      if (fullBody.length > 2) { // A stringified empty collection has "[]"
+      else if (fullBody.length > 2) { // A stringified empty collection has "[]"
         dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
-            var errString = err.toString();
-            console.log("DB_INSERT_ERR:", errString);
+            log.error(err, "DB_INSERT_ERR:");
             res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-            res.end(errString);
+            res.end(err.toString());
           }
           else { 
-            // console.log("docs:\n" +  JSON.stringify(doc));
+            log.trace({docs: doc});
             res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             res.write(JSON.stringify(doc));
             res.end();
@@ -587,8 +582,6 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
 
 app.post(apiPath + '*', ensureAuth401, function(req, response) {
   // Insert a new doc into collectionName
-  // console.log('In POST (insert) new doc into collection:', uri);
-  // Insert and new doc into collection.
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -597,30 +590,28 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db; 
   var dbUrl = dbName;
+  log.trace('In POST (insert) new doc into collection:', uri);
 
   var fullBody = '';
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    // console.log("Received body data : ");
-    // console.log(chunk.toString());
+      log.trace("Received body data : ");
+      log.trace(chunk.toString());
   });
   req.on('end', function() {
-    // 
-    // console.log("POST NEW DOC Received : ", fullBody);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-    // Where todo* is the collection name.
+    log.trace("POST NEW DOC Received : ", fullBody);
   
     dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
       if (err != null) {
-        var errString = err.toString();
-        console.log("DB_INSERT_ERR:", errString);
+        log.error(err, "DB_INSERT_ERR:");
         response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-        response.end(errString);
+        response.end(err);
       }
       else { 
-        // console.log("Inserted doc:\n", doc);
+        log.trace("Inserted doc:\n", doc);
         response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
         response.write(JSON.stringify(doc));
         response.end();
@@ -670,31 +661,15 @@ function interval_example() {
     if (count == 25) clearInterval(this);
     var end_time = new Date();
     var difference = end_time.getTime() - start_time.getTime();
+
     log.trace("Tick no. " + count + " after " + Math.round(difference/1000) + " seconds");
     count++;
     listSessions();
-    log.trace("DB Connection List:", dbs);
-    userList.logUserList();
   }, 30000);
 }
 
 // Log the current sessions. Called periodically by interval_example.
-// Currently will not work with cookie-session.
 function listSessions() {
-
-  log.trace("User Connection List:", users);
-
-/*
-  sessionStore.all(function(n, s) {
-    for (var i = 0, c = 0; i < s.length; i++) {
-      var result = JSON.parse(s[i]);
-      if (result.passport.user !== undefined) {
-        c++;
-        log.info("["+i+"] "+result.passport.user.email);
-      }
-      log.trace({ "typeof result" : typeof result});
-    }
-    log.info(i + " Sessions, " + c + " Users.");
-  });
-*/
+  userList.logUserList();
+  log.trace({ 'dbs' : dbs});
 }

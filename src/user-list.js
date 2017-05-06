@@ -6,6 +6,7 @@ var log = require('./logger.js').log.child({module:'user-list'});
 
 log.trace("log Level set to %d.", log.level())
 
+var sprintf = require('sprintf-js').sprintf;
 var mongojs = require('mongojs');
 
 var userauths = 0;
@@ -18,13 +19,17 @@ exports.userauths = userauths;
 
 exports.logUserList = function () {
 
-  var ulString =        'Id \tEmail          \t\tDB Name                         \t\t\tViews\n';
-  ulString = ulString + '-- \t-----          \t\t-------                         \t\t\t-----\n';
+  var ulString =  
+    sprintf('%-3s %-25s %-50s %-6s %1s', 'Id', 'Email', 'DB Name', 'Views', '\n');
 
+  ulString = ulString + 
+    sprintf('%-3s %-25s %-50s %-5s %-1s', '--', '-----', '-------', '-----', '\n');
+  
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
-    ulString = ulString + i + '\t' + user.email + '    \t' + user.db + '            \t\t' + user.views + '\n';
+    ulString = ulString + sprintf('%-3d %-25s %-50s %-6d %-1s', i, user.email, user.db, user.views || 0, '\n');
   }
+  
   log.info(ulString);
   log.trace({"user-list": exports.ul });
 };
