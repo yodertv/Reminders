@@ -81,14 +81,14 @@ function findByUsername(username, fn) {
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
 passport.serializeUser(function(user, done) {
-  log.trace({ user: user}, "serializing user.");
+  log.trace({ user: user}, "Serializing user:");
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  obj.views = (obj.views || 0) + 1;
-  log.trace({ user: obj}, "deserializing user.");
-  done(null, obj);
+passport.deserializeUser(function(user, done) {
+  user.views = (user.views || 0) + 1; // Yes, counting views here.
+  log.trace({ user: user}, "Deserializing user:");
+  done(null, user);
 });
 
 // Use the LocalStrategy within Passport.
