@@ -43,8 +43,7 @@ var userOptions = {
 
 userList.loadUserList(userOptions);
 
-var dbs = []; // Array of db connections
-
+var dbs = [] // Array of db connections
 var match = nodeURL.search('[0-9]{4}/$');
 var port = match && nodeURL.slice(match, nodeURL.length-1) || 80;
 
@@ -669,5 +668,4 @@ function interval_example() {
 // Log the current sessions. Called periodically by interval_example.
 function listSessions() {
   userList.logUserList();
-  log.trace("Open DBS", JSON.stringify(dbs));
 }

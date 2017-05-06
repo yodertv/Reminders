@@ -79,7 +79,6 @@ exports.loadUserList = function (options) {
   
   log.trace("Get User List opening DB: %s.", options.dbUrl);
   if (userDb == null) {
-    // userDb = new mongojs(dbUrl, [userCol], {authMechanism: 'SCRAM-SHA-1'});
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
@@ -102,11 +101,10 @@ exports.loadUserList = function (options) {
 
 var storeUser = function (userToStore) {
   // Store (replace) user object in the named collection of the DB identified by the dbURL option. 
-  // Assuem usee db is opened for use by loadUserList.
+  // Assume user db is opened for use by loadUserList.
   log.info("User to store: %s.", userToStore);
   userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToStore._id) }, userToStore, { upsert: false }, function(err, doc) {
     if (err != null) {
-      // var errString = err.toString();
       log.error(err, "USER_DB_UPDATE_ERR failed to store %s.", userToStore);
     }
   });
