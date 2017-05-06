@@ -18,14 +18,14 @@ exports.userauths = userauths;
 
 exports.logUserList = function () {
 
-  var ulString =        'Index\tEmail       \t\t\t\tDB Name\n';
-  ulString = ulString + '-----\t-----       \t\t\t\t-------\n';
+  var ulString =        'Id \tEmail          \t\tDB Name                         \t\t\tViews\n';
+  ulString = ulString + '-- \t-----          \t\t-------                         \t\t\t-----\n';
 
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
-    ulString = ulString + i + '\t\t' + user.email + '  \t\t\t' + user.db + '\n';
+    ulString = ulString + i + '\t' + user.email + '    \t' + user.db + '            \t\t' + user.views + '\n';
   }
-  log.info('User List:\n' + ulString);
+  log.info(ulString);
   log.trace({"user-list": exports.ul });
 };
 

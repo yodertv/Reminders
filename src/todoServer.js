@@ -288,7 +288,7 @@ app.get(['/welcome', '/authfailed'], function(req, res){
 
 app.get('/list', ensureAuthRedirect, function(req, res) { 
   // Redirect list route. Allows reload and sharing of list URL.
-  log.trace("Redirect /list", uri);
+  log.trace("Redirect /list", {user : req.user } );
   res.writeHead(302, { 'location' : '/#list' });
   res.end();
 });
