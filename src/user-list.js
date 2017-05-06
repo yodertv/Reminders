@@ -20,14 +20,14 @@ exports.userauths = userauths;
 exports.logUserList = function () {
 
   var ulString =  
-    sprintf('%-3s %-25s %-50s %-6s %1s', 'Id', 'Email', 'DB Name', 'Views', '\n');
+    sprintf('%-4s %-25s %-50s %-6s %1s', 'Idx', 'Email', 'DB Name', 'Views', '\n');
 
   ulString = ulString + 
-    sprintf('%-3s %-25s %-50s %-5s %-1s', '--', '-----', '-------', '-----', '\n');
+    sprintf('%-4s %-25s %-50s %-5s %-1s', '---', '-----', '-------', '-----', '\n');
   
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
-    ulString = ulString + sprintf('%-3d %-25s %-50s %-6d %-1s', i, user.email, user.db, user.views || 0, '\n');
+    ulString = ulString + sprintf('%-4d %-25s %-50s %-6d %-1s', i, user.email, user.db, user.views || 0, '\n');
   }
   
   log.info(ulString);
