@@ -19,19 +19,19 @@ exports.userauths = userauths;
 
 exports.logUserList = function () {
 
-  var ulString =  
-    sprintf('%-4s %-25s %-50s %-6s %1s', 'Idx', 'Email', 'DB Name', 'Views', '\n');
+  var ulString = 
+    sprintf('\n%-4s %-25s %-50s %-6s', 'Idx', 'Email', 'DB Name', 'Views');
 
   ulString = ulString + 
-    sprintf('%-4s %-25s %-50s %-5s %-1s', '---', '-----', '-------', '-----', '\n');
+    sprintf('\n%-4s %-25s %-50s %-6s', '---', '-----', '-------', '-----');
   
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
-    ulString = ulString + sprintf('%-4d %-25s %-50s %-6d %-1s', i, user.email, user.db, user.views || 0, '\n');
+    ulString = ulString + sprintf('\n%-4d %-25s %-50s %-6d', i, user.email, user.db, user.views || 0);
   }
   
-  log.info(ulString);
-  log.trace({"user-list": exports.ul });
+  log.info({"user-list-spfd":ulString}, "Log User List:");
+  log.trace({"user-list": exports.ul }, "Log User List:");
 };
 
 exports.closeUserList = function () {

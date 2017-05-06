@@ -496,17 +496,15 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
 });
 
 app.del(apiPath + '*', ensureAuth401, function(req, res) {
-  // Old Form of request: http://127.0.0.1/todoSat-Apr-06-2013/?mongoDB=test-todo
-  // Form of DEL request http://127.0.0.1/apiPath/todoSat-Apr-06-2013
   // Delete archived collection using mongojs.
-  // Todo: Consider refactoring to match the form of the other API calls. This got this way because the original 
-  // mongolab rest API didn't support delete collection.  
+  // Form of DEL request http://127.0.0.1/apiPath/Reminders
+
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
   var collectionName = uri.slice(apiPath.length); // Get collection name from URI
   
-  log.trace("dbUrl=", dbUrl, "collectionName=", collectionName);
+  log.trace("DROP:");
 
   dbs[dbName].collection(collectionName).drop( function(err) {
     if (err != null) {
@@ -671,5 +669,5 @@ function interval_example() {
 // Log the current sessions. Called periodically by interval_example.
 function listSessions() {
   userList.logUserList();
-  log.trace({ 'dbs' : dbs});
+  log.trace("Open DBS", JSON.stringify(dbs));
 }
