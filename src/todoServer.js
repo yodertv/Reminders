@@ -18,16 +18,17 @@ var passport = require('passport');
 var cookieSession = require('cookie-session');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var bunyanMiddleware = require('bunyan-middleware')
 
 var log = logger.log;
-var bunyan = logger.bunyan;
+var bunyan = logger.bunyan; // For the global defs.
 
 var nodeProd = ( process.env.NODE_ENV === 'production');
 var nodeEnv = nodeProd ? 'PROD' : 'DEV'; //Anything but production is DEV.
 var logLevel = process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info";
 
 log.level(logLevel);
-log.trace("Logging level set to", bunyan.INFO);
+log.trace("Logging level set to", log.level());
 
 var userList = require("./user-list");
 
@@ -181,7 +182,6 @@ passport.use(new GoogleStrategy({
 ));    
 }
 
-//  var sessionStore = new express.session.MemoryStore();
 var app = express();
 express.logger.token('user', function(req, res)
   { 
@@ -191,7 +191,22 @@ express.logger.token('user', function(req, res)
 
 // configure Express
 app.configure(function() {
-
+  
+  app.use(bunyanMiddleware(
+    { headerName: 'X-Request-Id'
+    , propertyName: 'reqId'
+    , logName: 'req_id'
+    , level: 'info'
+    , obscureHeaders: ['cookie-session']
+    , logger: log
+    , requestStart: log.level() < bunyan.INFO ? true : false
+    , additionalRequestFinishData: function(req, res) {
+        // var userEmail = req.user == undefined ? "undefined" : req.user.email;
+        return { status: res.statusCode };
+      }
+    })
+  );
+  
   app.use(express.static(__dirname + '/static'));
 
   if (logDate) { // date in logger output?
@@ -199,14 +214,18 @@ app.configure(function() {
   } else {
     app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   }
-  app.use(express.static(__dirname + '/static'));
+
   app.use(express.cookieParser());
   app.use(express.methodOverride());  
-  //app.use(express.session({ secret: 'keyboard cat', store: sessionStore, resave: false, saveUninitialized: false }));
-  app.use(cookieSession({ name: 'cookie-session', secret: 'keyboard cat', maxAge: 2.592e+8 })); // 72 hours
 
-  // Initialize Passport!  Also use passport.session() middleware, to support
-  // persistent login sessions (recommended).
+  app.use(cookieSession(
+    { name: 'cookie-session'
+    , secret: 'keyboard cat'
+    , maxAge: 2.592e+8       // 72 hours 
+    })
+  ); 
+
+  // Initialize Passport.
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -250,12 +269,13 @@ app.get('/auth/google',
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    log.trace(req.user.email);
+    req.log.trace(req.user.email);
     setTimeout(listSessions,1000); // Print sessions in one sec.
     res.redirect('/#list/:Reminders'); 
 });
 
 app.get('/logout', ensureAuthRedirect, function(req, res){
+  req.log.trace({user:req.user}, "Logout:")
   delete dbs[req.user.db];
   req.logout();
   res.redirect('/#welcome');
@@ -274,20 +294,20 @@ app.get('/account', function(req, res){
   else {
     userObj = {env : nodeEnv};
   }
-  log.trace({"userObj" : userObj});
+  req.log.trace({"userObj" : userObj});
   res.send(userObj);
 });
 
 app.get(['/welcome', '/authfailed'], function(req, res){
   // Redirect welcome route. Allows reload and sharing of welcome URL.
-  log.trace("Redirect /welcome or /authfailed.");
+  req.log.trace("Redirect /welcome or /authfailed.");
   res.writeHead(302, { 'location' : '/#welcome' });
   res.end();
 });
 
 app.get('/list', ensureAuthRedirect, function(req, res) { 
   // Redirect list route. Allows reload and sharing of list URL.
-  log.trace("Redirect /list", {user : req.user } );
+  req.log.trace("Redirect /list", {user : req.user } );
   res.writeHead(302, { 'location' : '/#list' });
   res.end();
 });
@@ -298,7 +318,7 @@ app.get('/list/:*', ensureAuthRedirect, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var collectionName = uri.slice(uri.lastIndexOf('/') + 1);
-  log.trace("Redirect /list/:*", uri);
+  req.log.trace("Redirect /list/:*", uri);
   res.writeHead(302, { 'location' : "/#list/" + collectionName });
   res.end();
 });
@@ -322,22 +342,22 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
-    log.info("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
+    req.log.info("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      log.error(err, 'Error opening database.');
+      req.log.error(err, 'Error opening database.');
        return err;
     });
   }
 
   dbs[dbName].getCollectionNames( function( err, myColls ){
     if (err != null) {
-        log.error(err, "DB_GETCOLLECTIONNAMES_ERR:");
+        req.log.error(err, "DB_GETCOLLECTIONNAMES_ERR:");
         res.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
         res.end(err.toString());
     }
     else {
-      log.trace("GET COLLECTIONS:\n", myColls);
+      req.log.trace("GET COLLECTIONS:\n", myColls);
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write(JSON.stringify(myColls))
       res.end();
@@ -346,7 +366,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 });
 
 app.get(apiPath + '*', ensureAuth401, function(req, res) {      
-  log.trace('GET DOCS:', uri);
+  req.log.trace('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
   // Where todo* is the collection name.
@@ -360,11 +380,11 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
 
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
-    log.info("Opening DB " + dbName + " via DB_FIND");
+    req.log.info("Opening DB " + dbName + " via DB_FIND");
 //    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      log.error(err, 'Error opening database!');
+      req.log.error(err, 'Error opening database!');
       return err;
     });
   }
@@ -372,7 +392,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var collectionName = uri.slice(apiPath.length); // Remove apiPath
   dbs[dbName].collection(collectionName).find( function( err, myDocs ){
     if (err != null) {
-      log.error(err, "DB_FIND_ERR:");
+      req.log.error(err, "DB_FIND_ERR:");
     }
     else {
       res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
@@ -394,13 +414,13 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   if (match>0) {
     objID = dbPart.slice(match);
     dbPart = dbPart.slice(0, match-1); // Remove /objID 
-    log.trace("match =", match, "\n objID =", objID);
+    req.log.trace("match =", match, "\n objID =", objID);
   }
 
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dbName;
   
-  log.trace("\nuri =", uri,
+  req.log.trace("\nuri =", uri,
     "\ndbPart =", dbPart, 
     "\ndbName =", dbName,
     "\ncollectionName =", collectionName,
@@ -420,13 +440,13 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         _id:mongojs.ObjectId(objID)
       }, function(err, doc) {
         if (err != null) {
-          log.error(err, "DB_FINDONE_ERR:");
+          req.log.error(err, "DB_FINDONE_ERR:");
           response.writeHead(500, "DB_FINDONE_ERR", {'Content-Type': 'text/html'});
           response.end(err);
           return err;
         }
         else { 
-          log.info("GET doc:\n" +  JSON.stringify(doc));
+          req.log.info("GET doc:\n" +  JSON.stringify(doc));
           response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
           response.write(JSON.stringify(doc));
           response.end();
@@ -435,17 +455,17 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     break;
     
     case 'PUT':
-      log.trace('UPDATE DOC: ', uri);
+      req.log.trace('UPDATE DOC: ', uri);
       // Save/replace todos here
       var fullBody = '';
       req.on('data', function(chunk) {
 
         fullBody += chunk.toString();
-        log.trace("Received body data : ");
-        log.trace(chunk.toString());
+        req.log.trace("Received body data : ");
+        req.log.trace(chunk.toString());
       });
       req.on('end', function() {
-        log.trace("PUT Received : ", fullBody);
+        req.log.trace("PUT Received : ", fullBody);
         // Replace the document specified by id
         // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
         // Where todo* is the collection name.
@@ -454,12 +474,12 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
           _id:mongojs.ObjectId(objID)
         }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
           if (err != null) {
-            log.error(err, "DB_UPDATE_ERR:");
+            req.log.error(err, "DB_UPDATE_ERR:");
             response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
             response.end(err);
           }
           else { 
-            log.trace({"updated-doc": doc});
+            req.log.trace({"updated-doc": doc});
             response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -474,12 +494,12 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         _id:mongojs.ObjectId(objID)
       }, true, function(err, doc) {
         if (err != null) {
-          log.error(err, "DB_DELETE_ERR:");
+          req.log.error(err, "DB_DELETE_ERR:");
           response.writeHead(500, "DB_DELET_ERR", {'Content-Type': 'text/html'});
           response.end(err);
         }
         else { 
-          log.trace("Deleted : " +  objID);
+          req.log.trace("Deleted : " +  objID);
           response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
           response.write(JSON.stringify(doc));
           response.end();
@@ -488,7 +508,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     break;
     
     default:
-      log.error(err, "OBJ_ERR");
+      req.log.error(err, "OBJ_ERR");
       response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
       response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
   }
@@ -503,11 +523,11 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
   var dbName = req.user.db;
   var collectionName = uri.slice(apiPath.length); // Get collection name from URI
   
-  log.trace("DROP:");
+  req.log.trace("DROP:%s", collectionName);
 
   dbs[dbName].collection(collectionName).drop( function(err) {
     if (err != null) {
-      log.error(err, "DB_DROP_COLLECTION_ERR:");
+      req.log.error(err, "DB_DROP_COLLECTION_ERR:");
       res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
       res.end(err.toString());
     }
@@ -519,7 +539,7 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 });
 
 app.put(apiPath + '*', ensureAuth401, function(req, res) {
-  log.trace('PUT NEW COLLECTION:', uri);
+  req.log.trace('PUT NEW COLLECTION:', uri);
   // Drop existing documents and replace with
   // Insert of the entire array into collection.
   // Makes a new collection if it doesn't exist.
@@ -535,11 +555,11 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    log.trace("Received body data : ");
-    log.trace(chunk.toString());
+    req.log.trace("Received body data : ");
+    req.log.trace(chunk.toString());
   });
   req.on('end', function() {
-    log.trace("PUT Collection Received : ", fullBody.length);
+    req.log.trace("PUT Collection Received : ", fullBody.length);
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     // Where todo* is the collection name.
@@ -550,19 +570,19 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
     
     dbs[dbName].collection(collectionName).drop( function(err) {
       if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
-        log.error(err, "DB_PUT_DROP_COLLECTION_ERR:");
+        req.log.error(err, "DB_PUT_DROP_COLLECTION_ERR:");
         res.writeHead(500, "DB_PUT_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
         res.end(err.toString());
       }
       else if (fullBody.length > 2) { // A stringified empty collection has "[]"
         dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
-            log.error(err, "DB_INSERT_ERR:");
+            req.log.error(err, "DB_INSERT_ERR:");
             res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
             res.end(err.toString());
           }
           else { 
-            log.trace({docs: doc});
+            req.log.trace({docs: doc});
             res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             res.write(JSON.stringify(doc));
             res.end();
@@ -587,28 +607,28 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db; 
   var dbUrl = dbName;
-  log.trace('In POST (insert) new doc into collection:', uri);
+  req.log.trace('In POST (insert) new doc into collection:', uri);
 
   var fullBody = '';
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-      log.trace("Received body data : ");
-      log.trace(chunk.toString());
+      req.log.trace("Received body data : ");
+      req.log.trace(chunk.toString());
   });
   req.on('end', function() {
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-    log.trace("POST NEW DOC Received : ", fullBody);
+    req.log.trace("POST NEW DOC Received : ", fullBody);
   
     dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
       if (err != null) {
-        log.error(err, "DB_INSERT_ERR:");
+        req.log.error(err, "DB_INSERT_ERR:");
         response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
         response.end(err);
       }
       else { 
-        log.trace("Inserted doc:\n", doc);
+        req.log.trace("Inserted doc:\n", doc);
         response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
         response.write(JSON.stringify(doc));
         response.end();
@@ -618,6 +638,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
 });
 
 app.all('*', function(req, res) {
+  req.log.trace("Redirecting to Welcome Page.");
   res.redirect("/#welcome");
 });
 
