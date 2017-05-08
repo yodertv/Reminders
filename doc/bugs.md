@@ -1,7 +1,22 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#46)
+##Open Bugs -- Next: (Bug#47)
+
+###(Bug#46) -- Protect this function from unopened db.
+```
+/Users/mike/src/Todos/build/todoServer.js:464
+        dbs[dbName].collection(collectionName).update({
+                   ^
+
+TypeError: Cannot read property 'collection' of undefined
+    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:464:20)
+    at emitNone (events.js:67:13)
+    at IncomingMessage.emit (events.js:166:7)
+    at endReadableNT (_stream_readable.js:905:12)
+    at doNTCallback2 (node.js:441:9)
+    at process._tickCallback (node.js:355:17)
+```
 
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
