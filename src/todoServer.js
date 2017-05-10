@@ -192,6 +192,9 @@ express.logger.token('user', function(req, res)
 // configure Express
 app.configure(function() {
   
+  // At INFO level or higher surpress logging the static file server by using it before the logger
+  if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/static'))};
+
   app.use(bunyanMiddleware(
     { headerName: 'X-Request-Id'
     , propertyName: 'reqId'
@@ -199,22 +202,24 @@ app.configure(function() {
     , level: 'info'
     , obscureHeaders: ['cookie-session']
     , logger: log
-    , requestStart: log.level() < bunyan.INFO ? true : false
+    , requestStart: log.level() < bunyan.INFO ? true : false  // Only log the request start when log level is less than INFO
     , additionalRequestFinishData: function(req, res) {
         // var userEmail = req.user == undefined ? "undefined" : req.user.email;
         return { status: res.statusCode };
       }
     })
   );
-  
-  app.use(express.static(__dirname + '/static'));
 
+  // While tracing cause static files to be logged by using the static server after the logger middleware.
+  if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/static')) };
+  
+  /*
   if (logDate) { // date in logger output?
     app.use(express.logger(':date [:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   } else {
     app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
   }
-
+  */
   app.use(express.cookieParser());
   app.use(express.methodOverride());  
 
