@@ -1,7 +1,12 @@
 Todos Bug List
 ==============
 
-##Open Bugs -- Next: (Bug#48)
+##Open Bugs -- Next: (Bug#49)
+
+###(Bug#48) -- Source IP address is not printed in ziet logs.
+```
+05/15 11:16 PM  Tue, 16 May 2017 03:16:11 GMT [yoderm01@gmail.com@::1]GET /list/:Reminders 302 - 5 ms
+``` 
 
 ###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses.
 ```
