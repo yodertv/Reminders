@@ -200,13 +200,15 @@ app.configure(function() {
     , propertyName: 'reqId'
     , logName: 'req_id'
     , level: 'info'
-    , obscureHeaders: ['cookie-session']
+    , obscureHeaders: ['cookie']
     , logger: log
     , requestStart: log.level() < bunyan.INFO ? true : false  // Only log the request start when log level is less than INFO
+/*
     , additionalRequestFinishData: function(req, res) {
-        // var userEmail = req.user == undefined ? "undefined" : req.user.email;
-        return { status: res.statusCode };
+        var userEmail = req.user == undefined ? "undefined" : req.user.email;
+        return { user: userEmail };
       }
+  */
     })
   );
 
