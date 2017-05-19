@@ -1,7 +1,7 @@
 // logger.js
 
-var bunyan = require('bunyan');
-var obj = {};
+var bunyan = require('bunyan')
+var obj = {}
 
 function reqSerializer(req) {
 	var userEmail = req.user == undefined ? "undefined" : req.user.email;
@@ -9,13 +9,13 @@ function reqSerializer(req) {
 		, method: req.method
 		, url: req.url
 		, ip: req.ip
-		, headers: req.headers };
-};
+		, headers: req.headers }
+}
 
 function resSerializer(res) {
 	// return {};
-    return  
-    	{ statusCode: res.statusCode }
+    return { statusCode: res.statusCode
+    	, method: res.method }
 }
 
 if( !obj.log ){
