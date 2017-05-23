@@ -4,9 +4,7 @@ var bunyan = require('bunyan')
 var obj = {}
 
 function reqSerializer(req) {
-	var userEmail = req.user == undefined ? "undefined" : req.user.email;
-	return { user: userEmail
-		, method: req.method
+	return { method: req.method
 		, url: req.url
 		, ip: req.ip
 		, headers: req.headers }

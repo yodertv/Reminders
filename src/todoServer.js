@@ -203,14 +203,15 @@ app.configure(function() {
     , obscureHeaders: ['cookie']
     , logger: log
     , requestStart: log.level() < bunyan.INFO ? true : false  // Only log the request start when log level is less than INFO
-/*
     , additionalRequestFinishData: function(req, res) {
-        var userEmail = req.user == undefined ? "undefined" : req.user.email;
-        return { user: userEmail };
+      if (req.user != undefined) {
+        return { user: req.user.email };
       }
-  */
-    })
-  );
+      else {
+        return {};
+      }
+    }
+  }));
 
   // While tracing cause static files to be logged by using the static server after the logger middleware.
   if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/static')) };
