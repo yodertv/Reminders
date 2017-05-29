@@ -88,6 +88,12 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   user.views = (user.views || 0) + 1; // Yes, counting views here.
   log.trace({ user: user}, "Deserializing user:");
+
+  userList.findByEmail(user.email, function (err, dbUser) {
+        if (err) { return done(err); }
+        dbUser.views = user.views; // Update view count in the user list.
+        return ( dbUser );
+  })
   done(null, user);
 });
 
@@ -132,6 +138,7 @@ passport.use(new LocalStrategy(
         user.views = 0;
         // Consider counting and remembering logins here.
         log.trace("Local Auth", user);
+        listSessions();
         return done(null, user);
       })
     });
@@ -176,6 +183,7 @@ passport.use(new GoogleStrategy({
       });
 
       user.env = nodeEnv;
+      user.views = 0;
       return done(null, user);
     });
   }
