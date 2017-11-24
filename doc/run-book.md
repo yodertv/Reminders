@@ -70,6 +70,7 @@ LOG_LEVEL is the level from bunyan logger to log at and above.
 ## Testing google auth on loopback (127.0.0.1)
 
 Use build_prop.127.json and set the NODE_ENV to production to test google auth on loopback.
+If you get the google auth button when NODE_ENV isn't production, check that you are using the correct url for your deployment.
 
 ```
 % export NODE_ENV=production
