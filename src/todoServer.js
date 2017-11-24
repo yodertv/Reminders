@@ -157,7 +157,7 @@ passport.use(new GoogleStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
-      log.trace(profile);
+      log.trace("GoogleStrategy", profile);
       
       // To keep the example simple, the user's Google profile is returned to
       // represent the logged-in user.  In a typical application, you would want
@@ -373,7 +373,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
         res.end(err.toString());
     }
     else {
-      req.log.trace("GET COLLECTIONS:\n", myColls);
+      req.log.trace("GET COLLECTIONS: ", myColls);
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write(JSON.stringify(myColls))
       res.end();
@@ -382,7 +382,6 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 });
 
 app.get(apiPath + '*', ensureAuth401, function(req, res) {      
-  req.log.trace('GET DOCS:', uri);
   // Get all documents from a specified collection
   // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
   // Where todo* is the collection name.
@@ -390,7 +389,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-
+  
   // Use authentication when MONGO_USER has a value.
   var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
@@ -405,6 +404,8 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     });
   }
 
+  req.log.trace('GET DOCS:', "dbName = ", dbName, "uri=", uri);
+
   var collectionName = uri.slice(apiPath.length); // Remove apiPath
   dbs[dbName].collection(collectionName).find( function( err, myDocs ){
     if (err != null) {
@@ -413,7 +414,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     else {
       res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
       res.write(JSON.stringify(myDocs));
-      res.end();
+      res.end();  
     }
   });
 });
@@ -430,13 +431,13 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   if (match>0) {
     objID = dbPart.slice(match);
     dbPart = dbPart.slice(0, match-1); // Remove /objID 
-    req.log.trace("match =", match, "\n objID =", objID);
+    req.log.trace("Object Action :", "match =", match, " objID =", objID);
   }
 
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbUrl = dbName;
   
-  req.log.trace("\nuri =", uri,
+  req.log.trace("Object Action :", "uri =", uri,
     "\ndbPart =", dbPart, 
     "\ndbName =", dbName,
     "\ncollectionName =", collectionName,
@@ -629,8 +630,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-      req.log.trace("Received body data : ");
-      req.log.trace(chunk.toString());
+      req.log.trace("Received body data : ", chunk.toString());
   });
   req.on('end', function() {
     // Replace the document specified by id
