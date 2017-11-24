@@ -14,19 +14,20 @@
     "node": "^7.0.0"
   },
   "dependencies": {
-    "express": "3.1.0",
-    "passport": "0.2.1",
-    "passport-local": "1.0.0",
-    "passport-google-oauth": "0.1.5",
-    "mongojs": "2.4.0",
-    "bootstrap": "3.3.6",
     "angular": "1.5.8",
     "angular-resource": "1.5.8",
     "angular-route": "1.5.8",
-    "cookie-session": "1.2.0",
-    "sprintf-js": "1.0.3",
+    "bootstrap": "3.3.6",
     "bunyan": "^1.8.10",
-    "bunyan-middleware": "^0.6.0"
+    "bunyan-middleware": "^0.6.0",
+    "cookie-session": "1.2.0",
+    "dtrace-provider": "^0.8.5",
+    "express": "3.1.0",
+    "mongojs": "2.4.0",
+    "passport": "0.2.1",
+    "passport-google-oauth": "0.1.5",
+    "passport-local": "1.0.0",
+    "sprintf-js": "1.0.3"
   },
   "devDependencies": {
     "commander": "2.6.0",
