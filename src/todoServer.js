@@ -63,6 +63,8 @@ var localUsers = [
   , { username: 'code', password: 'secret', email: 'yodercode@gmail.com'}
   , { username: 'junk', password: 'secret', email: 'junk@gmail.com'}
   , { username: 'frank', password: 'secret', email: 'frank@example.com'}
+  , { username: 'ted', password: 'secret', email: 'ted@example.com'}
+  , { username: 'john', password: 'secret', email: 'john@example.com'}
 ];
 
 function findByUsername(username, fn) {
@@ -91,7 +93,7 @@ passport.deserializeUser(function(user, done) {
 
   userList.findByEmail(user.email, function (err, dbUser) {
         if (err) { return done(err); }
-        dbUser.views = user.views; // Update view count in the user list.
+        if (dbUser != null) { dbUser.views = user.views }; // Update view count in the user list.
         return ( dbUser );
   })
   done(null, user);
@@ -122,22 +124,22 @@ passport.use(new LocalStrategy(
         user = userList.findByEmail(user.email, function (err, dbUser) {
           if (err) { return done(err); }
           if (!dbUser) {
-            user = userList.assignDb(user.email);
-            if (!user) { // Unable to assugn DB.
+            var newUser = userList.assignDb(user.email);
+            if (!newUser) { // Unable to assugn DB.   
               var brokenUser = {};
-              brokenUser.email = username;
+              brokenUser.email = user.email;
               brokenUser.db = 'Sorry, no available databases.'; // a hack to return the error message to the client.
-              log.error('Sorry, no available databases for user ' + username );
-              return ( brokenUser );
+              log.error('Sorry, no available databases for user ' + user.email );
+              return ( brokenUser ); // No DB available.
             }
-            return ( user ); // Just assigned.
+            return ( newUser ); // Just assigned.
           }
           return ( dbUser ); // Previously assinged.
         });
         user.env = nodeEnv;
         user.views = 0;
         // Consider counting and remembering logins here.
-        log.trace("Local Auth", user);
+        log.trace({"user" : user }, "Local Auth");
         listSessions();
         return done(null, user);
       })
@@ -303,7 +305,7 @@ app.get('/account', function(req, res){
     userObj = { email : req.user.email, db : req.user.db, env : nodeEnv, views : req.user.views } ;
     var user = userList.findByEmail(req.user.email, function (err, dbUser) {
         if (err) { return done(err); }
-        dbUser.views = req.user.views;
+        if (dbUser != null) { dbUser.views = req.user.views; }
         return ( dbUser );
     })
   }
@@ -373,7 +375,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
         res.end(err.toString());
     }
     else {
-      req.log.trace("GET COLLECTIONS: ", myColls);
+      req.log.trace({"myColls" : myColls}, "GET COLLECTIONS:");
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write(JSON.stringify(myColls))
       res.end();
@@ -599,7 +601,7 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
             res.end(err.toString());
           }
           else { 
-            req.log.trace({docs: doc});
+            req.log.trace({docs: doc}, "PUT COLLECTION:");
             res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
             res.write(JSON.stringify(doc));
             res.end();

@@ -60,12 +60,13 @@ exports.findByEmail = function(email, fn) {
       return fn(null, user);
     }
   }
+  log.error("findByEmail failed to find dbUser " + email);
   return fn(null, null);
 }
 
 exports.loadUserList = function (options) {
 
-  // Get user list objects from users collection of users DB. Using mongojs api and the options
+  // Get user list objects from options.collectionName of options.dbUrl DB. Using mongojs api and the options
   // specifying the dbUrl and collectionName. 
 
   var dbName = options.dbUrl;

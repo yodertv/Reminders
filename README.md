@@ -61,6 +61,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Version in Progress (12.01.2017)
+- Documented and fixed (Bug#49), handling 'no available DBs' condition more gracelfully.
+
 ### Version 0.5.6 (04.14.2017)
 - Changes for migration to zeit now deployment and updated docs and README.
 

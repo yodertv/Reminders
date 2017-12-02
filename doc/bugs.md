@@ -3,82 +3,6 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#50)
 
-###(Bug#49) -- Handling no availalbe DB doesn't inform user as expected.
-```
-23:54:36.323  INFO todo: request start GET /account fe80::417:74e5:b5d5:dbe4
-23:54:36.325 TRACE todo: {
-  "env": "DEV"
-}
-23:54:36.327  INFO todo: request finish 200 OK 3.288212ms
-23:54:36.390  INFO todo: request start GET /fonts/glyphicons-halflings-regular.woff2 fe80::417:74e5:b5d5:dbe4
-23:54:36.390  INFO todo: request finish 304 Not Modified 0.742995ms
-23:54:53.895  INFO todo: request start POST /auth/local fe80::417:74e5:b5d5:dbe4
-23:54:53.900  INFO todo: Assinging db...user-list
-23:54:53.901 ERROR todo: Sorry, no available databases for user junk
-23:54:53.902  INFO todo: Log User List:user-list 
-Idx  Email                     DB Name                                            Views 
----  -----                     -------                                            ----- 
-0    bob@example.com           localhost:27017/bobstodos                          69    
-1    test@example.com          localhost:27017/test-todo                          0     
-2    frank@example.com         localhost:27017/todos-for-frank                    0     
-3    yoderm01@gmail.com        localhost:27017/yodertvtodo                        0     
-4    yodercode@gmail.com       localhost:27017/todo_new_test                      14    
-23:54:53.903 TRACE todo: Serializing user:{
-  "email": "junk",
-  "db": "Sorry, no available databases.",
-  "env": "DEV",
-  "views": 0
-}
-23:54:53.906  INFO todo: request finish 302 Found 10.933273ms junk
-23:54:53.938  INFO todo: request start GET / fe80::417:74e5:b5d5:dbe4
-23:54:53.940  INFO todo: request finish 200 OK 1.435689ms
-23:54:53.993  INFO todo: request start GET /css/bootstrap-theme.min.css fe80::417:74e5:b5d5:dbe4
-23:54:53.994  INFO todo: request finish 304 Not Modified 0.996854ms
-23:54:54.030  INFO todo: request start GET /css/bootstrap-responsive.min.css fe80::417:74e5:b5d5:dbe4
-23:54:54.031  INFO todo: request finish 304 Not Modified 0.96876ms
-23:54:54.038  INFO todo: request start GET /css/bootstrap.min.css fe80::417:74e5:b5d5:dbe4
-23:54:54.040  INFO todo: request finish 304 Not Modified 1.48969ms
-23:54:54.041  INFO todo: request start GET /js/bootstrap.min.js fe80::417:74e5:b5d5:dbe4
-23:54:54.042  INFO todo: request finish 304 Not Modified 1.428366ms
-23:54:54.053  INFO todo: request start GET /js/angular-resource.min.js fe80::417:74e5:b5d5:dbe4
-23:54:54.054  INFO todo: request finish 304 Not Modified 0.727658ms
-23:54:54.055  INFO todo: request start GET /todo.css fe80::417:74e5:b5d5:dbe4
-23:54:54.055  INFO todo: request start GET /js/angular-route.min.js fe80::417:74e5:b5d5:dbe4
-23:54:54.056  INFO todo: request start GET /js/jquery-1.11.3.min.js fe80::417:74e5:b5d5:dbe4
-23:54:54.057  INFO todo: request finish 304 Not Modified 1.777198ms
-23:54:54.057  INFO todo: request finish 304 Not Modified 1.535685ms
-23:54:54.057  INFO todo: request finish 304 Not Modified 1.3963ms
-23:54:54.060  INFO todo: request start GET /todo.js fe80::417:74e5:b5d5:dbe4
-23:54:54.060  INFO todo: request finish 304 Not Modified 0.613447ms
-23:54:54.063  INFO todo: request start GET /TodoServices.js fe80::417:74e5:b5d5:dbe4
-23:54:54.064  INFO todo: request start GET /js/angular.min.js fe80::417:74e5:b5d5:dbe4
-23:54:54.065  INFO todo: request finish 304 Not Modified 1.359823ms
-23:54:54.065  INFO todo: request finish 304 Not Modified 1.156978ms
-23:54:54.157  INFO todo: request start GET /todo.html fe80::417:74e5:b5d5:dbe4
-23:54:54.161  INFO todo: request finish 200 OK 3.614034ms
-23:54:54.199  INFO todo: request start GET /img/favicon.ico fe80::417:74e5:b5d5:dbe4
-23:54:54.201  INFO todo: request finish 304 Not Modified 1.94656ms
-23:54:54.254  INFO todo: request start GET /api/todos/Reminders fe80::417:74e5:b5d5:dbe4
-23:54:54.255 TRACE todo: Deserializing user:{
-  "email": "junk",
-  "db": "Sorry, no available databases.",
-  "env": "DEV",
-  "views": 1
-}
-TypeError: Cannot set property 'views' of null
-    at /Users/mike/src/Todos/build/todoServer.js:94:22
-    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:63:10)
-    at /Users/mike/src/Todos/build/todoServer.js:92:12
-    at pass (/Users/mike/src/Todos/node_modules/passport/lib/authenticator.js:353:9)
-    at Authenticator.deserializeUser (/Users/mike/src/Todos/node_modules/passport/lib/authenticator.js:358:5)
-    at SessionStrategy.authenticate (/Users/mike/src/Todos/node_modules/passport/lib/strategies/session.js:49:28)
-    at attempt (/Users/mike/src/Todos/node_modules/passport/lib/middleware/authenticate.js:341:16)
-    at Object.authenticate [as handle] (/Users/mike/src/Todos/node_modules/passport/lib/middleware/authenticate.js:342:7)
-    at next (/usr/local/lib/node_modules/express/node_modules/connect/lib/proto.js:199:15)
-    at Object.initialize [as handle] (/Users/mike/src/Todos/node_modules/passport/lib/middleware/initialize.js:62:5)
-23:54:54.258  INFO todo: request finish 500 Internal Server Error 4.256763ms
-```
-
 ###(Bug#48) -- Source IP address is not printed in ziet logs.
 ```
 05/15 11:16 PM  Tue, 16 May 2017 03:16:11 GMT [yoderm01@gmail.com@::1]GET /list/:Reminders 302 - 5 ms
@@ -249,6 +173,84 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#49) -- Handling no availalbe DB doesn't inform user as expected.
+- Protected the code from null return objects when DB User wasn't found.
+
+```
+23:54:36.323  INFO todo: request start GET /account fe80::417:74e5:b5d5:dbe4
+23:54:36.325 TRACE todo: {
+  "env": "DEV"
+}
+23:54:36.327  INFO todo: request finish 200 OK 3.288212ms
+23:54:36.390  INFO todo: request start GET /fonts/glyphicons-halflings-regular.woff2 fe80::417:74e5:b5d5:dbe4
+23:54:36.390  INFO todo: request finish 304 Not Modified 0.742995ms
+23:54:53.895  INFO todo: request start POST /auth/local fe80::417:74e5:b5d5:dbe4
+23:54:53.900  INFO todo: Assinging db...user-list
+23:54:53.901 ERROR todo: Sorry, no available databases for user junk
+23:54:53.902  INFO todo: Log User List:user-list 
+Idx  Email                     DB Name                                            Views 
+---  -----                     -------                                            ----- 
+0    bob@example.com           localhost:27017/bobstodos                          69    
+1    test@example.com          localhost:27017/test-todo                          0     
+2    frank@example.com         localhost:27017/todos-for-frank                    0     
+3    yoderm01@gmail.com        localhost:27017/yodertvtodo                        0     
+4    yodercode@gmail.com       localhost:27017/todo_new_test                      14    
+23:54:53.903 TRACE todo: Serializing user:{
+  "email": "junk",
+  "db": "Sorry, no available databases.",
+  "env": "DEV",
+  "views": 0
+}
+23:54:53.906  INFO todo: request finish 302 Found 10.933273ms junk
+23:54:53.938  INFO todo: request start GET / fe80::417:74e5:b5d5:dbe4
+23:54:53.940  INFO todo: request finish 200 OK 1.435689ms
+23:54:53.993  INFO todo: request start GET /css/bootstrap-theme.min.css fe80::417:74e5:b5d5:dbe4
+23:54:53.994  INFO todo: request finish 304 Not Modified 0.996854ms
+23:54:54.030  INFO todo: request start GET /css/bootstrap-responsive.min.css fe80::417:74e5:b5d5:dbe4
+23:54:54.031  INFO todo: request finish 304 Not Modified 0.96876ms
+23:54:54.038  INFO todo: request start GET /css/bootstrap.min.css fe80::417:74e5:b5d5:dbe4
+23:54:54.040  INFO todo: request finish 304 Not Modified 1.48969ms
+23:54:54.041  INFO todo: request start GET /js/bootstrap.min.js fe80::417:74e5:b5d5:dbe4
+23:54:54.042  INFO todo: request finish 304 Not Modified 1.428366ms
+23:54:54.053  INFO todo: request start GET /js/angular-resource.min.js fe80::417:74e5:b5d5:dbe4
+23:54:54.054  INFO todo: request finish 304 Not Modified 0.727658ms
+23:54:54.055  INFO todo: request start GET /todo.css fe80::417:74e5:b5d5:dbe4
+23:54:54.055  INFO todo: request start GET /js/angular-route.min.js fe80::417:74e5:b5d5:dbe4
+23:54:54.056  INFO todo: request start GET /js/jquery-1.11.3.min.js fe80::417:74e5:b5d5:dbe4
+23:54:54.057  INFO todo: request finish 304 Not Modified 1.777198ms
+23:54:54.057  INFO todo: request finish 304 Not Modified 1.535685ms
+23:54:54.057  INFO todo: request finish 304 Not Modified 1.3963ms
+23:54:54.060  INFO todo: request start GET /todo.js fe80::417:74e5:b5d5:dbe4
+23:54:54.060  INFO todo: request finish 304 Not Modified 0.613447ms
+23:54:54.063  INFO todo: request start GET /TodoServices.js fe80::417:74e5:b5d5:dbe4
+23:54:54.064  INFO todo: request start GET /js/angular.min.js fe80::417:74e5:b5d5:dbe4
+23:54:54.065  INFO todo: request finish 304 Not Modified 1.359823ms
+23:54:54.065  INFO todo: request finish 304 Not Modified 1.156978ms
+23:54:54.157  INFO todo: request start GET /todo.html fe80::417:74e5:b5d5:dbe4
+23:54:54.161  INFO todo: request finish 200 OK 3.614034ms
+23:54:54.199  INFO todo: request start GET /img/favicon.ico fe80::417:74e5:b5d5:dbe4
+23:54:54.201  INFO todo: request finish 304 Not Modified 1.94656ms
+23:54:54.254  INFO todo: request start GET /api/todos/Reminders fe80::417:74e5:b5d5:dbe4
+23:54:54.255 TRACE todo: Deserializing user:{
+  "email": "junk",
+  "db": "Sorry, no available databases.",
+  "env": "DEV",
+  "views": 1
+}
+TypeError: Cannot set property 'views' of null
+    at /Users/mike/src/Todos/build/todoServer.js:94:22
+    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:63:10)
+    at /Users/mike/src/Todos/build/todoServer.js:92:12
+    at pass (/Users/mike/src/Todos/node_modules/passport/lib/authenticator.js:353:9)
+    at Authenticator.deserializeUser (/Users/mike/src/Todos/node_modules/passport/lib/authenticator.js:358:5)
+    at SessionStrategy.authenticate (/Users/mike/src/Todos/node_modules/passport/lib/strategies/session.js:49:28)
+    at attempt (/Users/mike/src/Todos/node_modules/passport/lib/middleware/authenticate.js:341:16)
+    at Object.authenticate [as handle] (/Users/mike/src/Todos/node_modules/passport/lib/middleware/authenticate.js:342:7)
+    at next (/usr/local/lib/node_modules/express/node_modules/connect/lib/proto.js:199:15)
+    at Object.initialize [as handle] (/Users/mike/src/Todos/node_modules/passport/lib/middleware/initialize.js:62:5)
+23:54:54.258  INFO todo: request finish 500 Internal Server Error 4.256763ms
+```
 
 ###(Bug#45) -- Made for iPhone 6 plus. Doesn't adjust to iPhone 6 and likely iPhone 5.
 - Used javascript to set the initial scale and width.
