@@ -172,7 +172,7 @@ passport.use(new GoogleStrategy({
         if (err) { return done(err); }
         if (!dbUser) { // Not found
           var newUser = userList.assignDb(profile._json.email);
-          if (!dbUser) { // Unable to assugn DB.
+          if (!newUser) { // Unable to assugn DB.
               var brokenUser = {};
               brokenUser.email = profile._json.email;
               brokenUser.db = 'Sorry, no available databases.'; // A hack to return the error message to the client.
