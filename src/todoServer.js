@@ -171,7 +171,7 @@ passport.use(new GoogleStrategy({
       var user = userList.findByEmail(profile._json.email, function(err, dbUser) {
         if (err) { return done(err); }
         if (!dbUser) { // Not found
-          dbUser = userList.assignDb(profile._json.email);
+          var newUser = userList.assignDb(profile._json.email);
           if (!dbUser) { // Unable to assugn DB.
               var brokenUser = {};
               brokenUser.email = profile._json.email;
@@ -179,13 +179,15 @@ passport.use(new GoogleStrategy({
               log.error('Sorry, no available databases for user ' + profile._json.email );
               return ( brokenUser );
             }
-            return ( dbUser ); // Just assigned.
+            return ( newUser ); // Just assigned.
           }
           return ( dbUser ); // Previously assinged.
       });
 
       user.env = nodeEnv;
       user.views = 0;
+      log.trace({"user" : user }, "Local Auth");
+      listSessions();
       return done(null, user);
     });
   }
