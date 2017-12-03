@@ -59,6 +59,11 @@ Each now deployment get's it's own unique URL. This project needs to know its ow
 % now alias set https://reminders-kevovklwel.now.sh reminders
 ```
 
+Keep the app from being frozen offline by using the scale command.
+```
+now scale reminders.now.sh 1
+```
+
 In the browser try out [Reminders App](https://reminders.now.sh).
 
 ## Add a new target

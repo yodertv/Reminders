@@ -1,6 +1,6 @@
 {
   "name": "Reminders",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "An example reminders app to illustrate a fully working, cloud hosted, three tiered, angular/nodejs/mongodb application.",
   "license": "MIT",
   "repository": {
@@ -14,23 +14,27 @@
     "node": "^7.0.0"
   },
   "dependencies": {
-    "express": "3.1.0",
-    "passport": "0.2.1",
-    "passport-local": "1.0.0",
-    "passport-google-oauth": "0.1.5",
-    "mongojs": "2.4.0",
-    "bootstrap": "3.3.6",
     "angular": "1.5.8",
     "angular-resource": "1.5.8",
     "angular-route": "1.5.8",
-    "cookie-session": "1.2.0"
+    "bootstrap": "3.3.6",
+    "bunyan": "^1.8.10",
+    "bunyan-middleware": "^0.6.0",
+    "cookie-session": "1.2.0",
+    "dtrace-provider": "^0.8.5",
+    "express": "3.1.0",
+    "mongojs": "2.4.0",
+    "passport": "0.2.1",
+    "passport-google-oauth": "0.1.5",
+    "passport-local": "1.0.0",
+    "sprintf-js": "1.0.3"
   },
   "devDependencies": {
-    "commander" : "2.6.0",
-    "shelljs" : "0.3.0"
+    "commander": "2.6.0",
+    "shelljs": "0.3.0"
   },
-  "#1_comment" : "Environment independent build variables.",
-  "build_dir" : "./build",
-  "lib_dir" : "./lib",
-  "src_dir" : "./src"
+  "#1_comment": "Environment independent build variables.",
+  "build_dir": "./build",
+  "lib_dir": "./lib",
+  "src_dir": "./src"
 }
