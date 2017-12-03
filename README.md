@@ -61,8 +61,12 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
-### Version in Progress (12.01.2017)
+### Version 0.6.0 (12.02.2017)
 - Documented and fixed (Bug#49), handling 'no available DBs' condition more gracelfully.
+- Refactor logging to use node-bunyan.
+- Added view count to cookie and print user list nicely.
+- Use only one auth strategy based on environment.
+- Use node 8.3.
 
 ### Version 0.5.6 (04.14.2017)
 - Changes for migration to zeit now deployment and updated docs and README.

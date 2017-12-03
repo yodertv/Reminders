@@ -1,6 +1,6 @@
 {
   "name": "Reminders",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "An example reminders app to illustrate a fully working, cloud hosted, three tiered, angular/nodejs/mongodb application.",
   "license": "MIT",
   "repository": {
