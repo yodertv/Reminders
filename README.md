@@ -57,8 +57,16 @@ Try out [Reminders App](https://reminders.now.sh).
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
 - Add a print feature.
+- Add proper logging on the server side.
 
 ## History
+
+### Version 0.6.0 (12.02.2017)
+- Documented and fixed (Bug#49), handling 'no available DBs' condition more gracelfully.
+- Refactor logging to use node-bunyan.
+- Added view count to cookie and print user list nicely.
+- Use only one auth strategy based on environment.
+- Use node 8.3.
 
 ### Version 0.5.6 (04.14.2017)
 - Changes for migration to zeit now deployment and updated docs and README.
