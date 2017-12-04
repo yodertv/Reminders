@@ -27,11 +27,11 @@ Try out [Reminders App](https://reminders.now.sh).
 - Assigns - storage for new users from a pool of pre-allocated DBs.
 - Used on - nook browser, iTouch, Safari, iPhone, Chrome on Mac.
 - Responsive - to three device sizes. Uses pills for navigation and a small menu.
-- Forward button - takes you to the next older archive if it exists.
+- Forward button - takes you to the next task list.
 - HTM5 and Angular Routing - support browser back and deep linking to archives and any page. 
 - Rest apiPath is configurable.
-- Login to /auth/local, with failure notification.
-- Logs user name using a custom token of express (connect) logger.
+- Login to /auth/local, with failure notification, for testing.
+- Logs user name using a cookies and the bunyan logger.
 - Displays a ```...loading...``` message while fetching data. 
 
 ## Deployments

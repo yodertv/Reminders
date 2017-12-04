@@ -187,7 +187,7 @@ passport.use(new GoogleStrategy({
       user.env = nodeEnv;
       user.views = 0;
       log.trace({"user" : user }, "Local Auth");
-      listSessions();
+      // listSessions();  duplicaste the asynchronos call made in google auth callback.
       return done(null, user);
     });
   }
