@@ -1,7 +1,49 @@
 Todos Bug List
 ==============
 
+##Open Bugs -- Next: (Bug#51)
+
+###(Bug#50) -- User list is printed twice.
+```
 ##Open Bugs -- Next: (Bug#50)
+08:08:44.861  INFO todo: request finish GET /list/:Reminders, 302 Found 33.424879ms, req.ip=::1
+08:08:46.167  INFO todo: request finish GET /account, 200 OK 6.035089ms, req.ip=::1
+08:08:49.286  INFO todo: request finish GET /auth/google, 302 Found 14.477818ms
+08:09:02.271  INFO todo: Log User List: module=user-list, user-list-spfd: 
+Idx  Email                     DB Name                                            Views 
+---  -----                     -------                                            ----- 
+0    yoderm01@gmail.com        ds031647.mlab.com:31647/yoderm01                   0     
+1    bob@example.com           localhost:27017/bobstodos                          0     
+2    test@example.com          localhost:27017/test-todo                          0     
+3    junk@gmail.com            ds039007.mongolab.com:39007/2ndnewishdn            0     
+4    frank@example.com         ds047057.mongolab.com:47057/frankstodos            0     
+5    yodercode@gmail.com       ds049467.mongolab.com:49467/bobstodos              6     
+6    nyoder@hudsonsailing.org  ds045137.mongolab.com:45137/todo-000               0     
+7    henrikgruett@gmail.com    ds047095.mongolab.com:47095/todos-001              0     
+8    UNASSIGNED_DB             ds051980.mongolab.com:51980/todo-002               0     
+9    UNASSIGNED_DB             ds037165.mongolab.com:37165/todos-003              0     
+10   UNASSIGNED_DB             ds045907.mlab.com:45907/test-todo                  0     
+08:09:02.279  INFO todo: request finish GET /auth/google/callback?code=4/AAAhvirPxRHjE_9OoQsXCQ-XqN4cIdIXr0LUZ2d6qB1JbBmqKBsGvmWki9lNjbZiOjVFuleGdxxZWoCO8REbMG0, 302 Found 327.472997ms, user=yoderm01@gmail.com, req.ip=::1
+08:09:03.273  INFO todo: Log User List: module=user-list, user-list-spfd: 
+Idx  Email                     DB Name                                            Views 
+---  -----                     -------                                            ----- 
+0    yoderm01@gmail.com        ds031647.mlab.com:31647/yoderm01                   0     
+1    bob@example.com           localhost:27017/bobstodos                          0     
+2    test@example.com          localhost:27017/test-todo                          0     
+3    junk@gmail.com            ds039007.mongolab.com:39007/2ndnewishdn            0     
+4    frank@example.com         ds047057.mongolab.com:47057/frankstodos            0     
+5    yodercode@gmail.com       ds049467.mongolab.com:49467/bobstodos              6     
+6    nyoder@hudsonsailing.org  ds045137.mongolab.com:45137/todo-000               0     
+7    henrikgruett@gmail.com    ds047095.mongolab.com:47095/todos-001              0     
+8    UNASSIGNED_DB             ds051980.mongolab.com:51980/todo-002               0     
+9    UNASSIGNED_DB             ds037165.mongolab.com:37165/todos-003              0     
+10   UNASSIGNED_DB             ds045907.mlab.com:45907/test-todo                  0     
+08:09:03.535  INFO todo: request finish GET /api/todos/Reminders, 200 OK 95.449711ms, user=yoderm01@gmail.com
+08:09:03.779  INFO todo: request finish GET /api/todos/, 200 OK 337.279833ms, user=yoderm01@gmail.com
+10:38:39.916  INFO todo: request finish GET /list/:Reminders, 302 Found 5.203817ms, user=yoderm01@gmail.com
+10:38:40.885  INFO todo: request finish GET /api/todos/, 200 OK 81.52386ms, user=yoderm01@gmail.com
+
+```
 
 ###(Bug#48) -- Source IP address is not printed in ziet logs.
 ```
