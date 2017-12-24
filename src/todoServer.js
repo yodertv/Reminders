@@ -140,7 +140,6 @@ passport.use(new LocalStrategy(
         user.views = 0;
         // Consider counting and remembering logins here.
         log.trace({"user" : user }, "Local Auth");
-        listSessions();
         return done(null, user);
       })
     });
@@ -186,8 +185,7 @@ passport.use(new GoogleStrategy({
 
       user.env = nodeEnv;
       user.views = 0;
-      log.trace({"user" : user }, "Local Auth");
-      // listSessions();  duplicaste the asynchronos call made in google auth callback.
+      log.trace({"user" : user }, "Google Auth");
       return done(null, user);
     });
   }
@@ -262,6 +260,8 @@ if (!nodeProd) { // Never use this route in production.
   app.post('/auth/local', express.bodyParser(),
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
+      req.log.trace(req.user.email);
+      setTimeout(listSessions,1000); // Print sessions in one sec.
       res.redirect('/#list/:Reminders');
     }
   );

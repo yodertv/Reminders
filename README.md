@@ -25,13 +25,13 @@ Try out [Reminders App](https://reminders.now.sh).
 - Delete icon - trash can deletes a task from a list or a list from the lists.  
 - Welcome - This page gives information about the application and the current user if authenticated, otherwise it provides information about the application and a login dialog screen.
 - Assigns - storage for new users from a pool of pre-allocated DBs.
-- Used on - nook browser, iTouch, Safari, iPhone, Chrome on Mac.
+- Used on - IE, nook browser, iTouch, Safari, iPhone, Chrome on Mac.
 - Responsive - to three device sizes. Uses pills for navigation and a small menu.
 - Forward button - takes you to the next task list.
 - HTM5 and Angular Routing - support browser back and deep linking to archives and any page. 
 - Rest apiPath is configurable.
 - Login to /auth/local, with failure notification, for testing.
-- Logs user name using a cookies and the bunyan logger.
+- Logs user name and other req info using cookies and the bunyan logger at multiple levels.
 - Displays a ```...loading...``` message while fetching data. 
 
 ## Deployments
@@ -45,7 +45,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - DB depends on MongoLab for production and local mongodb for dev.
 
 ## Backlog
-- Search feature
+- Search feature to find tasks
 - Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
@@ -53,13 +53,16 @@ Try out [Reminders App](https://reminders.now.sh).
 - Add unit testing.
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
-- Work off-line.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.
 - Support addvertisments.
+- Work off-line.
 - Add a print feature.
-- Add proper logging on the server side.
 
 ## History
+
+### Version 0.6.1 (12.23.2017)
+- Documented and fixed (Bug#51) -- User list is printed twice.
+- Updated Readme
 
 ### Version 0.6.0 (12.02.2017)
 - Documented and fixed (Bug#49), handling 'no available DBs' condition more gracelfully.
@@ -213,7 +216,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - Fixed (Bug#13) Inserting an array to a collection doesn't have the expected behavior of replacing the collection.
 - Fixed (Bug#11) Update to task fails.
 - Fixed (Bug#15) The inserted data from the client doesn't preserve the mongo ObjectID.
-- FIxed (Bug#10) two _id forms in db.
+- FIxed (Bug#10) two ```_id``` forms in DB 
 
 ### 2.1.2
 - Use $locationProvider.html5Mode(true) to eliminate # in my URLs.
