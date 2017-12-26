@@ -4,9 +4,12 @@ var bunyan = require('bunyan')
 var obj = {}
 
 function reqSerializer(req) {
+	var source_ip; 
+	if (req.headers['x-real-ip'] != null) { source_ip = req.headers['x-real-ip'] } // Where zeit now keeps the source ip.
+		else { source_ip = req.ip }
 	return { method: req.method
 		, url: req.url
-		, ip: req.ip
+		, ip: source_ip
 		, headers: req.headers }
 }
 
