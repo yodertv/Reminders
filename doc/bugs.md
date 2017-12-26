@@ -3,11 +3,6 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#51)
 
-###(Bug#48) -- Source IP address is not printed in ziet logs.
-```
-05/15 11:16 PM  Tue, 16 May 2017 03:16:11 GMT [yoderm01@gmail.com@::1]GET /list/:Reminders 302 - 5 ms
-``` 
-
 ###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses.
 ```
 mikes-air:Todos mike$ cd ./build ; node ./todoServer.js | ../node_modules/.bin/bunyan ; cd ..
@@ -174,9 +169,15 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 
 ##Closed Bugs
 
-###(Bug#50) -- User list is printed twice.
+###(Bug#48) -- Source IP address is not printed in ziet logs.
 ```
-##Open Bugs -- Next: (Bug#50)
+05/15 11:16 PM  Tue, 16 May 2017 03:16:11 GMT [yoderm01@gmail.com@::1]GET /list/:Reminders 302 - 5 ms
+``` 
+Closed 12.25.2017
+
+###(Bug#50) -- User list is printed twice.
+
+```
 08:08:44.861  INFO todo: request finish GET /list/:Reminders, 302 Found 33.424879ms, req.ip=::1
 08:08:46.167  INFO todo: request finish GET /account, 200 OK 6.035089ms, req.ip=::1
 08:08:49.286  INFO todo: request finish GET /auth/google, 302 Found 14.477818ms
