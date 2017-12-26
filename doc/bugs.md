@@ -3,41 +3,6 @@ Todos Bug List
 
 ##Open Bugs -- Next: (Bug#51)
 
-###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses.
-```
-mikes-air:Todos mike$ cd ./build ; node ./todoServer.js | ../node_modules/.bin/bunyan ; cd ..
-[2017-05-13T14:17:53.764Z]  INFO: todoServer/6866 on mikes-air.local: Todo Server v0.5.7 running on mikes-air.local:8080. Node environment = DEV.
-[2017-05-13T14:17:53.766Z]  INFO: todoServer/6866 on mikes-air.local: User store = localhost:27017/users[userList]
-[2017-05-13T14:17:53.766Z]  INFO: todoServer/6866 on mikes-air.local: Use URL http://localhost:8080. CTRL + C to shutdown.
-[2017-05-13T14:17:53.821Z]  INFO: todoServer/6866 on mikes-air.local: Log User List: (module=user-list)
-    user-list-spfd: 
-    Idx  Email                     DB Name                                            Views 
-    ---  -----                     -------                                            ----- 
-    0    bob@example.com           localhost:27017/bobstodos                          0     
-    1    test@example.com          localhost:27017/test-todo                          0     
-    2    frank@example.com         localhost:27017/todos-for-frank                    0     
-    3    yoderm01@gmail.com        localhost:27017/yodertvtodo                        0     
-    4    yodercode@gmail.com       localhost:27017/todo_new_test                      0     
-[2017-05-13T14:22:33.844Z]  INFO: todoServer/6866 on mikes-air.local: Opening DB localhost:27017/bobstodos via DB_FIND (req_id=9b2b78e0-37e7-11e7-b764-978aea49c2b6)
-[2017-05-13T14:22:33.869Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=9b2d74b0-37e7-11e7-b764-978aea49c2b6, duration=17.470032, status=200, req.user=bob@example.com)
-    GET /api/todos/ HTTP/1.1
-[2017-05-13T14:22:33.871Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=9b2b78e0-37e7-11e7-b764-978aea49c2b6, duration=32.745667, status=200, req.user=bob@example.com)
-    GET /api/todos/Reminders HTTP/1.1
-[2017-05-13T14:23:27.571Z]  INFO: todoServer/6866 on mikes-air.local: Opening DB localhost:27017/test-todo via DB_FIND (req_id=bb325320-37e7-11e7-b764-978aea49c2b6)
-[2017-05-13T14:23:27.584Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=bb325320-37e7-11e7-b764-978aea49c2b6, duration=13.978187, status=200, req.user=test@example.com)
-    GET /api/todos/Reminders HTTP/1.1
-[2017-05-13T14:23:27.589Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=bb338ba0-37e7-11e7-b764-978aea49c2b6, duration=10.98632, status=200, req.user=test@example.com)
-    GET /api/todos/ HTTP/1.1
-[2017-05-13T14:23:36.358Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c06e32f0-37e7-11e7-b764-978aea49c2b6, duration=6.503004, status=200, req.user=test@example.com)
-    GET /api/todos/ HTTP/1.1
-[2017-05-13T14:23:39.109Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c2126d10-37e7-11e7-b764-978aea49c2b6, duration=3.460762, status=200, req.user=test@example.com)
-    GET /api/todos/ HTTP/1.1
-[2017-05-13T14:23:39.115Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c2124600-37e7-11e7-b764-978aea49c2b6, duration=10.854809, status=200, req.user=test@example.com)
-    GET /api/todos/todoMon-Jan-14-2013 HTTP/1.1
-[2017-05-13T14:23:45.556Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c5e6f4b0-37e7-11e7-b764-978aea49c2b6, duration=25.322129999999998, status=200, req.user=test@example.com)
-    PUT /api/todos/todoMon-Jan-14-2013 HTTP/1.1
-```
-
 ###(Bug#46) -- Protect this function from unopened db.
 ```
 /Users/mike/src/Todos/build/todoServer.js:464
@@ -168,6 +133,42 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses. This appears to have been a mistake. Even the trace below actually has unique values.
+```
+mikes-air:Todos mike$ cd ./build ; node ./todoServer.js | ../node_modules/.bin/bunyan ; cd ..
+[2017-05-13T14:17:53.764Z]  INFO: todoServer/6866 on mikes-air.local: Todo Server v0.5.7 running on mikes-air.local:8080. Node environment = DEV.
+[2017-05-13T14:17:53.766Z]  INFO: todoServer/6866 on mikes-air.local: User store = localhost:27017/users[userList]
+[2017-05-13T14:17:53.766Z]  INFO: todoServer/6866 on mikes-air.local: Use URL http://localhost:8080. CTRL + C to shutdown.
+[2017-05-13T14:17:53.821Z]  INFO: todoServer/6866 on mikes-air.local: Log User List: (module=user-list)
+    user-list-spfd: 
+    Idx  Email                     DB Name                                            Views 
+    ---  -----                     -------                                            ----- 
+    0    bob@example.com           localhost:27017/bobstodos                          0     
+    1    test@example.com          localhost:27017/test-todo                          0     
+    2    frank@example.com         localhost:27017/todos-for-frank                    0     
+    3    yoderm01@gmail.com        localhost:27017/yodertvtodo                        0     
+    4    yodercode@gmail.com       localhost:27017/todo_new_test                      0     
+[2017-05-13T14:22:33.844Z]  INFO: todoServer/6866 on mikes-air.local: Opening DB localhost:27017/bobstodos via DB_FIND (req_id=9b2b78e0-37e7-11e7-b764-978aea49c2b6)
+[2017-05-13T14:22:33.869Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=9b2d74b0-37e7-11e7-b764-978aea49c2b6, duration=17.470032, status=200, req.user=bob@example.com)
+    GET /api/todos/ HTTP/1.1
+[2017-05-13T14:22:33.871Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=9b2b78e0-37e7-11e7-b764-978aea49c2b6, duration=32.745667, status=200, req.user=bob@example.com)
+    GET /api/todos/Reminders HTTP/1.1
+[2017-05-13T14:23:27.571Z]  INFO: todoServer/6866 on mikes-air.local: Opening DB localhost:27017/test-todo via DB_FIND (req_id=bb325320-37e7-11e7-b764-978aea49c2b6)
+[2017-05-13T14:23:27.584Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=bb325320-37e7-11e7-b764-978aea49c2b6, duration=13.978187, status=200, req.user=test@example.com)
+    GET /api/todos/Reminders HTTP/1.1
+[2017-05-13T14:23:27.589Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=bb338ba0-37e7-11e7-b764-978aea49c2b6, duration=10.98632, status=200, req.user=test@example.com)
+    GET /api/todos/ HTTP/1.1
+[2017-05-13T14:23:36.358Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c06e32f0-37e7-11e7-b764-978aea49c2b6, duration=6.503004, status=200, req.user=test@example.com)
+    GET /api/todos/ HTTP/1.1
+[2017-05-13T14:23:39.109Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c2126d10-37e7-11e7-b764-978aea49c2b6, duration=3.460762, status=200, req.user=test@example.com)
+    GET /api/todos/ HTTP/1.1
+[2017-05-13T14:23:39.115Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c2124600-37e7-11e7-b764-978aea49c2b6, duration=10.854809, status=200, req.user=test@example.com)
+    GET /api/todos/todoMon-Jan-14-2013 HTTP/1.1
+[2017-05-13T14:23:45.556Z]  INFO: todoServer/6866 on mikes-air.local: request finish (req_id=c5e6f4b0-37e7-11e7-b764-978aea49c2b6, duration=25.322129999999998, status=200, req.user=test@example.com)
+    PUT /api/todos/todoMon-Jan-14-2013 HTTP/1.1
+```
+Closed 12.25.2017 as mistaken report.
 
 ###(Bug#48) -- Source IP address is not printed in ziet logs.
 ```
