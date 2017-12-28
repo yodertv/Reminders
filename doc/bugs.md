@@ -1,22 +1,7 @@
-Todos Bug List
-==============
+Reminders Bug List
+==================
 
-##Open Bugs -- Next: (Bug#51)
-
-###(Bug#46) -- Protect this function from unopened db.
-```
-/Users/mike/src/Todos/build/todoServer.js:464
-        dbs[dbName].collection(collectionName).update({
-                   ^
-
-TypeError: Cannot read property 'collection' of undefined
-    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:464:20)
-    at emitNone (events.js:67:13)
-    at IncomingMessage.emit (events.js:166:7)
-    at endReadableNT (_stream_readable.js:905:12)
-    at doNTCallback2 (node.js:441:9)
-    at process._tickCallback (node.js:355:17)
-```
+##Open Bugs -- Next: (Bug#52)
 
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
@@ -133,6 +118,30 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#46) -- Protect this function from unopened db.
+```
+/Users/mike/src/Todos/build/todoServer.js:464
+        dbs[dbName].collection(collectionName).update({
+                   ^
+
+TypeError: Cannot read property 'collection' of undefined
+    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:464:20)
+    at emitNone (events.js:67:13)
+    at IncomingMessage.emit (events.js:166:7)
+    at endReadableNT (_stream_readable.js:905:12)
+    at doNTCallback2 (node.js:441:9)
+    at process._tickCallback (node.js:355:17)
+```
+Closed and fixed 12.27.2017 by checking for DB being opened.
+
+###(Bug#51) -- Object GET function defeated by the wild card GET.
+
+The below GET (not used by the app) returns an empty [] array.
+```
+http://mikes-air.local:8080/api/todos/Reminders/5a1a5b5850c6058f5cf63e16
+```
+Closed 12.27.2017 by reordering my express router.
 
 ###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses. This appears to have been a mistake. Even the trace below actually has unique values.
 ```
@@ -425,12 +434,15 @@ Trace
 
 ###(Bug#18) Duplicate objectID error.
 Happens on first archive of the day when the current todos are recreated:
+```
 	Save error: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: test-todo.todo.$_id_  dup key: { : ObjectId('519992d1e4b0ea5d049be645') }","op":{"_id":"519992d1e4b0ea5d049be645","text":"asd","done":false}})
- 	Happend in old test-todo db.
-
- 	Happend again on yodertvtodo 3.26.15 on kitchen-mac.
- 	DB_INSERT_ERR: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: yodertvtodo.todo.$_id_  dup key: { : ObjectId('54701f6fe4b0d8aa33853ba3') }","op":{"_id":"54701f6fe4b0d8aa33853ba3","text":"Amazon account switch","done":false}})
+```
+Happend in old test-todo db.
+Happend again on yodertvtodo 3.26.15 on kitchen-mac.
+``` 	
+  DB_INSERT_ERR: WriteError({"code":11000,"index":0,"errmsg":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: yodertvtodo.todo.$_id_  dup key: { : ObjectId('54701f6fe4b0d8aa33853ba3') }","op":{"_id":"54701f6fe4b0d8aa33853ba3","text":"Amazon account switch","done":false}})
 	Fri, 27 Mar 2015 03:08:06 GMT [::ffff:192.168.0.11]-PUT /api/1/databases/yodertvtodo/collections/todo 500 - 48 ms
+```
 
 ###(Bug#17) Server crashes when on localnet with multiple clients:
 ```
@@ -482,7 +494,7 @@ Server shows:
 ```
 Not Related to (Bug#10). Fixed by setting upsert option.
 
-###(Bug#10) two _id forms in db.
+###(Bug#10) two ```_id``` forms in db.
 ```
 { "_id" : ObjectId("519992d7e4b0601363034fef"), "text" : "fasd", "done" : true }
 	{ "_id" : "5179feafe4b0494c6ed82de2", "text" : "iii", "done" : false }

@@ -60,8 +60,13 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Version 0.6.2 (12.27.2017)
+- Fixed (Bug#51) -- Object GET function defeated by the wild card GET.
+- Fixed (Bug#46) -- Object Actions should open DB rather than error out.
+- Fixed (Bug#48) -- Zeit logs no Source IP address.
+
 ### Version 0.6.1 (12.23.2017)
-- Documented and fixed (Bug#51) -- User list is printed twice.
+- Documented and fixed (Bug#50) -- User list is printed twice.
 - Updated Readme
 
 ### Version 0.6.0 (12.02.2017)
