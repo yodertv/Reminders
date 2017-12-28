@@ -3,21 +3,6 @@ Reminders Bug List
 
 ##Open Bugs -- Next: (Bug#52)
 
-###(Bug#46) -- Protect this function from unopened db.
-```
-/Users/mike/src/Todos/build/todoServer.js:464
-        dbs[dbName].collection(collectionName).update({
-                   ^
-
-TypeError: Cannot read property 'collection' of undefined
-    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:464:20)
-    at emitNone (events.js:67:13)
-    at IncomingMessage.emit (events.js:166:7)
-    at endReadableNT (_stream_readable.js:905:12)
-    at doNTCallback2 (node.js:441:9)
-    at process._tickCallback (node.js:355:17)
-```
-
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
 ###(Bug#43) -- Got this result somehow with 0.5.0 on my production db yodertvtodo on mLab.
@@ -133,6 +118,22 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#46) -- Protect this function from unopened db.
+```
+/Users/mike/src/Todos/build/todoServer.js:464
+        dbs[dbName].collection(collectionName).update({
+                   ^
+
+TypeError: Cannot read property 'collection' of undefined
+    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:464:20)
+    at emitNone (events.js:67:13)
+    at IncomingMessage.emit (events.js:166:7)
+    at endReadableNT (_stream_readable.js:905:12)
+    at doNTCallback2 (node.js:441:9)
+    at process._tickCallback (node.js:355:17)
+```
+Closed and fixed 12.27.2017 by checking for DB being opened.
 
 ###(Bug#51) -- Object GET function defeated by the wild card GET.
 
