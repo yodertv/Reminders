@@ -168,8 +168,9 @@ function initEnv(env){
 		_props = require(prop_file_name);
 		BLD_FILES.push(prop_file_name);
 
-		var git_log = _shell.exec('git log --graph --oneline --decorate --all -n 5', {'silent':'true'});
+		var git_log = _shell.exec('git log --graph --oneline --decorate --all -n 10', {'silent':'true'});
 		var git_status = _shell.exec('git status', {'silent':'true'});
+		var git_repos = _shell.exec('git remote -v', {'silent':'true'});
 		var build_date = new Date();
 
 		build_manifest = '\n ' + program.name() + ' started with argv="' + process.argv + '"\n' +
@@ -183,9 +184,11 @@ function initEnv(env){
 	    					'\n Using properties:' + '\n' +
 	    					JSON.stringify(_props, null, " ") + '\n' +
 	    					'\n Using code:' + '\n' +
-	    					git_log.output + '\n' +
+	    					git_log.output +
 	    					'\n With status:' + '\n' +
-	    					git_status.output;
+	    					git_status.output +
+	    					'\n With repos:' + '\n' +
+	    					git_repos.output;
 
 	    if (! program.silent) {
  	       console.log(build_manifest);
