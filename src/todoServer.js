@@ -385,44 +385,6 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   })
 });
 
-app.get(apiPath + '*', ensureAuth401, function(req, res) {      
-  // Get all documents from a specified collection
-  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
-  // Where todo* is the collection name.
-  
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
-  var uri = reqUrl.pathname;
-  var dbName = req.user.db;
-  
-  // Use authentication when MONGO_USER has a value.
-  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
-  // The client may start with reading the documents from the collection. Open db here.
-  if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_FIND");
-//    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
-    dbs[dbName] = new mongojs(dbUrl, []);
-    dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database!');
-      return err;
-    });
-  }
-
-  req.log.trace('GET DOCS:', "dbName = ", dbName, "uri=", uri);
-
-  var collectionName = uri.slice(apiPath.length); // Remove apiPath
-  dbs[dbName].collection(collectionName).find( function( err, myDocs ){
-    if (err != null) {
-      req.log.error(err, "DB_FIND_ERR:");
-    }
-    else {
-      res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
-      res.write(JSON.stringify(myDocs));
-      res.end();  
-    }
-  });
-});
-
 app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   // Form of URL: http://127.0.0.1/{apiPath}/{*}/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, true); // true parses the query string.
@@ -533,6 +495,44 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
       response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
       response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
   }
+});
+
+app.get(apiPath + '*', ensureAuth401, function(req, res) {      
+  // Get all documents from a specified collection
+  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
+  // Where todo* is the collection name.
+  
+  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var uri = reqUrl.pathname;
+  var dbName = req.user.db;
+  
+  // Use authentication when MONGO_USER has a value.
+  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
+  // The client may start with reading the documents from the collection. Open db here.
+  if (dbs[dbName] == undefined) {
+    req.log.info("Opening DB " + dbName + " via DB_FIND");
+//    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName].on('error',function(err) {
+      req.log.error(err, 'Error opening database!');
+      return err;
+    });
+  }
+
+  req.log.trace('GET DOCS:', "dbName = ", dbName, "uri=", uri);
+
+  var collectionName = uri.slice(apiPath.length); // Remove apiPath
+  dbs[dbName].collection(collectionName).find( function( err, myDocs ){
+    if (err != null) {
+      req.log.error(err, "DB_FIND_ERR:");
+    }
+    else {
+      res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
+      res.write(JSON.stringify(myDocs));
+      res.end();  
+    }
+  });
 });
 
 app.del(apiPath + '*', ensureAuth401, function(req, res) {

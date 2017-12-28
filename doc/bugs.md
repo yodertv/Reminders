@@ -1,14 +1,7 @@
-Todos Bug List
-==============
+Reminders Bug List
+==================
 
 ##Open Bugs -- Next: (Bug#52)
-
-###(Bug#51) -- Object GET function defeated by the wild card GET.
-
-The below GET (not used by the app) returns an empty [] array.
-```
-http://mikes-air.local:8080/api/todos/Reminders/5a1a5b5850c6058f5cf63e16
-```
 
 ###(Bug#46) -- Protect this function from unopened db.
 ```
@@ -140,6 +133,14 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#51) -- Object GET function defeated by the wild card GET.
+
+The below GET (not used by the app) returns an empty [] array.
+```
+http://mikes-air.local:8080/api/todos/Reminders/5a1a5b5850c6058f5cf63e16
+```
+Closed 12.27.2017 by reordering my express router.
 
 ###(Bug#47) -- Bunyan middleware logging reuses the same ```req_id``` in all request logging even with different users from different browsers on different IP addresses. This appears to have been a mistake. Even the trace below actually has unique values.
 ```
