@@ -1,7 +1,36 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#52)
+##Open Bugs -- Next: (Bug#53)
+
+###(Bug#52) -- app.all(apiPath) fails to open DB and crashes
+```
+22:33:40.242  INFO todo: request start PUT /api/todos/junky, req.ip=::ffff:192.168.0.13
+22:33:40.251 TRACE todo: Deserializing user: user: {
+  "_id": "5a1a5a97b17ca07db9826051",
+  "email": "ted@example.com",
+  "db": "localhost:27017/todos01",
+  "views": 6,
+  "env": "DEV"
+}
+22:33:40.252 TRACE todo: PUT NEW COLLECTION: undefined
+22:33:40.253 TRACE todo: Received body data : 
+22:33:40.253 TRACE todo: []
+22:33:40.254 TRACE todo: PUT Collection Received :  2
+/Users/mike/src/Todos/build/todoServer.js:602
+    dbs[dbName].collection(collectionName).drop( function(err) {
+               ^
+
+TypeError: Cannot read property 'collection' of undefined
+    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:602:16)
+    at emitNone (events.js:105:13)
+    at IncomingMessage.emit (events.js:207:7)
+    at endReadableNT (_stream_readable.js:1045:12)
+    at _combinedTickCallback (internal/process/next_tick.js:138:11)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+    
+[2]+  Exit 1                  nohup node todoServer.js  (wd: ~/src/Todos/build)
+```
 
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
@@ -47,38 +76,6 @@ Fri, 12 Aug 2016 06:12:06 GMT [frank@::1]GET /api/todos/ 500 - 9 ms
 Fri, 12 Aug 2016 06:12
 ```
 
-###(Bug#38) -- No proper error when no more databases are found.
-```
-mikes-air:Todos mike$ cd ./build ; node ./todoServer.js ; cd ..
-Get User List opening DB: localhost:27017/users
-Todo Server v0.4.2
-Running on mikes-air.local:8080
-Node environment = DEV
-User store = localhost:27017/users[userList]
-Use http://localhost:8080
-CTRL + C to shutdown
-i  email          db
-0 bob@example.com   localhost:27017/bobstodos
-1 yoderm01@gmail.com    localhost:27017/todo_new_test
-2 test@example.com  localhost:27017/test-todo
-Fri, 12 Aug 2016 05:21:10 GMT [undefined@::1]GET /account 200 18 9 ms
-Assinging db...
-/Users/mike/src/Todos/build/user-list.js:33
-  user.email = email; 
-             ^
-
-TypeError: Cannot set property 'email' of null
-    at Object.exports.assignDb (/Users/mike/src/Todos/build/user-list.js:33:14)
-    at /Users/mike/src/Todos/build/todoServer.js:106:29
-    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:45:10)
-    at /Users/mike/src/Todos/build/todoServer.js:103:25
-    at findByUsername (/Users/mike/src/Todos/build/todoServer.js:64:14)
-    at /Users/mike/src/Todos/build/todoServer.js:97:7
-    at doNTCallback0 (node.js:419:9)
-    at process._tickCallback (node.js:348:13)
-mikes-air:Todos mike$ git status
-```
-
 ###(Bug#37) -- When load userlist fails, e.g. when no mongod is running. todoServer exits. Should have a helpful error message.
 - Looks like the solution is to upgrade to mongojs 2.0
 ```
@@ -118,6 +115,39 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#38) -- No proper error when no more databases are found.
+```
+mikes-air:Todos mike$ cd ./build ; node ./todoServer.js ; cd ..
+Get User List opening DB: localhost:27017/users
+Todo Server v0.4.2
+Running on mikes-air.local:8080
+Node environment = DEV
+User store = localhost:27017/users[userList]
+Use http://localhost:8080
+CTRL + C to shutdown
+i  email          db
+0 bob@example.com   localhost:27017/bobstodos
+1 yoderm01@gmail.com    localhost:27017/todo_new_test
+2 test@example.com  localhost:27017/test-todo
+Fri, 12 Aug 2016 05:21:10 GMT [undefined@::1]GET /account 200 18 9 ms
+Assinging db...
+/Users/mike/src/Todos/build/user-list.js:33
+  user.email = email; 
+             ^
+
+TypeError: Cannot set property 'email' of null
+    at Object.exports.assignDb (/Users/mike/src/Todos/build/user-list.js:33:14)
+    at /Users/mike/src/Todos/build/todoServer.js:106:29
+    at Object.exports.findByEmail (/Users/mike/src/Todos/build/user-list.js:45:10)
+    at /Users/mike/src/Todos/build/todoServer.js:103:25
+    at findByUsername (/Users/mike/src/Todos/build/todoServer.js:64:14)
+    at /Users/mike/src/Todos/build/todoServer.js:97:7
+    at doNTCallback0 (node.js:419:9)
+    at process._tickCallback (node.js:348:13)
+mikes-air:Todos mike$ git status
+```
+Closed 12.28.2017 as duplicate to (Bug#49)
 
 ###(Bug#46) -- Protect this function from unopened db.
 ```
@@ -304,6 +334,8 @@ TypeError: Cannot set property 'views' of null
     at Object.initialize [as handle] (/Users/mike/src/Todos/node_modules/passport/lib/middleware/initialize.js:62:5)
 23:54:54.258  INFO todo: request finish 500 Internal Server Error 4.256763ms
 ```
+Closed 12.2.2017
+commit d21e17f526040b6bf4fb536c2c3669fba329fcb8
 
 ###(Bug#45) -- Made for iPhone 6 plus. Doesn't adjust to iPhone 6 and likely iPhone 5.
 - Used javascript to set the initial scale and width.
