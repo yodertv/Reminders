@@ -49,8 +49,10 @@ Try out [Reminders App](https://reminders.now.sh).
 - Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
 - Capture creation datetime and store with task
-- Support scheduled tasks
+- Support scheduled tasks.
+- Protect API from malformed requests and nonsense.
 - Add unit testing.
+- Add API documentation and testing.
 - Consider making the build manifest in JSON notation rather than string.
 - Minimize trips to server. Keep data cached between pages.
 - Test preserving some global data so that it doesn't all get blown away and refreshed with ```$scope```.

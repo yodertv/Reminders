@@ -1,5 +1,5 @@
-Test Cases
-==========
+Test Cases Client Side
+======================
 
 - Logon
 - Logon with registration
@@ -29,3 +29,28 @@ Test Cases
 - Next list navication button ">"
 - Next list button wraps around and continues through each list again
 - Deep linking to lists and welcome page
+
+Test Cases API
+==============
+
+|  API Method | Path | Auth Redirect |     Description |
+|--|--|--|--|
+|app.get | '/auth/google' | None | |
+|app.get | '/auth/google/callback' | None | |
+|app.get | '/logout' | ensureAuthRedirect | |
+|app.get | '/account' | None | |
+|app.get | '/welcome' | None | |
+|app.get | '/authfailed' | None | |
+|app.get | '/list' | ensureAuthRedirect | |
+|app.get | '/list/:*'| ensureAuthRedirect | |
+|app.get | apiPath | ensureAuth401 | |
+|app.get | apiPath + '*' | ensureAuth401 | |
+|app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body|
+|app.post |'/auth/local' | None | Check username and password from form data |
+|app.post | apiPath + '*' | ensureAuth401 | |
+|app.del | apiPath + '*' | ensureAuth401 | |
+|app.all | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | |
+|app.all | '*' | None | |
+
+
+```

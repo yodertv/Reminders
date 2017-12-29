@@ -509,20 +509,21 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
 
 app.get(apiPath + '*', ensureAuth401, function(req, res) {      
   // Get all documents from a specified collection
-  // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo
-  // Where todo* is the collection name.
+  // Form of URL: http://host/apiPath/CollectionName
+  // todo: Check against actual collections and reply with not found
   
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
+  var collectionName = uri.slice(apiPath.length); // Remove apiPath
   
-  // Use authentication when MONGO_USER has a value.
-  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
     req.log.info("Opening DB " + dbName + " via DB_FIND");
-//    dbs[dbName] = new mongojs(dbUrl, [], {authMechanism: 'SCRAM-SHA-1'});
+    
+    // Use authentication when MONGO_USER has a value.
+    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       req.log.error(err, 'Error opening database!');
@@ -532,7 +533,6 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
 
   req.log.trace('GET DOCS:', "dbName = ", dbName, "uri=", uri);
 
-  var collectionName = uri.slice(apiPath.length); // Remove apiPath
   dbs[dbName].collection(collectionName).find( function( err, myDocs ){
     if (err != null) {
       req.log.error(err, "DB_FIND_ERR:");
@@ -546,7 +546,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
 });
 
 app.del(apiPath + '*', ensureAuth401, function(req, res) {
-  // Delete archived collection using mongojs.
+  // Delete list (collection) using mongojs.
   // Form of DEL request http://127.0.0.1/apiPath/Reminders
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
@@ -555,6 +555,20 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
   var collectionName = uri.slice(apiPath.length); // Get collection name from URI
   
   req.log.trace("DROP:%s", collectionName);
+
+  // The client may start with deleting a collection. Open db here.
+  if (dbs[dbName] == undefined) {
+    req.log.info("Opening DB " + dbName + " via DB_DROP_COLLECTION");
+
+    // Use authentication when MONGO_USER has a value.
+    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
+    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName].on('error',function(err) {
+      req.log.error(err, 'Error opening database.');
+       return err;
+    });
+  }
 
   dbs[dbName].collection(collectionName).drop( function(err) {
     if (err != null) {
@@ -570,18 +584,31 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 });
 
 app.put(apiPath + '*', ensureAuth401, function(req, res) {
-  req.log.trace('PUT NEW COLLECTION:', uri);
-  // Drop existing documents and replace with
-  // Insert of the entire array into collection.
-  // Makes a new collection if it doesn't exist.
+  // Drop existing documents from the collection and replace with an 
+  // insert of the entire json array from body data.
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db;
-  var dbUrl = dbName;
   var fullBody = '';
+
+  req.log.trace('REPLACE_COLLECTION uri: %s dbPart: %s collectionName: %s', uri, dbPart, collectionName);
+
+  // The client may start with storing a collection. Open db here.
+  if (dbs[dbName] == undefined) {
+    req.log.info("Opening DB " + dbName + " via DB_REPLACE_COLLECTION");
+
+    // Use authentication when MONGO_USER has a value.
+    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+
+    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName].on('error',function(err) {
+      req.log.error(err, 'Error opening database.');
+       return err;
+    });
+  }
 
   req.on('data', function(chunk) {
 
@@ -591,37 +618,33 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   });
   req.on('end', function() {
     req.log.trace("PUT Collection Received : ", fullBody.length);
-    // Replace the document specified by id
-    // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-    // Where todo* is the collection name.
- 
-    // Suspect race condition when the insert below beats the key cleanup of the drop cause a duplicate key error and loss of data.
-    // attempted to fix by putting the insert into the return function
-    // dbs[dbName].collection(collectionName).drop();
+    // Suspect race condition when the insert below beats the key cleanup of the drop cause 
+    // a duplicate key error and loss of data. Attempt to fix that by putting the insert into the return function.
+    // As of 12.29.2017 the fix seems to have solved the problem.
     
     dbs[dbName].collection(collectionName).drop( function(err) {
       if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
-        req.log.error(err, "DB_PUT_DROP_COLLECTION_ERR:");
-        res.writeHead(500, "DB_PUT_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+        req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
+        res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
         res.end(err.toString());
       }
       else if (fullBody.length > 2) { // A stringified empty collection has "[]"
         dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
-            req.log.error(err, "DB_INSERT_ERR:");
-            res.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+            req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
+            res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
             res.end(err.toString());
           }
           else { 
-            req.log.trace({docs: doc}, "PUT COLLECTION:");
-            res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+            req.log.trace({docs: doc}, "REPLACE_COLLECTION:");
+            res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
             res.write(JSON.stringify(doc));
             res.end();
           }
         });
       }
       else { // Avoid the empty collection error from DB by skipping the insert above.
-        res.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+        res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
         res.end();          
       }
     });

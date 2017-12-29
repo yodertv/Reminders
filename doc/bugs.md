@@ -3,35 +3,6 @@ Reminders Bug List
 
 ##Open Bugs -- Next: (Bug#53)
 
-###(Bug#52) -- app.all(apiPath) fails to open DB and crashes
-```
-22:33:40.242  INFO todo: request start PUT /api/todos/junky, req.ip=::ffff:192.168.0.13
-22:33:40.251 TRACE todo: Deserializing user: user: {
-  "_id": "5a1a5a97b17ca07db9826051",
-  "email": "ted@example.com",
-  "db": "localhost:27017/todos01",
-  "views": 6,
-  "env": "DEV"
-}
-22:33:40.252 TRACE todo: PUT NEW COLLECTION: undefined
-22:33:40.253 TRACE todo: Received body data : 
-22:33:40.253 TRACE todo: []
-22:33:40.254 TRACE todo: PUT Collection Received :  2
-/Users/mike/src/Todos/build/todoServer.js:602
-    dbs[dbName].collection(collectionName).drop( function(err) {
-               ^
-
-TypeError: Cannot read property 'collection' of undefined
-    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:602:16)
-    at emitNone (events.js:105:13)
-    at IncomingMessage.emit (events.js:207:7)
-    at endReadableNT (_stream_readable.js:1045:12)
-    at _combinedTickCallback (internal/process/next_tick.js:138:11)
-    at process._tickCallback (internal/process/next_tick.js:180:9)
-    
-[2]+  Exit 1                  nohup node todoServer.js  (wd: ~/src/Todos/build)
-```
-
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
 ###(Bug#43) -- Got this result somehow with 0.5.0 on my production db yodertvtodo on mLab.
@@ -115,6 +86,36 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 ###(Bug#27) Server silently sends the client crap when not able to connect to db.
 
 ##Closed Bugs
+
+###(Bug#52) -- app.all(apiPath) fails to open DB and crashes
+```
+22:33:40.242  INFO todo: request start PUT /api/todos/junky, req.ip=::ffff:192.168.0.13
+22:33:40.251 TRACE todo: Deserializing user: user: {
+  "_id": "5a1a5a97b17ca07db9826051",
+  "email": "ted@example.com",
+  "db": "localhost:27017/todos01",
+  "views": 6,
+  "env": "DEV"
+}
+22:33:40.252 TRACE todo: PUT NEW COLLECTION: undefined
+22:33:40.253 TRACE todo: Received body data : 
+22:33:40.253 TRACE todo: []
+22:33:40.254 TRACE todo: PUT Collection Received :  2
+/Users/mike/src/Todos/build/todoServer.js:602
+    dbs[dbName].collection(collectionName).drop( function(err) {
+               ^
+
+TypeError: Cannot read property 'collection' of undefined
+    at IncomingMessage.<anonymous> (/Users/mike/src/Todos/build/todoServer.js:602:16)
+    at emitNone (events.js:105:13)
+    at IncomingMessage.emit (events.js:207:7)
+    at endReadableNT (_stream_readable.js:1045:12)
+    at _combinedTickCallback (internal/process/next_tick.js:138:11)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+    
+[2]+  Exit 1                  nohup node todoServer.js  (wd: ~/src/Todos/build)
+```
+Closed 12.29.2017 by checking for the DB being open. Added backlog item to test all APIs.
 
 ###(Bug#38) -- No proper error when no more databases are found.
 ```
