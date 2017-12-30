@@ -23,6 +23,7 @@
     "cookie-session": "1.2.0",
     "dtrace-provider": "^0.8.5",
     "express": "3.1.0",
+    "jsonschema": "^1.2.2",
     "mongojs": "2.4.0",
     "passport": "0.2.1",
     "passport-google-oauth": "0.1.5",

@@ -47,7 +47,7 @@ Test Cases API
 |app.get | apiPath + '*' | ensureAuth401 | |
 |app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body|
 |app.post |'/auth/local' | None | Check username and password from form data |
-|app.post | apiPath + '*' | ensureAuth401 | |
+|app.post | apiPath + '*' | ensureAuth401 | Inserts a validated list item (todo) parsed from req data into the collection |
 |app.del | apiPath + '*' | ensureAuth401 | |
 |app.all | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | |
 |app.all | '*' | None | |

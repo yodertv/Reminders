@@ -19,6 +19,7 @@ var cookieSession = require('cookie-session');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var bunyanMiddleware = require('bunyan-middleware')
+var Validator = require('jsonschema').Validator;
 
 var log = logger.log;
 var bunyan = logger.bunyan; // For the global defs.
@@ -75,6 +76,16 @@ function findByUsername(username, fn) {
     }
   }
   return fn(null, null);
+}
+
+function safelyParseJSON (json) {
+  var parsed
+  try {
+    parsed = JSON.parse(json)
+  } catch (e) {
+    // Oh well, whatever...
+  }
+  return parsed // Could be undefined!
 }
 
 // Passport session setup.
@@ -664,19 +675,6 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
 
   var fullBody = '';
 
-  // The client may start with posting a new item. Open db here.
-  if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
-
-    // Use authentication when MONGO_USER has a value.
-    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-    dbs[dbName] = new mongojs(dbUrl, []);
-    dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database.');
-       return err;
-    });
-  }
-  
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
@@ -686,20 +684,60 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
     req.log.trace("POST_DOC Received : ", fullBody);
-  
-    dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
-      if (err != null) {
-        req.log.error(err, "DB_INSERT_ERR:");
-        response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-        response.end(err);
+    var v = new Validator();
+    var schema = {
+      "type": "object",
+      "properties": {
+        "text": { "type": "string"},
+        "done": { "type": "boolean"},
+        "showInView": {"type": "boolean"},
+        "_id": {"type": "string"}
+      },
+      "required": ["text", "done"]
+    };
+
+    var instance = safelyParseJSON(fullBody);    
+    if (instance == undefined ) {
+        var msg = "POST_DOC: ParseError not JSON";
+        req.log.error(msg);
+        response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+        response.end(msg);
+    }
+    else {
+      var result = v.validate(instance, schema);
+      if (!result.valid) {
+        req.log.error({"validationError" : result}, "POST_DOC");
+        response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+        response.end(JSON.stringify(result));
       }
-      else { 
-        req.log.trace("Inserted doc:\n", doc);
-        response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-        response.write(JSON.stringify(doc));
-        response.end();
+      else {
+        // The client may start with posting a new item. Open db here.
+        if (dbs[dbName] == undefined) {
+          req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
+
+          // Use authentication when MONGO_USER has a value.
+          var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+          dbs[dbName] = new mongojs(dbUrl, []);
+          dbs[dbName].on('error',function(err) {
+            req.log.error(err, 'Error opening database.');
+             return err;
+          });
+        }
+        dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
+          if (err != null) {
+            req.log.error(err, "DB_INSERT_ERR:");
+            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+            response.end(err.message);
+          }
+          else { 
+            req.log.trace("Inserted doc:\n", doc);
+            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+            response.write(JSON.stringify(doc));
+            response.end();
+          }
+        });
       }
-    });
+    }
   });   
 });
 
