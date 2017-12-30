@@ -660,10 +660,23 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   //var dbName = dbPart.slice(0,dbPart.indexOf('/'));
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db; 
-  var dbUrl = dbName;
-  req.log.trace('In POST (insert) new doc into collection:', uri);
+  req.log.trace('In POST_DOC (insert) new doc into collection: uri=%s, dbPart=%s, collectionName=%s', uri, dbPart, collectionName);
 
   var fullBody = '';
+
+  // The client may start with posting a new item. Open db here.
+  if (dbs[dbName] == undefined) {
+    req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
+
+    // Use authentication when MONGO_USER has a value.
+    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName].on('error',function(err) {
+      req.log.error(err, 'Error opening database.');
+       return err;
+    });
+  }
+  
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
@@ -672,7 +685,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   req.on('end', function() {
     // Replace the document specified by id
     // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-    req.log.trace("POST NEW DOC Received : ", fullBody);
+    req.log.trace("POST_DOC Received : ", fullBody);
   
     dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody), function(err, doc) {
       if (err != null) {
