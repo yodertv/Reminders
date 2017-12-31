@@ -664,16 +664,16 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
 
 app.post(apiPath + '*', ensureAuth401, function(req, response) {
   // Insert a new doc into collectionName
+  // URL: mikes-air.local:8080/apiPath/Reminders
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
-  //var dbName = dbPart.slice(0,dbPart.indexOf('/'));
+  var dbPart = uri.slice(apiPath.length); // Remove apiPath
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db; 
-  req.log.trace('In POST_DOC (insert) new doc into collection: uri=%s, dbPart=%s, collectionName=%s', uri, dbPart, collectionName);
-
   var fullBody = '';
+
+  req.log.trace('In POST_DOC (insert) new doc into collection: uri=%s, dbPart=%s, collectionName=%s', uri, dbPart, collectionName);
 
   req.on('data', function(chunk) {
 
@@ -681,61 +681,67 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
       req.log.trace("Received body data : ", chunk.toString());
   });
   req.on('end', function() {
-    // Replace the document specified by id
-    // Form of URL: http://127.0.0.1:8080/api/1/databases/test-todo/collections/todoThu-Jan-29-2015/
-    req.log.trace("POST_DOC Received : ", fullBody);
-    var v = new Validator();
-    var schema = {
-      "type": "object",
-      "properties": {
-        "text": { "type": "string"},
-        "done": { "type": "boolean"},
-        "showInView": {"type": "boolean"},
-        "_id": {"type": "string"}
-      },
-      "required": ["text", "done"]
-    };
-
-    var instance = safelyParseJSON(fullBody);    
-    if (instance == undefined ) {
-        var msg = "POST_DOC: ParseError not JSON";
-        req.log.error(msg);
-        response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
-        response.end(msg);
+    if ( dbPart != collectionName ) {
+      var msg = "POST_DOC: Invalid Path";
+      req.log.error(msg);
+      response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+      response.end(msg);
     }
     else {
-      var result = v.validate(instance, schema);
-      if (!result.valid) {
-        req.log.error({"validationError" : result}, "POST_DOC");
-        response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
-        response.end(JSON.stringify(result));
+      req.log.trace("POST_DOC Received : ", fullBody);
+      var v = new Validator();
+      var schema = {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string"},
+          "done": { "type": "boolean"},
+          "showInView": {"type": "boolean"},
+          "_id": {"type": "string"}
+        },
+        "required": ["text", "done"]
+      };
+
+      var instance = safelyParseJSON(fullBody);    
+      if (instance == undefined ) {
+          var msg = "POST_DOC: ParseError not JSON";
+          req.log.error(msg);
+          response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+          response.end(msg);
       }
       else {
-        // The client may start with posting a new item. Open db here.
-        if (dbs[dbName] == undefined) {
-          req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
+        var result = v.validate(instance, schema);
+        if (!result.valid) {
+          req.log.error({"validationError" : result}, "POST_DOC");
+          response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+          response.end(JSON.stringify(result));
+        }
+        else {
+          // The client may start with posting a new item. Open db here.
+          if (dbs[dbName] == undefined) {
+            req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
 
-          // Use authentication when MONGO_USER has a value.
-          var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-          dbs[dbName] = new mongojs(dbUrl, []);
-          dbs[dbName].on('error',function(err) {
-            req.log.error(err, 'Error opening database.');
-             return err;
+            // Use authentication when MONGO_USER has a value.
+            var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+            dbs[dbName] = new mongojs(dbUrl, []);
+            dbs[dbName].on('error',function(err) {
+              req.log.error(err, 'Error opening database.');
+               return err;
+            });
+          }
+          dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
+            if (err != null) {
+              req.log.error(err, "DB_INSERT_ERR:");
+              response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
+              response.end(err.message);
+            }
+            else { 
+              req.log.trace("Inserted doc:\n", doc);
+              response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
+              response.write(JSON.stringify(doc));
+              response.end();
+            }
           });
         }
-        dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
-          if (err != null) {
-            req.log.error(err, "DB_INSERT_ERR:");
-            response.writeHead(500, "DB_INSERT_ERR", {'Content-Type': 'text/html'});
-            response.end(err.message);
-          }
-          else { 
-            req.log.trace("Inserted doc:\n", doc);
-            response.writeHead(200, "OK-INSERT", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(doc));
-            response.end();
-          }
-        });
       }
     }
   });   

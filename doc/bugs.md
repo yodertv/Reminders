@@ -3,7 +3,7 @@ Reminders Bug List
 
 ##Open Bugs -- Next: (Bug#54)
 
-###(Bug#52) -- Slashes in new list input should be handled more gracefully.
+###(Bug#53) -- Slashes in new list input should be handled more gracefully.
 Example from the client console:
 ```
 todo.js:128 addNewList called with new name:  dododby/due
