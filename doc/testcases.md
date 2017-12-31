@@ -31,7 +31,7 @@ Test Cases Client Side
 - Deep linking to lists and welcome page
 
 API Method Catalog
-===========
+==================
 
 |  API Method | Path | Auth Redirect |     Description |
 |--|--|--|--|
@@ -45,10 +45,10 @@ API Method Catalog
 |app.get | '/list/:*'| ensureAuthRedirect | |
 |app.get | apiPath | ensureAuth401 | |
 |app.get | apiPath + '*' | ensureAuth401 | |
-|app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body|
+|app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body |
 |app.post |'/auth/local' | None | Check username and password from form data |
 |app.post | apiPath + '*' | ensureAuth401 | Inserts a validated list item (todo) parsed from req data into the collection |
-|app.del | apiPath + '*' | ensureAuth401 | |
+|app.del | apiPath + '*' | ensureAuth401 | Drop the collection named by '*'|
 |app.all | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | |
 |app.all | '*' | None | |
 

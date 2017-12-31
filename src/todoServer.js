@@ -563,9 +563,10 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
   var reqUrl = url.parse(req.url, true); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var collectionName = uri.slice(apiPath.length); // Get collection name from URI
+  var dbPart = uri.slice(apiPath.length); // Remove apiPath
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1); // Get collection name from URI
   
-  req.log.trace("DROP:%s", collectionName);
+  req.log.trace("DEL_COLLECTION: uri=%s, dbPart=%s, collectionName=%s", uri, dbPart, collectionName);
 
   // The client may start with deleting a collection. Open db here.
   if (dbs[dbName] == undefined) {
@@ -581,17 +582,25 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
     });
   }
 
-  dbs[dbName].collection(collectionName).drop( function(err) {
-    if (err != null) {
-      req.log.error(err, "DB_DROP_COLLECTION_ERR:");
-      res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
-      res.end(err.toString());
-    }
-    else { // Send a success response.
-      res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
-      res.end();        
-    }
-  });
+  if ( dbPart != collectionName ) {
+    var msg = "DEL_COLLECTION: Invalid Path";
+    req.log.error(msg);
+    res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+    res.end(msg);
+  }
+  else {
+    dbs[dbName].collection(collectionName).drop( function(err) {
+      if (err != null) {
+        req.log.error(err, "DB_DROP_COLLECTION_ERR:");
+        res.writeHead(500, "DB_DROP_COLLECTION_ERR", {'Content-Type': 'text/html'});
+        res.end(err.toString());
+      }
+      else { // Send a success response.
+        res.writeHead(200, "OK-DEL-COLL", {'Content-Type': 'text/html'});
+        res.end();        
+      }
+    });
+  } 
 });
 
 app.put(apiPath + '*', ensureAuth401, function(req, res) {
