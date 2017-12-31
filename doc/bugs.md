@@ -1,7 +1,14 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#53)
+##Open Bugs -- Next: (Bug#54)
+
+###(Bug#52) -- Slashes in new list input should be handled more gracefully.
+Example from the client console:
+```
+todo.js:128 addNewList called with new name:  dododby/due
+```
+When such an archive name is provided the client side routeprovider fails to match and redirects to the welcome page. No error message is provided to help understand what's wrong.
 
 ###(Bug#44) -- Insert point in list is obscured when list is long.
 
