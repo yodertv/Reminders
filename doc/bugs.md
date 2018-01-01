@@ -1,7 +1,42 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#54)
+##Open Bugs -- Next: (Bug#55)
+
+###(Bug#54) -- Unexpexed Mongo error on list collections and other actions.
+```
+[2018-01-01T13:29:25.205-05:00] ERROR: todo/231 on iaz6pypy0cii8w63abfp6ywe: DB_GETCOLLECTIONNAMES_ERR: (req_id=b1ae7850-ef21-11e7-9fbe-8f77dbb7a775)
+    MongoError: Topology was destroyed
+        at nextFunction (/home/nowuser/src/node_modules/mongodb-core/lib/cursor.js:545:27)
+        at CommandCursor.Cursor.next [as _next] (/home/nowuser/src/node_modules/mongodb-core/lib/cursor.js:699:3)
+        at fetchDocs (/home/nowuser/src/node_modules/mongodb/lib/cursor.js:857:10)
+        at toArray (/home/nowuser/src/node_modules/mongodb/lib/cursor.js:884:3)
+        at CommandCursor.Cursor.toArray (/home/nowuser/src/node_modules/mongodb/lib/cursor.js:837:44)
+        at /home/nowuser/src/node_modules/mongojs/lib/database.js:111:34
+        at apply (/home/nowuser/src/node_modules/thunky/index.js:16:28)
+        at Proxy.<anonymous> (/home/nowuser/src/node_modules/thunky/index.js:27:3)
+        at Proxy.Database.listCollections (/home/nowuser/src/node_modules/mongojs/lib/database.js:108:8)
+        at Proxy.Database.getCollectionNames (/home/nowuser/src/node_modules/mongojs/lib/database.js:119:8)
+[2018-01-01T13:29:25.206-05:00]  INFO: todo/231 on iaz6pypy0cii8w63abfp6ywe: request finish (req_id=b1ae7850-ef21-11e7-9fbe-8f77dbb7a775, user=yodercode@gmail.com, req.ip=74.66.16.180)
+    GET /api/todos/ HTTP/1.1
+    host: reminders.now.sh
+    x-forwarded-host: reminders.now.sh
+    x-real-ip: 74.66.16.180
+    x-forwarded-for: 74.66.16.180
+    x-forwarded-proto: https
+    x-now-log-id: Qsfbo0jqujhGmoVOCDWziuIo
+    x-zeit-co-forwarded-for: 74.66.16.180
+    connection: close
+    accept: application/json, text/plain, */*
+    referer: https://reminders.now.sh/list/:Reminders
+    dnt: 1
+    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/604.4.7 (KHTML, like Gecko) Version/11.0.2 Safari/604.4.7
+    accept-language: en-us
+    accept-encoding: br, gzip, deflate
+    cookie: null
+    --
+    HTTP/1.1 500 Internal Server Error
+```
 
 ###(Bug#53) -- Slashes in new list input should be handled more gracefully.
 Example from the client console:
