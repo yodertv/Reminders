@@ -43,14 +43,16 @@ API Method Catalog
 |app.get | '/authfailed' | None | |
 |app.get | '/list' | ensureAuthRedirect | |
 |app.get | '/list/:*'| ensureAuthRedirect | |
-|app.get | apiPath | ensureAuth401 | |
+|app.get | apiPath | ensureAuth401 | Get the list of collectionNames |
 |app.get | apiPath + '*' | ensureAuth401 | |
 |app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body |
 |app.post |'/auth/local' | None | Check username and password from form data |
 |app.post | apiPath + '*' | ensureAuth401 | Inserts a validated list item (todo) parsed from req data into the collection |
 |app.del | apiPath + '*' | ensureAuth401 | Drop the collection named by '*'|
-|app.all | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | |
-|app.all | '*' | None | |
+|app.all.get | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Fetch list item by ID |
+|app.all.put | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Replace list item by ID |
+|app.all.del | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Delete list item by ID |
+|app.all | '*' | None | Redirect everything else to the welcome page |
 
 API Test Cases
 ==============

@@ -398,7 +398,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 
 app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   // Form of URL: http://127.0.0.1/{apiPath}/{*}/54bbaee8e4b08851f12dfbf5
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var reqUrl = url.parse(req.url, false); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
   var dbName = req.user.db;
@@ -411,25 +411,27 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     req.log.trace("Object Action :", "match =", match, " objID =", objID);
   }
 
-  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
-  var dbUrl = dbName;
-  
-  req.log.trace("Object Action :", "uri =", uri,
-    "\ndbPart =", dbPart, 
-    "\ndbName =", dbName,
-    "\ncollectionName =", collectionName,
-    "\nobjID = ", objID,
-    "\ndbUrl =", dbUrl
-  );
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);  
+  req.log.trace("Object Action : uri=%s, dbPart=%s, collectionName=%s, objID=%s", uri, dbPart, collectionName, objID);
 
   // The client may start with an object action, so open db here.
   if (dbs[dbName] == undefined) {
     req.log.info("Opening DB " + dbName + " via DB_Object_Action");
+
+    // Use authentication when MONGO_USER has a value.
+    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       req.log.error(err, 'Error opening database.');
        return err;
     });
+  }
+  if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
+    var msg = "Object Action: Invalid Path";
+    req.log.error(msg);
+    response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+    response.end(msg);
+    return;
   }
 
   switch (req.method) {
@@ -446,10 +448,17 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         if (err != null) {
           req.log.error(err, "DB_FINDONE_ERR:");
           response.writeHead(500, "DB_FINDONE_ERR", {'Content-Type': 'text/html'});
-          response.end(err);
-          return err;
+          response.end(err.toString());
+          return(err);
         }
-        else { 
+        if ( doc == null) {
+          var msg = "GET Object Action: Failed - No such document found."
+          req.log.error(msg);
+          response.writeHead(404, msg, {'Content-Type': 'text/html'});
+          response.end(msg);
+          return(err);
+        }
+        else {
           req.log.trace({"doc": doc}, "GET Object Action:");
           response.writeHead(200, "OK-FINDONE", {'Content-Type': 'text/html'});
           response.write(JSON.stringify(doc));
@@ -459,7 +468,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     break;
     
     case 'PUT':
-      req.log.trace('UPDATE DOC: ', uri);
+      req.log.trace('PUT Object Action: ', uri);
       // Save/replace todos here
       var fullBody = '';
       req.on('data', function(chunk) {
@@ -480,10 +489,10 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
           if (err != null) {
             req.log.error(err, "DB_UPDATE_ERR:");
             response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
-            response.end(err);
+            response.end(err.toString());
           }
           else { 
-            req.log.trace({"updated-doc": doc});
+            req.log.trace({ 'doc' : doc}, "PUT Object Action");
             response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
             response.write(JSON.stringify(doc));
             response.end();
@@ -498,23 +507,23 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
         _id:mongojs.ObjectId(objID)
       }, true, function(err, doc) {
         if (err != null) {
-          req.log.error(err, "DB_DELETE_ERR:");
-          response.writeHead(500, "DB_DELET_ERR", {'Content-Type': 'text/html'});
-          response.end(err);
+          req.log.error(err, "DB_REMOVE_ERR:");
+          response.writeHead(500, "DB_REMOVE_ERR", {'Content-Type': 'text/html'});
+          response.end(err.toString());
         }
         else { 
-          req.log.trace("Deleted : " +  objID);
+          req.log.trace("Delete Object Action : " +  objID);
           response.writeHead(200, "OK-DELETE", {'Content-Type': 'text/html'});
-          response.write(JSON.stringify(doc));
           response.end();
         }
       });
     break;
     
     default:
-      req.log.error(err, "OBJ_ERR");
-      response.writeHead(405, "Method not supported.", {'Content-Type': 'text/html'});
-      response.end('<html><head><title>405 - Method not supported.</title></head><body><h1>Method not supported.</h1></body></html>');
+      var msg = "Object Action Error : Method not supported."
+      req.log.error(msg);
+      response.writeHead(405, msg, {'Content-Type': 'text/html'});
+      response.end('<html><body><h1>405 - ' + msg + '</h1></body></html>');
   }
 });
 
@@ -523,10 +532,11 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   // Form of URL: http://host/apiPath/CollectionName
   // todo: Check against actual collections and reply with not found
   
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var reqUrl = url.parse(req.url, false); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
-  var collectionName = uri.slice(apiPath.length); // Remove apiPath
+  var dbPart = uri.slice(apiPath.length); // Remove apiPath
+  var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1); // Get collection name from URI
   
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
@@ -542,25 +552,33 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     });
   }
 
-  req.log.trace('GET DOCS:', "dbName = ", dbName, "uri=", uri);
+  req.log.trace('GET_DOCS: dbPart=%s collectionName=%s', dbPart, collectionName);
 
-  dbs[dbName].collection(collectionName).find( function( err, myDocs ){
-    if (err != null) {
-      req.log.error(err, "DB_FIND_ERR:");
-    }
-    else {
-      res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
-      res.write(JSON.stringify(myDocs));
-      res.end();  
-    }
-  });
+  if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
+    var msg = "GET_DOCS: Invalid Path";
+    req.log.error(msg);
+    res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+    res.end(msg);
+  }
+  else {
+    dbs[dbName].collection(collectionName).find( function( err, myDocs ){
+      if (err != null) {
+        req.log.error(err, "DB_FIND_ERR:");
+      }
+      else {
+        res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
+        res.write(JSON.stringify(myDocs));
+        res.end();  
+      }
+    });
+  }
 });
 
 app.del(apiPath + '*', ensureAuth401, function(req, res) {
   // Delete list (collection) using mongojs.
   // Form of DEL request http://127.0.0.1/apiPath/Reminders
 
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var reqUrl = url.parse(req.url, false); // true parses the query string.
   var uri = reqUrl.pathname;
   var dbName = req.user.db;
   var dbPart = uri.slice(apiPath.length); // Remove apiPath
@@ -582,7 +600,7 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
     });
   }
 
-  if ( dbPart != collectionName ) {
+  if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
     var msg = "DEL_COLLECTION: Invalid Path";
     req.log.error(msg);
     res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
@@ -607,14 +625,14 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   // Drop existing documents from the collection and replace with an 
   // insert of the entire json array from body data.
 
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var reqUrl = url.parse(req.url, false);
   var uri = reqUrl.pathname;
-  var dbPart = uri.slice(apiPath.length); // Remove /api/1/databases/
+  var dbPart = uri.slice(apiPath.length); // Remove apiPath
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
   var dbName = req.user.db;
   var fullBody = '';
 
-  req.log.trace('REPLACE_COLLECTION uri: %s dbPart: %s collectionName: %s', uri, dbPart, collectionName);
+  req.log.trace('REPLACE_COLLECTION: uri=%s dbPart=%s collectionName=%s', uri, dbPart, collectionName);
 
   // The client may start with storing a collection. Open db here.
   if (dbs[dbName] == undefined) {
@@ -628,6 +646,14 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
       req.log.error(err, 'Error opening database.');
        return err;
     });
+  }
+
+  if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
+    var msg = "REPLACE_COLLECTION: Invalid Path";
+    req.log.error({"reqUrl" : reqUrl}, msg);
+    res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+    res.end(msg);
+    return;
   }
 
   req.on('data', function(chunk) {
@@ -675,7 +701,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
   // Insert a new doc into collectionName
   // URL: mikes-air.local:8080/apiPath/Reminders
 
-  var reqUrl = url.parse(req.url, true); // true parses the query string.
+  var reqUrl = url.parse(req.url, false); // don't parse the query string.
   var uri = reqUrl.pathname;
   var dbPart = uri.slice(apiPath.length); // Remove apiPath
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1);
@@ -690,9 +716,9 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
       req.log.trace("Received body data : ", chunk.toString());
   });
   req.on('end', function() {
-    if ( dbPart != collectionName ) {
+    if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
       var msg = "POST_DOC: Invalid Path";
-      req.log.error(msg);
+      req.log.error({"reqUrl" : reqUrl}, msg);
       response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
       response.end(msg);
     }
