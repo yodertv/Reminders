@@ -78,10 +78,10 @@ function findByUsername(username, fn) {
   return fn(null, null);
 }
 
-function safelyParseJSON (json) {
+function safelyParseJSON (json, reviver) {
   var parsed
   try {
-    parsed = JSON.parse(json)
+    parsed = JSON.parse(json, reviver)
   } catch (e) {
     // Oh well, whatever...
   }
@@ -675,6 +675,14 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
         res.end(err.toString());
       }
       else if (fullBody.length > 2) { // A stringified empty collection has "[]"
+        var instance = safelyParseJSON(fullBody, reObjectify);    
+        if (instance == undefined ) {
+          var msg = "REPLACE_COLLECTION: ParseError not JSON";
+          req.log.error(msg);
+          res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+          res.end(msg);
+          return;
+        }
         dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
           if (err != null) {
             req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");

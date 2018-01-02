@@ -42,16 +42,16 @@ API Method Catalog
 |app.get | '/welcome' | None | |
 |app.get | '/authfailed' | None | |
 |app.get | '/list' | ensureAuthRedirect | |
-|app.get | '/list/:*'| ensureAuthRedirect | |
+|app.get | '/list/:collectionName'| ensureAuthRedirect | |
 |app.get | apiPath | ensureAuth401 | Get the list of collectionNames |
-|app.get | apiPath + '*' | ensureAuth401 | |
-|app.put | apiPath + '*' | ensureAuth401 | Drop and replace an existing collection with json array in body |
+|app.get | apiPath + 'collectionName' | ensureAuth401 | |
+|app.put | apiPath + 'collectionName' | ensureAuth401 | Drop and replace an existing collection with json array in body |
 |app.post |'/auth/local' | None | Check username and password from form data |
-|app.post | apiPath + '*' | ensureAuth401 | Inserts a validated list item (todo) parsed from req data into the collection |
-|app.del | apiPath + '*' | ensureAuth401 | Drop the collection named by '*'|
-|app.all.get | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Fetch list item by ID |
-|app.all.put | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Replace list item by ID |
-|app.all.del | apiPath + '*/[A-Fa-f0-9]{24}$' | ensureAuth401 | Delete list item by ID |
+|app.post | apiPath + 'collectionName' | ensureAuth401 | Inserts a validated list item (todo) parsed from req data into the collection |
+|app.del | apiPath + 'collectionName' | ensureAuth401 | Drop the collection named by 'collectionName'|
+|app.all.get | apiPath + 'collectionName/[A-Fa-f0-9]{24}$' | ensureAuth401 | Fetch list item by ID |
+|app.all.put | apiPath + 'collectionName/[A-Fa-f0-9]{24}$' | ensureAuth401 | Replace list item by ID |
+|app.all.del | apiPath + 'collectionName/[A-Fa-f0-9]{24}$' | ensureAuth401 | Delete list item by ID |
 |app.all | '*' | None | Redirect everything else to the welcome page |
 
 API Test Cases

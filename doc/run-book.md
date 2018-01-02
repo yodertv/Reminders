@@ -43,6 +43,7 @@ mod-mongo-aws-east-1a:PRIMARY>
 - Restart the todoServer so it reads the updated user table.
 ```
 % now
+% now alias rm reminders
 % now alias set https://reminders-kevovklwel.now.sh reminders
 ```
 
