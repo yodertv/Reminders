@@ -54,7 +54,7 @@ for (var i = 0; i < LIB_FILES_NAMES.length; i++) {
 }; 
 
 // Server source files to copy to root directory.
-var SRV_FILES_NAMES = ['todoServer.js', 'user-list.js', 'logger.js'];
+var SRV_FILES_NAMES = ['todoServer.js', 'user-list.js', 'logger.js', 'remindersSchema.js'];
 var SRV_FILES = [];
 for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
  	SRV_FILES.push(SRC_PATH + '/' + SRV_FILES_NAMES[i]);

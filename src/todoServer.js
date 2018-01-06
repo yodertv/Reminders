@@ -11,15 +11,19 @@ var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged
 var os = require("os");
 var url = require("url");
 var http = require("http");
-var logger = require('./logger.js');
 var mongojs = require("mongojs");
 var express = require("express");
 var passport = require('passport');
+var logger = require('./logger.js');
+var userList = require("./user-list");
 var cookieSession = require('cookie-session');
+var validSchema = require('./remindersSchema.js')
+var bunyanMiddleware = require('bunyan-middleware')
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var bunyanMiddleware = require('bunyan-middleware')
-var Validator = require('jsonschema').Validator;
+
+var Validator = require('jsonschema').Validator
+var v = new Validator();
 
 var log = logger.log;
 var bunyan = logger.bunyan; // For the global defs.
@@ -30,8 +34,6 @@ var logLevel = process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info";
 
 log.level(logLevel);
 log.trace("Logging level set to", log.level());
-
-var userList = require("./user-list");
 
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
@@ -683,7 +685,7 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
           res.end(msg);
           return;
         }
-        dbs[dbName].collection(collectionName).insert( JSON.parse(fullBody, reObjectify), function(err, doc) {
+        dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
           if (err != null) {
             req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
             res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
@@ -732,18 +734,6 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
     }
     else {
       req.log.trace("POST_DOC Received : ", fullBody);
-      var v = new Validator();
-      var schema = {
-        "type": "object",
-        "properties": {
-          "text": { "type": "string"},
-          "done": { "type": "boolean"},
-          "showInView": {"type": "boolean"},
-          "_id": {"type": "string"}
-        },
-        "required": ["text", "done"]
-      };
-
       var instance = safelyParseJSON(fullBody);    
       if (instance == undefined ) {
           var msg = "POST_DOC: ParseError not JSON";
@@ -752,7 +742,8 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
           response.end(msg);
       }
       else {
-        var result = v.validate(instance, schema);
+        req.log.trace({ "obj" : instance}, {"schema" : validSchema.itemSchema});
+        var result = v.validate(instance, validSchema.itemSchema);
         if (!result.valid) {
           req.log.error({"validationError" : result}, "POST_DOC");
           response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
