@@ -400,6 +400,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 });
 
 app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
+  // GET, PUT, and DELETE item by id.
   // Form of URL: http://127.0.0.1/{apiPath}/{*}/54bbaee8e4b08851f12dfbf5
   var reqUrl = url.parse(req.url, false); // true parses the query string.
   var uri = reqUrl.pathname;
@@ -471,37 +472,50 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
     break;
     
     case 'PUT':
-      req.log.trace('PUT Object Action: ', uri);
-      // Save/replace todos here
+      // Replace the document specified by id
+      // E.g.: http://mikes-air.local:8080/api/todos/Reminders/5a1a5b5850c6058f5cf63e16
       var fullBody = '';
+      req.log.trace('PUT Object Action: ', uri);
+      
       req.on('data', function(chunk) {
 
         fullBody += chunk.toString();
-        req.log.trace("Received body data : ");
-        req.log.trace(chunk.toString());
+        req.log.trace({ "chunk" : chunk.toString() }, "Received body data: ");
       });
       req.on('end', function() {
         req.log.trace("PUT Received : ", fullBody);
-        // Replace the document specified by id
-        // Form of URL: http://127.0.0.1/api/1/databases/test-todo/collections/todo/54bbaee8e4b08851f12dfbf5
-        // Where todo* is the collection name.
-      
-        dbs[dbName].collection(collectionName).update({
-          _id:mongojs.ObjectId(objID)
-        }, JSON.parse(fullBody), { upsert: true }, function(err, doc) {
-          if (err != null) {
-            req.log.error(err, "DB_UPDATE_ERR:");
-            response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
-            response.end(err.toString());
+        var instance = safelyParseJSON(fullBody);    
+        if (instance == undefined ) {
+          var msg = "PUT Object Action: ParseError not JSON";
+          req.log.error(msg);
+          response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+          response.end(msg);
+        }
+        else {
+          var result = v.validate(instance, validSchema.itemSchema);
+          if (!result.valid) {
+            req.log.error({"validationError" : result}, "PUT Object Action");
+            response.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+            response.end(JSON.stringify(result));
           }
-          else { 
-            req.log.trace({ 'doc' : doc}, "PUT Object Action");
-            response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
-            response.write(JSON.stringify(doc));
-            response.end();
+          else {
+            dbs[dbName].collection(collectionName).update({ _id:mongojs.ObjectId(objID) }, instance, { upsert: true }, function(err, doc) {
+              if (err != null) {
+                req.log.error(err, "DB_UPDATE_ERR:");
+                response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
+                response.end(err.toString());
+              }
+              else { 
+                req.log.trace({ 'doc' : doc}, "PUT Object Action");
+                response.writeHead(200, "OK-PUT", {'Content-Type': 'text/html'});
+                response.write(JSON.stringify(doc));
+                response.end();
+              }
+            });
           }
-        });
-      });   
+        }
+      });
+
     break;
 
     case 'DELETE':              

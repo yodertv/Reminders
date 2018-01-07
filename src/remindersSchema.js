@@ -9,7 +9,8 @@ exports.itemSchema = {
 		"showInView": {"type": "boolean"},
 		"_id": {"type": "objectid"}
 	},
-	"required": ["text", "done"]
+	"required": ["text", "done"],
+	"additionalProperties": false
 }
 
 exports.itemListSchema = {
