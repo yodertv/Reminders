@@ -24,6 +24,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var Validator = require('jsonschema').Validator
 var v = new Validator();
+v.addSchema(validSchema.itemSchema, '/itemSchema');
 
 var log = logger.log;
 var bunyan = logger.bunyan; // For the global defs.
@@ -624,7 +625,7 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 });
 
 app.put(apiPath + '*', ensureAuth401, function(req, res) {
-  // Drop existing documents from the collection and replace with an 
+  // REPLACE_COLLECTION: Drop existing documents from the collection and replace with an 
   // insert of the entire json array from body data.
 
   var reqUrl = url.parse(req.url, false);
@@ -661,8 +662,7 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   req.on('data', function(chunk) {
 
     fullBody += chunk.toString();
-    req.log.trace("Received body data : ");
-    req.log.trace(chunk.toString());
+    req.log.trace({ "chunk" : chunk.toString() }, "Received body data: ");
   });
   req.on('end', function() {
     req.log.trace("PUT Collection Received : ", fullBody.length);
@@ -670,40 +670,52 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
     // a duplicate key error and loss of data. Attempt to fix that by putting the insert into the return function.
     // As of 12.29.2017 the fix seems to have solved the problem.
     
-    dbs[dbName].collection(collectionName).drop( function(err) {
-      if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
-        req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
-        res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
-        res.end(err.toString());
+    if (fullBody.length > 2) { // A stringified empty collection has "[]"
+      var instance = safelyParseJSON(fullBody, reObjectify);    
+      if (instance == undefined ) {
+        var msg = "REPLACE_COLLECTION: ParseError not JSON";
+        req.log.error(msg);
+        res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
+        res.end(msg);
       }
-      else if (fullBody.length > 2) { // A stringified empty collection has "[]"
-        var instance = safelyParseJSON(fullBody, reObjectify);    
-        if (instance == undefined ) {
-          var msg = "REPLACE_COLLECTION: ParseError not JSON";
-          req.log.error(msg);
+      else {
+        // req.log.trace({ "obj" : instance}, "REPLACE_COLLECTION", {"schema" : validSchema.itemListSchema});
+        var result = v.validate(instance, validSchema.itemListSchema);
+        if (!result.valid) {
+          req.log.error({"validationError" : result}, "REPLACE_COLLECTION");
           res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});
-          res.end(msg);
-          return;
+          res.end(JSON.stringify(result));
         }
-        dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
-          if (err != null) {
-            req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
-            res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
-            res.end(err.toString());
-          }
-          else { 
-            req.log.trace({docs: doc}, "REPLACE_COLLECTION:");
-            res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
-            res.write(JSON.stringify(doc));
-            res.end();
-          }
-        });
+        else {
+          dbs[dbName].collection(collectionName).drop( function(err) {
+            if (err != null) { // Only error seems to be dropping an non-exisiting namespace.
+              req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
+              res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
+              res.end(err.toString());
+            }
+            else {
+              dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
+                if (err != null) {
+                  req.log.error(err, "DB_REPLACE_COLLECTION_ERR:");
+                  res.writeHead(500, "DB_REPLACE_COLLECTION_ERR", {'Content-Type': 'text/html'});
+                  res.end(err.toString());
+                }
+                else { 
+                  req.log.trace({docs: doc}, "REPLACE_COLLECTION:");
+                  res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
+                  res.write(JSON.stringify(doc));
+                  res.end();
+                }
+              });
+            }
+          });
+        }
       }
-      else { // Avoid the empty collection error from DB by skipping the insert above.
-        res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
-        res.end();          
-      }
-    });
+    }
+    else { // Avoid the empty collection error from DB by skipping the insert above.
+      res.writeHead(200, "OK-REPLACE", {'Content-Type': 'text/html'});
+      res.end();          
+    }
   }); 
 });
 
@@ -742,7 +754,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
           response.end(msg);
       }
       else {
-        req.log.trace({ "obj" : instance}, {"schema" : validSchema.itemSchema});
+        req.log.trace({ "obj" : instance}, "POST_DOC", {"schema" : validSchema.itemSchema});
         var result = v.validate(instance, validSchema.itemSchema);
         if (!result.valid) {
           req.log.error({"validationError" : result}, "POST_DOC");

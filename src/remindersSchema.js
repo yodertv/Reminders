@@ -1,8 +1,5 @@
 // remindersSchema.js
 
-var Validator = require('jsonschema').Validator
-var v = new Validator();
-
 exports.itemSchema = {
 	"id": "/itemSchema",
 	"type": "object",
@@ -10,16 +7,13 @@ exports.itemSchema = {
 		"text": { "type": "string"},
 		"done": { "type": "boolean"},
 		"showInView": {"type": "boolean"},
-		"_id": {"type": "string"}
+		"_id": {"type": "objectid"}
 	},
 	"required": ["text", "done"]
 }
 
 exports.itemListSchema = {
+	"id": "/itemListSchema",
 	"type": "array",
 	"items": {"$ref": "/itemSchema"}
 }
-
-//exports.validate = v.validate
-
-
