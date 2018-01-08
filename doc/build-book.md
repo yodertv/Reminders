@@ -6,6 +6,7 @@ Build Book
 - Install npm.
 - Clone yodertv/Reminders from Github.
 - Resolve dependancies by ```npm update```.
+- Check client-side dependancies
 - Make the deployment you want.
 - Install the node deployment tools for the target hosting service
 - Deploy and enjoy.
@@ -98,6 +99,9 @@ In the browser try out [Reminders App](https://reminders.now.sh).
 ```
 
 ## Creating a published version for yodertv/Reminders. 
+
+Use get pull local to get the working master branch from my local repo and merge it into Reminders than push to origin.
+
 
 Assumes that Todos is the name of the project and Reminders is the name of the published version and they are peers in the same directory.
 
