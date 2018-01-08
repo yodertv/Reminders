@@ -49,7 +49,7 @@
 			"response": []
 		},
 		{
-			"name": "put apiPath *",
+			"name": "PUT apiPath *",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -81,7 +81,7 @@
 			"response": []
 		},
 		{
-			"name": "put apiPath * - Bad Path",
+			"name": "PUT apiPath * - Bad Path",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -113,7 +113,7 @@
 			"response": []
 		},
 		{
-			"name": "put apiPath * - bad JSON",
+			"name": "PUT apiPath * - bad JSON",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -144,7 +144,7 @@
 			"response": []
 		},
 		{
-			"name": "put apiPath * - Invalid Schema",
+			"name": "PUT apiPath * - Invalid Schema",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -208,7 +208,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ Not JSON",
+			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ - Not JSON",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -240,7 +240,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ Bad Schema",
+			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ - Bad Schema",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -272,7 +272,7 @@
 			"response": []
 		},
 		{
-			"name": "Get apiPath *",
+			"name": "GET apiPath *",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -318,7 +318,7 @@
 			"response": []
 		},
 		{
-			"name": "Get apiPath/*/A-Fa-f0-9]{24}$",
+			"name": "GET apiPath/*/A-Fa-f0-9]{24}$",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -342,7 +342,7 @@
 			"response": []
 		},
 		{
-			"name": "Get apiPath/*/A-Fa-f0-9]{24}$ - Bad ID",
+			"name": "GET apiPath/*/A-Fa-f0-9]{24}$ - Bad ID",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -366,7 +366,7 @@
 			"response": []
 		},
 		{
-			"name": "Get apiPath/*/A-Fa-f0-9]{24}$ - Bad Path",
+			"name": "GET apiPath/*/A-Fa-f0-9]{24}$ - Bad Path",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -434,7 +434,38 @@
 			"response": []
 		},
 		{
-			"name": "POST bogus list item - invalid schema",
+			"name": "POST item",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST item - invalid schema",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -465,7 +496,7 @@
 			"response": []
 		},
 		{
-			"name": "POST bogus list item - not valid JSON",
+			"name": "POST item - not valid JSON",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -496,7 +527,7 @@
 			"response": []
 		},
 		{
-			"name": "POST list item",
+			"name": "POST item - duplicate key",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -527,38 +558,7 @@
 			"response": []
 		},
 		{
-			"name": "post list item -- duplicate key",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true}"
-				},
-				"url": {
-					"raw": "mikes-air.local:8080/api/todos/Reminders",
-					"host": [
-						"mikes-air",
-						"local"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"todos",
-						"Reminders"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "post bogus list item - invalid collection name",
+			"name": "POST item - invalid collection name",
 			"request": {
 				"method": "POST",
 				"header": [

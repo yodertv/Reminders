@@ -59,7 +59,16 @@ API Test Cases
 |  Test Case | API Method | Description |
 |--|--|--|
 | system.indexes | app.post | Test that posting this collection doesn't break anything. |
-| bad JSON | app.post | Test that invalid JSON doesn't break anything. |
-| bad schema| app.post | Test that posting the wrong object to this collection doesn't break anything. |
-| bad path| app.post | Test that posting an object to an invalid collection name doesn't break anything. |
+| bad path   | app.post | Test that posting an object to an invalid collection name doesn't break anything. |
+| bad JSON   | app.post | Test that invalid JSON doesn't break anything. |
+| bad schema | app.post | Test that posting the wrong object to this collection doesn't break anything. |
+| bad path   | app.put | Test that puting an object to an invalid collection name fails. |
+| bad JSON   | app.put | Test that puting invalid JSON doesn't fails. |
+| bad schema | app.put | Test that puting the wrong type of object to this collection fails. |
+| bad path   | app.all.put | Test that posting an object to an invalid collection name doesn't break anything. |
+| bad JSON   | app.all.put | Test that invalid JSON doesn't break anything. |
+| bad schema | app.all.put | Test that posting the wrong object to this collection doesn't break anything. |
+| bad path   | app.all.get | Test that getting an object with an invalid collection name fails. |
+| bad uri    | app.all.get | Test that getting with a query string fails. |
+| bad method | app.patch   | Test that invalid methods are detected. |
 
