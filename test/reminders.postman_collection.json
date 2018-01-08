@@ -1,0 +1,686 @@
+{
+	"info": {
+		"name": "reminders",
+		"_postman_id": "3c039126-d95e-f717-6e9c-c1fc3ec7705f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "welcome",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[]"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/welcome",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"welcome"
+					]
+				},
+				"description": "Test the welcome page"
+			},
+			"response": []
+		},
+		{
+			"name": "POST local auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": ""
+				},
+				"description": "login post"
+			},
+			"response": []
+		},
+		{
+			"name": "put apiPath *",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"_id\":\"5a1a5b5850c6058f5cf63e16\",\"text\":\"1\",\"done\":true,\"showInView\":true},{\"_id\":\"5a1c3c9350c6058f5cf63e1a\",\"text\":\"5\",\"done\":true,\"showInView\":false},{\"_id\":\"5a22f24b8d93ce0e320f3724\",\"text\":\"8\",\"done\":true,\"showInView\":false},{\"_id\":\"5a42e9942380570f2133da11\",\"text\":\"3\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da12\",\"text\":\"4\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da13\",\"text\":\"5\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9962380570f2133da14\",\"text\":\"6\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da15\",\"text\":\"7\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da16\",\"text\":\"8\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da17\",\"text\":\"9\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da18\",\"text\":\"0\",\"done\":false,\"showInView\":true}]"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/junk/junkyy",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"junk",
+						"junkyy"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "put apiPath * - Bad Path",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"_id\":\"5a1a5b5850c6058f5cf63e16\",\"text\":\"1\",\"done\":true,\"showInView\":true},{\"_id\":\"5a1c3c9350c6058f5cf63e1a\",\"text\":\"5\",\"done\":true,\"showInView\":false},{\"_id\":\"5a22f24b8d93ce0e320f3724\",\"text\":\"8\",\"done\":true,\"showInView\":false},{\"_id\":\"5a42e9942380570f2133da11\",\"text\":\"3\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da12\",\"text\":\"4\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da13\",\"text\":\"5\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9962380570f2133da14\",\"text\":\"6\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da15\",\"text\":\"7\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da16\",\"text\":\"8\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da17\",\"text\":\"9\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da18\",\"text\":\"0\",\"done\":false,\"showInView\":true}]"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/junk/junkyy",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"junk",
+						"junkyy"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "put apiPath * - bad JSON",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"_id\":\"5a1a5b5850c6058f5cf63e16\",\"text\":\"1\",\"done\":true,\"showInView\":true},{\"_id\":\"5a1c3c9350c6058f5cf63e1a\",\"text\":\"5\",\"done\":true,\"showInView\":false},{\"_id\":\"5a22f24b8d93ce0e320f3724\",\"text\":\"8\",\"done\":true,\"showInView\":false},{\"_id\":\"5a42e9942380570f2133da11\",\"text\":\"3\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da12\",\"text\":\"4\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da13\",\"text\":\"5\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9962380570f2133da14\",\"text\":\"6\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da15\",\"text\":\"7\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da16\",\"text\":\"8\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da17\",\"text\":\"9\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da18\",\"text\":\"0\",\"done\":false,\"showInView\":true}]"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/junk",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"junk"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "put apiPath * - Invalid Schema",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"_id\":\"5a1a5b5850c6058f5cf63e16\",\"text\":\"1\",\"done\":true,\"showInView\":true},{\"_id\":\"5a1c3c9350c6058f5cf63e1a\",\"text\":\"5\",\"done\":true,\"showInView\":false},{\"_id\":\"5a22f24b8d93ce0e320f3724\",\"text\":\"8\",\"done\":true,\"showInView\":false},{\"_id\":\"5a42e9942380570f2133da11\",\"text\":\"3\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da12\",\"text\":\"4\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9952380570f2133da13\",\"text\":\"5\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9962380570f2133da14\",\"text\":\"6\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da15\",\"text\":\"7\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9972380570f2133da16\",\"text\":\"8\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da17\",\"text\":\"9\",\"done\":false,\"showInView\":true},{\"_id\":\"5a42e9982380570f2133da18\",\"text\":\"0\",\"done\":false,\"showInView\":true}]"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/junk/junkyy",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"junk",
+						"junkyy"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"100\",\"done\":false,\"showInView\":true}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808afd549be2d2a0a937b",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808afd549be2d2a0a937b"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ Not JSON",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"New two hundred\",\"done\":false,\"showInView\":true}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808afd549be2d2a0a937b",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808afd549be2d2a0a937b"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT apiPath/*/A-Fa-f0-9]{24}$ Bad Schema",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"New two hundred\",\"done\":false,\"showInView\":true,}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808afd549be2d2a0a937b",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808afd549be2d2a0a937b"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get apiPath *",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/fail",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"fail"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET List (collection) - Bad Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/jun%asd",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"jun%asd"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get apiPath/*/A-Fa-f0-9]{24}$",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808c1d549be2d2a0a937d",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808c1d549be2d2a0a937d"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get apiPath/*/A-Fa-f0-9]{24}$ - Bad ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808c1d549be2d2a0a937d",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808c1d549be2d2a0a937d"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get apiPath/*/A-Fa-f0-9]{24}$ - Bad Path",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808c1d549be2d2a0a937d",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808c1d549be2d2a0a937d"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET Collections",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/account",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"account"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST bogus list item - invalid schema",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"test\" : \"value\" }"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST bogus list item - not valid JSON",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true,\"_id\":\"5a46ff1e07500800e7922ecf\""
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST list item",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "post list item -- duplicate key",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true}"
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "post bogus list item - invalid collection name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"hello\",\"done\":false,\"showInView\":true,\"_id\":\"5a46ff1e07500800e7922ecf\""
+				},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DEL List (collection) - bad collectionName",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/junk/junkyy",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"junk",
+						"junkyy"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DEL List (collection) - system.indexes",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/system.indexes",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"system.indexes"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DEL List (collection) - mal formed URI",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/jun%asd",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"jun%asd"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH apiPath/*/A-Fa-f0-9]{24}$ - Bad Method",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "mikes-air.local:8080/api/todos/Reminders/5a4808c1d549be2d2a0a937d",
+					"host": [
+						"mikes-air",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos",
+						"Reminders",
+						"5a4808c1d549be2d2a0a937d"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
