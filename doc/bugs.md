@@ -1,7 +1,32 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#55)
+##Open Bugs -- Next: (Bug#56)
+
+###(Bug#55) -- Race condition on start-up: First authentication processed before userlist is read.
+```
+01/08 08:49 AM  npm start
+01/08 08:50 AM  
+                > Reminders@0.6.2 start /home/nowuser/src
+                > node ./todoServer.js
+08:50:02.412  INFO todo: Todo Server v0.6.2 running on sl1uvepjvtqk7jyid45jjx8u:80. Node environment = PROD.
+08:50:02.413  INFO todo: User store = ds043972.mongolab.com:43972/users[userList]
+08:50:02.413  INFO todo: Use URL https://reminders.now.sh. CTRL + C to shutdown.
+01/08 08:50 AM  TypeError: Cannot read property 'length' of undefined
+                    at Object.exports.findByEmail (/home/nowuser/src/user-list.js:57:35)
+                    at /home/nowuser/src/todoServer.js:105:12
+                    at pass (/home/nowuser/src/node_modules/passport/lib/authenticator.js:353:9)
+                    at Authenticator.deserializeUser (/home/nowuser/src/node_modules/passport/lib/authenticator.js:358:5)
+                    at SessionStrategy.authenticate (/home/nowuser/src/node_modules/passport/lib/strategies/session.js:49:28)
+                    at attempt (/home/nowuser/src/node_modules/passport/lib/middleware/authenticate.js:341:16)
+                    at Object.authenticate [as handle] (/home/nowuser/src/node_modules/passport/lib/middleware/authenticate.js:342:7)
+                    at next (/home/nowuser/src/node_modules/connect/lib/proto.js:199:15)
+                    at Object.initialize [as handle] (/home/nowuser/src/node_modules/passport/lib/middleware/initialize.js:62:5)
+                    at next (/home/nowuser/src/node_modules/connect/lib/proto.js:199:15)
+08:50:02.883  INFO todo: request finish GET /list/:Reminders, 500 Internal Server Error 8.349042ms, req.ip=74.66.16.180
+08:50:02.985  INFO todo: Log User List: module=user-list, user-list-spfd: 
+
+```
 
 ###(Bug#54) -- Unexpexed Mongo error on list collections and other actions.
 ```
