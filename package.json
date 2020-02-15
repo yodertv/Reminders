@@ -10,9 +10,6 @@
   "scripts": {
     "start": "node ./todoServer.js"
   },
-  "engines": {
-    "node": "^7.0.0"
-  },
   "dependencies": {
     "angular": "1.5.8",
     "angular-resource": "1.5.8",

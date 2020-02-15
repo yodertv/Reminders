@@ -62,6 +62,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Version 0.6.3 (02.15.2020)
+- Upgraded now cli, nodejs locally, force version 1 of zeit, removed nodejs engine version to use default.
+
 ### Version 0.6.2 (12.27.2017)
 - Fixed (Bug#51) -- Object GET function defeated by the wild card GET.
 - Fixed (Bug#46) -- Object Actions should open DB rather than error out.
