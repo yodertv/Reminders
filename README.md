@@ -45,6 +45,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - DB depends on MongoLab for production and local mongodb for dev.
 
 ## Backlog
+- 17:49:26.796  warning express > connect@2.7.2: connect 2.x series is deprecated
 - Search feature to find tasks
 - Scroll to insert point when it is obscured.
 - Display counts of uncompleted tasks from each list on Lists page
@@ -61,6 +62,9 @@ Try out [Reminders App](https://reminders.now.sh).
 - Add a print feature.
 
 ## History
+
+### Working Version (09.17.20)
+- Upgraded mongod and shell to 4.4.0. Tested on localhost.
 
 ### Version 0.6.3 (02.15.2020)
 - Upgraded now cli, nodejs locally, force version 1 of zeit, removed nodejs engine version to use default.

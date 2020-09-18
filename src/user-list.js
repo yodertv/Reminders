@@ -7,7 +7,7 @@ var log = require('./logger.js').log.child({module:'user-list'});
 log.trace("log Level set to %d.", log.level())
 
 var sprintf = require('sprintf-js').sprintf;
-var mongojs = require('mongojs');
+const mongojs = require('mongojs');
 
 var userauths = 0;
 var userDb = undefined;
@@ -69,16 +69,25 @@ exports.loadUserList = function (options) {
   // Get user list objects from options.collectionName of options.dbUrl DB. Using mongojs api and the options
   // specifying the dbUrl and collectionName. 
 
-  var dbName = options.dbUrl;
+  var dbUrl = options.dbUrl;
+  var nodeEnv = options.nodeEnv;
+  var dbArgs = "?ssl=true&replicaSet=atlas-20rvws-shard-0&authSource=admin&retryWrites=true&w=majority";
 
   // Assume produciton has db authernitcation on. Has desirable side effect of failing to connect
   // on DBs without authentication enabled.
-  var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+  // Node.js driver v 2.2.12 or later
+  ///var dbUrl = "mongodb://<user>:<password>@cluster0-shard-00-00.4swbu.mongodb.net:27017,cluster0-shard-00-01.4swbu.mongodb.net:27017,cluster0-shard-00-02.4swbu.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-20rvws-shard-0&authSource=admin&retryWrites=true&w=majority"
+  // mongodb+srv://yodertv:<password>@cluster0.4swbu.mongodb.net/<dbname>?retryWrites=true&w=majority
+  // var dbUrl = process.env.MONGO_USER ? "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName + dbArgs : dbName;
+
+  if ( nodeEnv === `PROD` ) {
+    dbUrl = "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName; 
+  }
 
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   userCol = options.collectionName;
-  
-  log.trace("Get User List opening DB: %s.", options.dbUrl);
+
+  log.debug("Get User List opening DB: %s.", dbUrl);
   if (userDb == null) {
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {

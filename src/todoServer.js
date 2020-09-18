@@ -43,7 +43,8 @@ var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 var userOptions = {
   'dbUrl' : '@USERDBNAME@',
-  'collectionName' : 'userList'
+  'collectionName' : 'userList',
+  'nodeEnv' : nodeEnv
 }
 
 userList.loadUserList(userOptions);

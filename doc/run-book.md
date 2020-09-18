@@ -22,7 +22,7 @@ Start mongo db:
 % mongo
 ```
 
-## Create new DBs for to be assigned to users:
+## Create new DBs to be assigned to users:
 - Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db. Note the mongo connection string. Looks something like: ```ds047057.mongolab.com:47057/frankstodos```
 - Create the user in the DB for authentication. Must be the same user and password of every db.
 - Test the auth by connecting like:
@@ -48,7 +48,7 @@ mod-mongo-aws-east-1a:PRIMARY>
 ```
 
 ## Environment Variables and Secrets
-These are required for security credentials in production.
+These are required for security credentials in production and ignored when in dev assuming test auth and credential free db.
 ```
 NODE_ENV = {production|dev}
 MONGO_USER = <dbUserName>
