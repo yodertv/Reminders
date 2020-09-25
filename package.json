@@ -1,6 +1,6 @@
 {
   "name": "Reminders",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "An example reminders app to illustrate a fully working, cloud hosted, three tiered, angular/nodejs/mongodb application.",
   "license": "MIT",
   "repository": {
@@ -21,7 +21,7 @@
     "dtrace-provider": "^0.8.5",
     "express": "3.1.0",
     "jsonschema": "^1.2.2",
-    "mongojs": "2.4.0",
+    "mongojs": "^3.1.0",
     "passport": "0.2.1",
     "passport-google-oauth": "0.1.5",
     "passport-local": "1.0.0",

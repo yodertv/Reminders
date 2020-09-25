@@ -81,7 +81,7 @@ exports.loadUserList = function (options) {
   // var dbUrl = process.env.MONGO_USER ? "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName + dbArgs : dbName;
 
   if ( nodeEnv === `PROD` ) {
-    dbUrl = "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName; 
+    dbUrl = "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbUrl + dbArgs;
   }
 
   // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
@@ -92,7 +92,7 @@ exports.loadUserList = function (options) {
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
-      log.fatal(err, 'USER_DB_OPEN_ERR: Failed to open database %s.', dbName);
+      log.fatal(err, 'USER_DB_OPEN_ERR: Failed to open database %s.', dbUrl);
       throw err;
     });
   }

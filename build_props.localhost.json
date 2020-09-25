@@ -14,6 +14,5 @@
 	"nodeURL" : "http://localhost:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
-	"userDbName" : "cluster0-shard-00-00.4swbu.mongodb.net:27017,cluster0-shard-00-01.4swbu.mongodb.net:27017,cluster0-shard-00-02.4swbu.mongodb.net:27017/users"
+	"userDbName" : "localhost:27017/users"
 }
-
