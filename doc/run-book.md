@@ -77,17 +77,23 @@ If you get the google auth button when NODE_ENV isn't production, check that you
 % export NODE_ENV=production
 % ./make.js --silent install 127
 % cd ./build ; node ./todoServer.js ; cd ..
-Todo Server v0.4.3
-Running on mikes-air.local:8080
-Node environment = PROD
-User store = localhost:27017/users[userList]
-Use http://127.0.0.1:8080
-CTRL + C to shutdown
-i  email     	  db
-0 bob@example.com	localhost:27017/bobstodos
-1 test@example.com	localhost:27017/test-todo
-2 frank@example.com	localhost:27017/todos-for-frank
-3 yoderm01@gmail.com	localhost:27017/yodertvtodo
-4 yodercode@gmail.com	localhost:27017/todo_new_test
-
+% mikes-air:Todos mike$ ~/src/node-bunyan/bin/bunyan -L --output short ./build/node.out
+22:08:30.699  INFO todo: Todo Server v0.7.0 running on mikes-air.local:8080. Node environment = DEV.
+22:08:30.700  INFO todo: User store = mongodb://localhost:27017/users[userList]
+22:08:30.701  INFO todo: Use URL http://127.0.0.1:8080. CTRL + C to shutdown.
+22:08:30.727  INFO todo: Log User List: (module=user-list)
+    user-list-spfd:
+    Idx  Email                     DB Name                                            Views
+    ---  -----                     -------                                            -----
+    0    junk@gmail.com            ds039007.mongolab.com:39007/2ndnewishdn            0
+    1    frank@example.com         ds047057.mongolab.com:47057/frankstodos            0
+    2    yodercode@gmail.com       ds049467.mongolab.com:49467/bobstodos              0
+    3    nyoder@hudsonsailing.org  ds045137.mongolab.com:45137/todo-000               0
+    4    henrikgruett@gmail.com    ds047095.mongolab.com:47095/todos-001              0
+    5    murtaza478@gmail.com      ds051980.mongolab.com:51980/todo-002               0
+    6    UNASSIGNED_DB             ds037165.mongolab.com:37165/todos-003              0
+    7    UNASSIGNED_DB             ds045907.mlab.com:45907/test-todo                  0
+    8    yoderm01@gmail.com        mongodb://localhost:27017/yoderm01                 0
+    9    bob@example.com           mongodb://localhost:27017/bobstodos                0
+    10   test@example.com          mongodb://localhost:27017/test-todo                0
 ```

@@ -80,26 +80,21 @@ exports.loadUserList = function (options) {
   // mongodb+srv://yodertv:<password>@cluster0.4swbu.mongodb.net/<dbname>?retryWrites=true&w=majority
   // var dbUrl = process.env.MONGO_USER ? "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName + dbArgs : dbName;
 
-  if ( nodeEnv === `PROD` ) {
-    dbUrl = "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbUrl + dbArgs;
-  }
-
-  // var dbUrl = process.env.MONGO_USER + ":" + process.env.MONGO_PWD + "@" + options.dbUrl;
   userCol = options.collectionName;
 
-  log.debug("Get User List opening DB: %s.", dbUrl);
+  log.debug("loadUserList: opening database %s.", dbUrl);
   if (userDb == null) {
     userDb = new mongojs(dbUrl, [userCol]);
     userDb.on('error',function(err) {
       // This never runs. Bug#37
-      log.fatal(err, 'USER_DB_OPEN_ERR: Failed to open database %s.', dbUrl);
+      log.fatal(err, 'loadUserList: Failed to open database %s.', dbUrl);
       throw err;
     });
   }
   
   userDb.collection(userCol).find( function( err, myDocs ){
     if (err != null) {
-      log.fatal(err, "USER_DB_FIND_ERR: Failed to loadUserList.");
+      log.fatal(err, "loadUserList: Failed to load user list.");
       throw err;
     }
     else {
