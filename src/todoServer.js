@@ -500,7 +500,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
             response.end(JSON.stringify(result));
           }
           else {
-            dbs[dbName].collection(collectionName).update({ _id:mongojs.ObjectId(objID) }, instance, { upsert: true }, function(err, doc) {
+            dbs[dbName].collection(collectionName).update({ _id:mongojs.ObjectId(objID) }, { $set : instance }, { upsert: true }, function(err, doc) {
               if (err != null) {
                 req.log.error(err, "DB_UPDATE_ERR:");
                 response.writeHead(500, "DB_UPDATE_ERR", {'Content-Type': 'text/html'});
