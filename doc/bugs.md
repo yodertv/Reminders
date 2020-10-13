@@ -1,7 +1,25 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#56)
+##Open Bugs -- Next: (Bug#57)
+
+###(Bug#56) -- In new mongo, update document requires atomic operators.
+```
+mikes-air:Todos mike$ /Users/mike/src/Todos/node_modules/mongodb/lib/operations/update_one.js:12
+      throw new TypeError('Update document requires atomic operators');
+      ^
+
+TypeError: Update document requires atomic operators
+    at new UpdateOneOperation (/Users/mike/src/Todos/node_modules/mongodb/lib/operations/update_one.js:12:13)
+    at Collection.updateOne (/Users/mike/src/Todos/node_modules/mongodb/lib/collection.js:758:5)
+    at /Users/mike/src/Todos/node_modules/mongojs/lib/collection.js:145:16
+    at /Users/mike/src/Todos/node_modules/mongojs/lib/collection.js:20:7
+    at apply (/Users/mike/src/Todos/node_modules/thunky/index.js:44:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+[1]+  Exit 1                  node ./todoServer.js > node.out  (wd: ~/src/Todos/build)
+(wd now: ~/src/Todos)
+```
 
 ###(Bug#55) -- Race condition on start-up: First authentication processed before userlist is read.
 ```
