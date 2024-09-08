@@ -63,6 +63,10 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Working Version (09.08.24)
+- Installed nvm, Node, Mongo community v5.0.28, build and run locally.
+- Learned the AngularJS is deprecated.
+
 ### Working Version (09.17.20)
 - Upgraded mongod and shell to 4.4.0. Tested on localhost.
 

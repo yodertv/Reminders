@@ -114,9 +114,10 @@ cp -p ../Todos/lib/img/RemindersApp.png ./lib/img
 ```
 ## Deprecated: Deploy to modulus / xervo. 
 
-From Nodejitsu to moduls to Xervo. Went out of business 4/28/2017
+From Nodejitsu to moduls to Xervo, went out of business 4/28/2017
+...to Ziet rebranded as Vercel.
 
-Build for modulus:
+Deprecated -- Build for modulus:
 ```
 % ./make.js --silent install localhost
 ```	

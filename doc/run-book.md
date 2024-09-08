@@ -6,16 +6,27 @@ Run-book
 % ./make.js --silent install localhost
 ```	
 
+## deploy community mongodb locally:
+- https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x-tarball/
+
+```
+tar -zxvf mongodb-macos-x86_64-7.0.tgz
+sudo ln -s  /Users/mike/mongowrk/mongodb-macos-aarch64-7.0.14/bin/* /usr/local/bin/
+```
+
 ## localhost and localnet 
 Start mongo db:
 ```
-% pushd ~/mongowrk/ ; nohup mongod & popd
+% mongod --dbpath ~/mongowrk/data/db --logpath ~/mongowrk/data/log/mongo.log --fork
 ```
 
 ## Run Todo server on localhost:
 ```
 % cd ./build ; node ./todoServer.js & cd ..
 ```
+
+## Connect to local deployment:
+http://localhost:8080/
 
 ## Connect to mongod with repl interface:
 ```
