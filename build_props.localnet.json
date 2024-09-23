@@ -8,7 +8,7 @@
 	"logDate" : "true",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://mikes-air.local:8080/",
+	"nodeURL" : "http://Michaels-MacBook-Air.local:8080",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/",
 	"userDbName" : "localhost:27017/users"

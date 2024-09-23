@@ -45,6 +45,8 @@ Try out [Reminders App](https://reminders.now.sh).
 - DB depends on MongoLab for production and local mongodb for dev.
 
 ## Backlog
+- Use the "Seed Database" concept from mogodb-starter to automate DB provisioning.
+- AngularJS is deprecated. https://blog.angular.dev/finding-a-path-forward-with-angularjs-7e186fdd4429.
 - 17:49:26.796  warning express > connect@2.7.2: connect 2.x series is deprecated
 - Search feature to find tasks
 - Scroll to insert point when it is obscured.
