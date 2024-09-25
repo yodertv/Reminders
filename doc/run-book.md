@@ -20,6 +20,11 @@ Start mongo db:
 % mongod --dbpath ~/mongowrk/data/db --logpath ~/mongowrk/data/log/mongo.log --fork
 ```
 
+## Restore local db dump to Atlas:
+```
+% mongorestore --uri="mongodb+srv://cluster0.4swbu.mongodb.net/" --username=yodertv ./dump
+```
+
 ## Run Todo server on localhost:
 ```
 % cd ./build ; node ./todoServer.js & cd ..

@@ -12,7 +12,9 @@ var os = require("os");
 var url = require("url");
 var http = require("http");
 var mongojs = require("mongojs");
-var express = require("express");
+const express = require("express");
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 var passport = require('passport');
 var logger = require('./logger.js');
 var userList = require("./user-list");
@@ -207,7 +209,8 @@ passport.use(new GoogleStrategy({
 ));    
 }
 
-var app = express();
+const app = express();
+/*
 express.logger.token('user', function(req, res)
   { 
     if (req.user == undefined) return ('undefined')
@@ -216,53 +219,52 @@ express.logger.token('user', function(req, res)
 
 // configure Express
 app.configure(function() {
-  
-  // At INFO level or higher surpress logging the static file server by using it before the logger
-  if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/static'))};
+*/
+// At INFO level or higher surpress logging the static file server by using it before the logger
+if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/static'))};
 
-  app.use(bunyanMiddleware(
-    { headerName: 'X-Request-Id'
-    , propertyName: 'reqId'
-    , logName: 'req_id'
-    , level: 'info'
-    , obscureHeaders: ['cookie']
-    , logger: log
-    , requestStart: log.level() < bunyan.INFO ? true : false  // Only log the request start when log level is less than INFO
-    , additionalRequestFinishData: function(req, res) {
-      if (req.user != undefined) {
-        return { user: req.user.email };
-      }
-      else {
-        return {};
-      }
+app.use(bunyanMiddleware(
+  { headerName: 'X-Request-Id'
+  , propertyName: 'reqId'
+  , logName: 'req_id'
+  , level: 'info'
+  , obscureHeaders: ['cookie']
+  , logger: log
+  , requestStart: log.level() < bunyan.INFO ? true : false  // Only log the request start when log level is less than INFO
+  , additionalRequestFinishData: function(req, res) {
+    if (req.user != undefined) {
+      return { user: req.user.email };
     }
-  }));
-
-  // While tracing cause static files to be logged by using the static server after the logger middleware.
-  if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/static')) };
-  
-  /*
-  if (logDate) { // date in logger output?
-    app.use(express.logger(':date [:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
-  } else {
-    app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+    else {
+      return {};
+    }
   }
-  */
-  app.use(express.cookieParser());
-  app.use(express.methodOverride());  
+}));
 
-  app.use(cookieSession(
-    { name: 'cookie-session'
-    , secret: 'keyboard cat'
-    , maxAge: 2.592e+8       // 72 hours 
-    })
-  ); 
+// While tracing cause static files to be logged by using the static server after the logger middleware.
+if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/static')) };
 
-  // Initialize Passport.
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(app.router);
-});
+/*
+if (logDate) { // date in logger output?
+  app.use(express.logger(':date [:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+} else {
+  app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
+}
+*/
+app.use(cookieParser());
+//app.use(express.methodOverride());  
+
+app.use(cookieSession(
+  { name: 'cookie-session'
+  , secret: 'keyboard cat'
+  , maxAge: 2.592e+8       // 72 hours 
+  })
+);
+
+// Initialize Passport.
+app.use(passport.initialize());
+app.use(passport.session());
+//  app.use(app.router);
 
 // POST /login for local auth
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -272,7 +274,7 @@ app.configure(function() {
 //
 //   curl -v -d "username=bob&password=secret" http://localhost:8080/auth/local
 if (!nodeProd) { // Never use this route in production.
-  app.post('/auth/local', express.bodyParser(),
+  app.post('/auth/local', bodyParser(),
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
       req.log.trace(req.user.email);
