@@ -45,13 +45,14 @@ Try out [Reminders App](https://reminders.now.sh).
 - DB depends on MongoLab for production and local mongodb for dev.
 
 ## Backlog
+- Address new URL specs for Atlas vs. localhost.
 - Use the "Seed Database" concept from mogodb-starter to automate DB provisioning.
 - AngularJS is deprecated. https://blog.angular.dev/finding-a-path-forward-with-angularjs-7e186fdd4429.
-- 17:49:26.796  warning express > connect@2.7.2: connect 2.x series is deprecated
-- Search feature to find tasks
+- 17:49:26.796  warning express > connect@2.7.2: connect 2.x series is deprecated.
+- Search feature to find tasks.
 - Scroll to insert point when it is obscured.
-- Display counts of uncompleted tasks from each list on Lists page
-- Capture creation datetime and store with task
+- Display counts of uncompleted tasks from each list on Lists page.
+- Capture creation datetime and store with task.
 - Support scheduled tasks.
 - Protect API from malformed requests and nonsense.
 - Add unit testing.
@@ -65,7 +66,8 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
-### Working Version (09.08.24)
+### Working Version (09.28.24)
+- Working out using Atlas hosted user datastore.
 - Installed nvm, Node, Mongo community v5.0.28, build and run locally.
 - Learned the AngularJS is deprecated.
 
