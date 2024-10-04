@@ -11,7 +11,7 @@ var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged
 var os = require("os");
 var url = require("url");
 var http = require("http");
-var mongojs = require("mongojs");
+const mongojs = require("mongojs");
 const express = require("express");
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
@@ -380,16 +380,17 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
     req.log.info("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
-    dbs[dbName] = new mongojs(dbUrl, []);
+    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_GETCOLLECTIONNAMES");
+    dbs[dbName] = new mongojs('mongodb+srv://' + dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database.');
+      req.log.error('Error opening database:' + err);
        return err;
     });
   }
 
   dbs[dbName].getCollectionNames( function( err, myColls ){
     if (err != null) {
-        req.log.error(err, "DB_GETCOLLECTIONNAMES_ERR:");
+        req.log.error("DB_GETCOLLECTIONNAMES_ERR:" + err);
         res.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
         res.end(err.toString());
     }
@@ -427,9 +428,10 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
 
     // Use authentication when MONGO_USER has a value.
     var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_Object_Action");
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database.');
+      req.log.error('Error opening database:' + err);
        return err;
     });
   }
@@ -564,10 +566,10 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     
     // Use authentication when MONGO_USER has a value.
     var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
-    dbs[dbName] = new mongojs(dbUrl, []);
+    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_FIND");
+    dbs[dbName] = new mongojs('mongodb+srv://' + dbUrl, []);
     dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database!');
+      req.log.error('Error opening database:' + err);
       return err;
     });
   }
@@ -583,7 +585,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   else {
     dbs[dbName].collection(collectionName).find( function( err, myDocs ){
       if (err != null) {
-        req.log.error(err, "DB_FIND_ERR:");
+        req.log.error("DB_FIND_ERR:" + err);
       }
       else {
         res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
@@ -612,7 +614,7 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 
     // Use authentication when MONGO_USER has a value.
     var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
+    req.log.trace("Opening DB with credentials " + dbURL + " via DB_DROP_COLLECTION");
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       req.log.error(err, 'Error opening database.');
@@ -660,7 +662,7 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
 
     // Use authentication when MONGO_USER has a value.
     var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-
+    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_REPLACE_COLLECTION");
     dbs[dbName] = new mongojs(dbUrl, []);
     dbs[dbName].on('error',function(err) {
       req.log.error(err, 'Error opening database.');
@@ -785,6 +787,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
 
             // Use authentication when MONGO_USER has a value.
             var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
+            req.log.trace("Opening DB with credentials " + dbUrl + " via DB_POST_DOC");
             dbs[dbName] = new mongojs(dbUrl, []);
             dbs[dbName].on('error',function(err) {
               req.log.error(err, 'Error opening database.');
