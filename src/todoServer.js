@@ -379,11 +379,8 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_GETCOLLECTIONNAMES");
-    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_GETCOLLECTIONNAMES");
-    dbs[dbName] = new mongojs('mongodb+srv://' + dbUrl, []);
+    dbs[dbName] = userList.openDB(req.user.db, req.log, "via GET archiveList");
     dbs[dbName].on('error',function(err) {
-      req.log.error('Error opening database:' + err);
        return err;
     });
   }
@@ -424,17 +421,12 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
 
   // The client may start with an object action, so open db here.
   if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_Object_Action");
-
-    // Use authentication when MONGO_USER has a value.
-    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_Object_Action");
-    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_Object_Action");
     dbs[dbName].on('error',function(err) {
-      req.log.error('Error opening database:' + err);
-       return err;
+        return err;
     });
   }
+
   if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
     var msg = "Object Action: Invalid Path";
     req.log.error(msg);
@@ -562,15 +554,9 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_FIND");
-    
-    // Use authentication when MONGO_USER has a value.
-    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_FIND");
-    dbs[dbName] = new mongojs('mongodb+srv://' + dbUrl, []);
+    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_FIND");
     dbs[dbName].on('error',function(err) {
-      req.log.error('Error opening database:' + err);
-      return err;
+        return err;
     });
   }
 
@@ -610,15 +596,9 @@ app.del(apiPath + '*', ensureAuth401, function(req, res) {
 
   // The client may start with deleting a collection. Open db here.
   if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_DROP_COLLECTION");
-
-    // Use authentication when MONGO_USER has a value.
-    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-    req.log.trace("Opening DB with credentials " + dbURL + " via DB_DROP_COLLECTION");
-    dbs[dbName] = new mongojs(dbUrl, []);
+    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_DROP_COLLECTION");
     dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database.');
-       return err;
+        return err;
     });
   }
 
@@ -657,15 +637,9 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
   req.log.trace('REPLACE_COLLECTION: uri=%s dbPart=%s collectionName=%s', uri, dbPart, collectionName);
 
   // The client may start with storing a collection. Open db here.
-  if (dbs[dbName] == undefined) {
-    req.log.info("Opening DB " + dbName + " via DB_REPLACE_COLLECTION");
-
-    // Use authentication when MONGO_USER has a value.
-    var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-    req.log.trace("Opening DB with credentials " + dbUrl + " via DB_REPLACE_COLLECTION");
-    dbs[dbName] = new mongojs(dbUrl, []);
+    if (dbs[dbName] == undefined) {
+    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_REPLACE_COLLECTION");
     dbs[dbName].on('error',function(err) {
-      req.log.error(err, 'Error opening database.');
        return err;
     });
   }
@@ -783,17 +757,12 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
         else {
           // The client may start with posting a new item. Open db here.
           if (dbs[dbName] == undefined) {
-            req.log.info("Opening DB " + dbName + " via DB_POST_DOC");
-
-            // Use authentication when MONGO_USER has a value.
-            var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
-            req.log.trace("Opening DB with credentials " + dbUrl + " via DB_POST_DOC");
-            dbs[dbName] = new mongojs(dbUrl, []);
+            dbs[dbName] = userList.openDB(req.user.db, req.log, "via via DB_POST_DOC");
             dbs[dbName].on('error',function(err) {
-              req.log.error(err, 'Error opening database.');
-               return err;
+              return err;
             });
           }
+
           dbs[dbName].collection(collectionName).insert( instance, function(err, doc) {
             if (err != null) {
               req.log.error(err, "DB_INSERT_ERR:");

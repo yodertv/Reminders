@@ -17,6 +17,23 @@ var unassignedValue ="UNASSIGNED_DB";
 exports.ul = undefined;
 exports.userauths = userauths;
 
+exports.openDB = function(dbName, log, msg) {
+  var protoString = dbName.split("//")[0] + "//";
+  var hostString = dbName.split("//")[1];
+
+  // If we have a MONGO_USER environment variable, assume authenticated connection and rewrite the url.
+  var dbUrl = process.env.MONGO_USER ? protoString  + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + hostString : dbName;
+
+  log.info("openDB() " + dbName + " " + msg);
+  log.trace("openDB() with credentials " + dbUrl + " " + msg);
+  const dbs = new mongojs(dbUrl);
+  dbs.on('error',function(err) {
+    log.error('openDB() Error:' + dbUrl + " " + msg + ", error:" + err);
+    return err;
+  });
+  return dbs
+}
+
 exports.logUserList = function () {
 
   var ulString = 
@@ -71,24 +88,13 @@ exports.loadUserList = function (options) {
 
   var dbUrl = options.dbUrl;
   var nodeEnv = options.nodeEnv;
-  var dbArgs = "?ssl=true&replicaSet=atlas-20rvws-shard-0&authSource=admin&retryWrites=true&w=majority";
-
-  // Assume produciton has db authernitcation on. Has desirable side effect of failing to connect
-  // on DBs without authentication enabled.
-  // Node.js driver v 2.2.12 or later
-  ///var dbUrl = "mongodb://<user>:<password>@cluster0-shard-00-00.4swbu.mongodb.net:27017,cluster0-shard-00-01.4swbu.mongodb.net:27017,cluster0-shard-00-02.4swbu.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-20rvws-shard-0&authSource=admin&retryWrites=true&w=majority"
-  // mongodb+srv://yodertv:<password>@cluster0.4swbu.mongodb.net/<dbname>?retryWrites=true&w=majority
-  // var dbUrl = process.env.MONGO_USER ? "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName + dbArgs : dbName;
 
   userCol = options.collectionName;
 
-  log.debug("loadUserList: opening database %s.", dbUrl);
-  if (userDb == null) {
-    userDb = new mongojs(dbUrl, [userCol]);
+  if (userDb == undefined) {
+    userDb = exports.openDB(dbUrl, log, "via loadUserList");
     userDb.on('error',function(err) {
-      // This never runs. Bug#37
-      log.fatal(err, 'loadUserList: Failed to open database %s.', dbUrl);
-      throw err;
+       return err;
     });
   }
   

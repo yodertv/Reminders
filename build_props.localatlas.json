@@ -11,5 +11,5 @@
 	"nodeURL" : "http://Michaels-MacBook-Air.local:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/",
-	"userDbName" : "cluster0.4swbu.mongodb.net/users"
+	"userDbName" : "mongodb+srv://cluster0.4swbu.mongodb.net/users?retryWrites=true&w=majority"
 }

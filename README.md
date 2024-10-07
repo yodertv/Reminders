@@ -45,8 +45,7 @@ Try out [Reminders App](https://reminders.now.sh).
 - DB depends on MongoLab for production and local mongodb for dev.
 
 ## Backlog
-- Address new URL specs for Atlas vs. localhost.
-- Use the "Seed Database" concept from mogodb-starter to automate DB provisioning.
+- Use the "Seed Database" concept from mogodb-starter to automate DB provisioning. Overcome by the concept of simply creating an empty database for new users.
 - AngularJS is deprecated. https://blog.angular.dev/finding-a-path-forward-with-angularjs-7e186fdd4429.
 - 17:49:26.796  warning express > connect@2.7.2: connect 2.x series is deprecated.
 - Search feature to find tasks.
@@ -66,7 +65,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
-### Working Version (09.28.24)
+### Working Version (10.6.24)
+- Addressed new URL specs for Atlas vs. localhost.
+- Refactoring mongo db opening code into a single function.
 - Working out using Atlas hosted user datastore.
 - Installed nvm, Node, Mongo community v5.0.28, build and run locally.
 - Learned the AngularJS is deprecated.
