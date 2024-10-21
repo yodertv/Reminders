@@ -113,14 +113,14 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(user, done) {
   user.views = (user.views || 0) + 1; // Yes, counting views here.
-  log.trace({ user: user}, "Deserializing user:");
-
-  user = userList.findByEmail(user.email, function (err, dbUser) {
-        if (err) { return done(err, dbUser); }
-        if (dbUser != null) { dbUser.views = user.views }; // Update view count in the user list.
-        return ( dbUser );
-  })
-  done(null, user);
+  log.trace({user}, "Deserializing user:");
+  var dbUser = userList.findByEmail(user.email)
+  if (!dbUser) {
+    return done("dbUser not found", user);
+  } else {
+    dbUser.views = user.views ; // Update view count in the user list.
+  }
+  done(null, dbUser);
 });
 
 if (!nodeProd) {
