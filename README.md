@@ -65,7 +65,11 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
-### Working Version (10.6.24)
+### Working tag: working-2024.10.13
+- Mongo and Atlas API seem to be able to create dbs on the fly. Will use this to refactor user-list.js which currently expects a pre-allocated db because of the past constraints.
+- Started tagging working versions with the date to relate them back to the readme.
+
+### Working Version (10.6.24) (tag: working-2024-10-06)
 - Addressed new URL specs for Atlas vs. localhost.
 - Refactoring mongo db opening code into a single function.
 - Working out using Atlas hosted user datastore.

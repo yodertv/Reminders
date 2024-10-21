@@ -36,7 +36,7 @@ var nodeEnv = nodeProd ? 'PROD' : 'DEV'; //Anything but production is DEV.
 var logLevel = process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info";
 
 log.level(logLevel);
-log.trace("Logging level set to", log.level());
+log.trace("Logging level set to", log.level(), ".");
 
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
@@ -63,6 +63,7 @@ var reObjectify = function (key, value) {
   return value;
 }
 
+// bob is now the only user that matters in the localStrategy.
 var localUsers = [
     { username: 'bob', password: 'secret', email: 'bob@example.com'}
   , { username: 'mike', password: 'secret', email: 'yoderm01@gmail.com'}
@@ -72,6 +73,7 @@ var localUsers = [
   , { username: 'frank', password: 'secret', email: 'frank@example.com'}
   , { username: 'ted', password: 'secret', email: 'ted@example.com'}
   , { username: 'john', password: 'secret', email: 'john@example.com'}
+  , { username: 'george', password: 'secret', email: 'george@example.com'}
 ];
 
 function findByUsername(username, fn) {
@@ -82,6 +84,11 @@ function findByUsername(username, fn) {
     }
   }
   return fn(null, null);
+}
+
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 function safelyParseJSON (json, reviver) {
@@ -108,60 +115,62 @@ passport.deserializeUser(function(user, done) {
   user.views = (user.views || 0) + 1; // Yes, counting views here.
   log.trace({ user: user}, "Deserializing user:");
 
-  userList.findByEmail(user.email, function (err, dbUser) {
-        if (err) { return done(err); }
+  user = userList.findByEmail(user.email, function (err, dbUser) {
+        if (err) { return done(err, dbUser); }
         if (dbUser != null) { dbUser.views = user.views }; // Update view count in the user list.
         return ( dbUser );
   })
   done(null, user);
 });
 
-// Use the LocalStrategy within Passport.
+if (!nodeProd) {
+// Use the LocalStrategy within Passport only when not in production.
 //   Strategies in passport require a `verify` function, which accept
 //   credentials (in this case, a username and password), and invoke a callback
-//   with a user object.  In the real world, this would query a database;
-//   however, in this example we are using a baked-in set of users.
+//   with a user object.  In the real world, this might query a database for a public passkey;
+//   however, in this example we are accepting any valid email if the operatore knows the "secret".
+//   Todo: Validate email address structure.
 
-if (!nodeProd) {
 passport.use(new LocalStrategy(
-  function(username, password, done) {
+  function(email, password, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
       
-      // Find the user by username.  If there is no user with the given
-      // username, or the password is not correct, set the user to `false` to
-      // indicate failure and set a flash message.  Otherwise, return the
-      // authenticated `user`.
-      findByUsername(username, function(err, user) {
+      // Find the user by bob.  If we don't find bob or the password is not correct, 
+      // set the user to `false` to indicate failure and set a flash message.  Otherwise, return the
+      // authenticated `user` made from only the email address.
+      if (!isValidEmail(email)) { 
+        log.error({"email" : email, "pwd" : password}, "Invalid email.");
+        return done(null, false, { message: 'Invalid email.' }); 
+      }
+      findByUsername('bob', function(err, user) {
         if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
-        if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
-        
-        // Now search the userList for their registered DB, if not found allocate one.        
-        user = userList.findByEmail(user.email, function (err, dbUser) {
-          if (err) { return done(err); }
-          if (!dbUser) {
-            var newUser = userList.assignDb(user.email);
-            if (!newUser) { // Unable to assugn DB.   
-              var brokenUser = {};
-              brokenUser.email = user.email;
-              brokenUser.db = 'Sorry, no available databases.'; // a hack to return the error message to the client.
-              log.error('Sorry, no available databases for user ' + user.email );
-              return ( brokenUser ); // No DB available.
-            }
-            return ( newUser ); // Just assigned.
-          }
-          return ( dbUser ); // Previously assinged.
-        });
-        user.env = nodeEnv;
-        user.views = 0;
-        // Consider counting and remembering logins here.
-        log.trace({"user" : user }, "Local Auth");
-        return done(null, user);
-      })
+        if (!user) { return done(null, false, { message: 'Unknown user ' + 'bob' }); }
+        if (user.password != password) { return done(null, false, { message: 'Invalid password.' }); }
+      });
+      // Now search the userList by email for the user's account, if not found, call assignDb.
+      var dbUser = userList.findByEmail(email);
+      if (!dbUser) { // Not found
+        dbUser = userList.assignDb(email);
+        if (!dbUser) { // Unable to assignDb. This is fatal for the client.
+          var brokenUser = {};
+          brokenUser.email = user.email;
+          brokenUser.db = 'Sorry, assignDb failed.'; // a hack to return the error message to the client.
+          log.error('assignDb failed for ' + user.email );
+          return done(null, brokenUser); // assignDb failed.
+        } else {  // Just assigned.
+          dbUser.views = 0;
+          log.trace("assigned dbUser:", dbUser)
+        }
+      } else { // Resolved from userList.
+        log.trace("found dbUser:", dbUser)
+      };
+    dbUser.env = nodeEnv;
+    // Consider counting and remembering logins here.
+    log.trace({"user" : dbUser }, "Local Auth");
+    return done(null, dbUser);
     });
-  }
-));
+  }));
 } else {
 // Use the GoogleStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
@@ -188,7 +197,7 @@ passport.use(new GoogleStrategy({
         if (err) { return done(err); }
         if (!dbUser) { // Not found
           var newUser = userList.assignDb(profile._json.email);
-          if (!newUser) { // Unable to assugn DB.
+          if (!newUser) { // Unable to assign DB.
               var brokenUser = {};
               brokenUser.email = profile._json.email;
               brokenUser.db = 'Sorry, no available databases.'; // A hack to return the error message to the client.
@@ -277,7 +286,7 @@ if (!nodeProd) { // Never use this route in production.
   app.post('/auth/local', bodyParser(),
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
-      req.log.trace(req.user.email);
+      req.log.trace(req.user);
       setTimeout(listSessions,1000); // Print sessions in one sec.
       res.redirect('/#list/:Reminders');
     }
@@ -812,7 +821,7 @@ function ensureAuthRedirect(req, res, next) { // Use this for routes called by t
 function ensureAuth401(req, res, next) {  // Use this for routes consumed by XHR.
   if (req.isAuthenticated()) { return next(); }
   // setTimeout(listSessions,1000); // Print sessions in one sec.
-  res.send(401);
+  res.sendStatus(401);
 }
 
 // interval example - 5x output every 2secs using setInterval

@@ -12,10 +12,17 @@ const mongojs = require('mongojs');
 var userauths = 0;
 var userDb = undefined;
 var userCol = undefined;
-var unassignedValue ="UNASSIGNED_DB";
+var dbServerPath = undefined
+var dbUrl = undefined;
+var nodeEnv = undefined;
 
 exports.ul = undefined;
 exports.userauths = userauths;
+
+function makeDbName(email) {
+  // Remove special characters and use underscores instead
+  return email.replace(/[^a-zA-Z0-9]/g, "_");
+}
 
 exports.openDB = function(dbName, log, msg) {
   var protoString = dbName.split("//")[0] + "//";
@@ -57,28 +64,31 @@ exports.closeUserList = function () {
 };
 
 exports.assignDb = function (email) {
-  // Set the email value of an UNASSIGNED one and store it back for the future.
-  log.info("Assinging db...");
-  var user = exports.findByEmail("UNASSIGNED_DB", function c(err, user) {
-    if (err) { return 0 } // Not found
-      else {    return user }
-  });
-  if (user) { 
-    user.email = email; 
-    storeUser(user);
-  }
-  return (user);
+  // Set the db value and createUser. 
+  // Caller must check valid email address is not found in the ul before calling assignDb.
+  log.trace("assignDb...", email);
+  var dbUser = {};
+  dbUser.email = email;
+  dbUser.db = dbServerPath + "/" + makeDbName(email);
+  createUser(dbUser); // Create user in the user database.
+  exports.ul.push(dbUser) // Push the user into the memory user list.
+  return (dbUser);
 }
 
-exports.findByEmail = function(email, fn) {
+exports.findByEmail = function(email) {
+  // Search the in memory user list for a pointer to the user's record. Return null for not found.
+  if (exports.ul === null ) { // exports.ul is loaded asynchronously so it may still be null.
+    log.trace("findByEmail: user list undefined", email);
+    return null 
+  }
   for (var i = 0, len = exports.ul.length; i < len; i++) {
     var user = exports.ul[i];
     if (user.email === email) {
-      return fn(null, user);
+      return user;
     }
   }
-  log.error("findByEmail failed to find dbUser " + email);
-  return fn(null, null);
+  log.trace("findByEmail: Not found", email, exports.ul);
+  return null;
 }
 
 exports.loadUserList = function (options) {
@@ -86,8 +96,11 @@ exports.loadUserList = function (options) {
   // Get user list objects from options.collectionName of options.dbUrl DB. Using mongojs api and the options
   // specifying the dbUrl and collectionName. 
 
-  var dbUrl = options.dbUrl;
-  var nodeEnv = options.nodeEnv;
+  dbUrl = options.dbUrl;
+  nodeEnv = options.nodeEnv;
+  dbServerPath = dbUrl.substring(0, dbUrl.lastIndexOf('/'));
+
+  log.trace( "loadUserList:", {"opts" : options, "dbServerPath" : dbServerPath } )
 
   userCol = options.collectionName;
 
@@ -110,13 +123,24 @@ exports.loadUserList = function (options) {
   });
 };
 
-var storeUser = function (userToStore) {
-  // Store (replace) user object in the named collection of the DB identified by the dbURL option. 
+var updateUser = function (userToUpdate) {
+  // Stores (replaces) user object in the named collection of the DB identified by the dbURL option. 
   // Assume user db is opened for use by loadUserList.
-  log.info("User to store: %s.", userToStore);
-  userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToStore._id) }, userToStore, { upsert: false }, function(err, doc) {
+  log.info("updateUser: %s.", userToUpdate);
+  userDb.collection(userCol).update({ _id : mongojs.ObjectId(userToUpdate._id) }, userToUpdate, { upsert: false }, function(err, doc) {
     if (err != null) {
-      log.error(err, "USER_DB_UPDATE_ERR failed to store %s.", userToStore);
+      log.error(err, "USER_DB_UPDATE_ERR failed to update %s.", userToUpdate);
+    }
+  });
+};
+
+var createUser = function (userToCreate) {
+  // Create (insert) user object in the named collection of the DB identified by the dbURL option. 
+  // Assume user db is opened for use by loadUserList.
+  log.info("createUser: %s.", userToCreate);
+  userDb.collection(userCol).insert(userToCreate, { upsert: false }, function(err, doc) {
+    if (err != null) {
+      log.error(err, "USER_DB_CREATE_ERR failed to create %s.", userToCreate);
     }
   });
 };
