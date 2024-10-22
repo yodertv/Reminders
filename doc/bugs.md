@@ -1,8 +1,88 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#57)
+##Open Bugs -- Next: (Bug#58)
 
+###(Bug#57) -- Mystery 10sec delay in loading new user as seen here:
+```
+01:25:14.805Z  INFO todo: request start GET /api/todos/Reminders, req.ip=::1
+01:25:14.805Z TRACE todo: Deserializing user: user: {
+  "_id": "6700b5a62948d9324399255a",
+  "email": "frank@example.com",
+  "db": "mongodb://localhost.local:27017/frankstodos",
+  "env": "DEV",
+  "views": 6
+}
+01:25:14.805Z  INFO todo: openDB() mongodb://localhost.local:27017/frankstodos via DB_FIND
+01:25:14.805Z TRACE todo: openDB() with credentials mongodb://localhost.local:27017/frankstodos via DB_FIND
+01:25:14.805Z TRACE todo: GET_DOCS: dbPart=Reminders collectionName=Reminders
+01:25:14.810Z  INFO todo: request start GET /api/todos/, req.ip=::1
+01:25:14.810Z TRACE todo: Deserializing user: user: {
+  "_id": "6700b5a62948d9324399255a",
+  "email": "frank@example.com",
+  "db": "mongodb://localhost.local:27017/frankstodos",
+  "env": "DEV",
+  "views": 6
+}
+01:25:15.637Z  INFO todo: Log User List: module=user-list, user-list-spfd: 
+Idx  Email                     DB Name                                            Views 
+---  -----                     -------                                            ----- 
+0    yodercode@gmail.com       ds049467.mongolab.com:49467/bobstodos              0     
+1    nyoder@hudsonsailing.org  ds045137.mongolab.com:45137/todo-000               0     
+2    henrikgruett@gmail.com    ds047095.mongolab.com:47095/todos-001              0     
+3    murtaza478@gmail.com      ds051980.mongolab.com:51980/todo-002               0     
+4    yoderm01@gmail.com        mongodb://localhost:27017/yoderm01                 0     
+5    bob@example.com           mongodb://localhost:27017/bobstodos                0     
+6    test@example.com          mongodb://localhost:27017/test-todo                0     
+7    junk@gmail.com            cluster0.4swbu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/bobstodos 0     
+8    frank@example.com         mongodb://localhost.local:27017/frankstodos        6     
+9    george@example.com        mongodb://localhost.local:27017/george_example_com 0     
+10   joe@example.com           mongodb://localhost.local:27017/joe_example_com    0     
+11   jim@example.com           mongodb://localhost.local:27017/jim_example_com    0     
+12   kat@example.com           mongodb://localhost.local:27017/kat_example_com    0     
+13   frank@complete.com        mongodb://localhost.local:27017/frank_complete_com 7     
+
+mike@Michaels-MacBook-Air Todos % 01:25:24.822Z TRACE todo: GET COLLECTIONS: myColls: [
+  "Reminders",
+  "test",
+  "fixit",
+  "King%20Kong"
+]
+01:25:24.823Z  INFO todo: request finish 200 OK 10013.992208ms, user=frank@example.com
+01:25:24.823Z  WARN todo: request socket closed GET /api/todos/, 200 OK 10014.106083ms, req.ip=::1
+01:25:24.826Z  INFO todo: request finish 200 OK 10021.811291ms, user=frank@example.com
+01:25:24.826Z  WARN todo: request socket closed GET /api/todos/Reminders, 200 OK 10021.935375ms, req.ip=::1
+```
+Here's an example of a different user login that completes in the expected time:
+```
+01:49:51.322Z  INFO todo: request start GET /api/todos/Reminders, req.ip=::1
+01:49:51.323Z TRACE todo: Deserializing user: user: {
+  "_id": "5f753871d31cf68a606309d6",
+  "email": "test@example.com",
+  "db": "mongodb://localhost:27017/test-todo",
+  "env": "DEV",
+  "views": 1
+}
+01:49:51.323Z  INFO todo: openDB() mongodb://localhost:27017/test-todo via DB_FIND
+01:49:51.323Z TRACE todo: openDB() with credentials mongodb://localhost:27017/test-todo via DB_FIND
+01:49:51.323Z TRACE todo: GET_DOCS: dbPart=Reminders collectionName=Reminders
+01:49:51.328Z  INFO todo: request start GET /api/todos/, req.ip=::1
+01:49:51.330Z TRACE todo: Deserializing user: user: {
+  "_id": "5f753871d31cf68a606309d6",
+  "email": "test@example.com",
+  "db": "mongodb://localhost:27017/test-todo",
+  "env": "DEV",
+  "views": 1
+}
+01:49:51.336Z  INFO todo: request finish 200 OK 14.104542ms, user=test@example.com
+01:49:51.337Z  WARN todo: request socket closed GET /api/todos/Reminders, 200 OK 14.201542ms, req.ip=::1
+01:49:51.337Z TRACE todo: GET COLLECTIONS: myColls: [
+  "Garden",
+  "Reminders"
+]
+01:49:51.337Z  INFO todo: request finish 200 OK 9.699625ms, user=test@example.com
+01:49:51.338Z  WARN todo: request socket closed GET /api/todos/, 200 OK 9.770167ms, req.ip=::1
+```
 ###(Bug#55) -- Race condition on start-up: First authentication processed before userlist is read.
 ```
 01/08 08:49 AM  npm start
