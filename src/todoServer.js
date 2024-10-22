@@ -331,13 +331,13 @@ app.get('/account', function(req, res){
   var userObj = {};
   if (req.isAuthenticated()) {
     userObj = { email : req.user.email, db : req.user.db, env : nodeEnv, views : req.user.views } ;
-    var user = userList.findByEmail(req.user.email, function (err, dbUser) {
-        if (err) { return done(err); }
-        if (dbUser != null) { dbUser.views = req.user.views; }
-        return ( dbUser );
-    })
-  }
-  else {
+    var dbUser = userList.findByEmail(req.user.email);
+    if (dbUser != null) { 
+      dbUser.views = req.user.views; 
+    } else {
+      userObj = {env : nodeEnv};
+    }
+  } else {
     userObj = {env : nodeEnv};
   }
   req.log.trace({"userObj" : userObj});
