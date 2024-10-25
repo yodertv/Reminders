@@ -65,6 +65,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Working tag: working-2024.10.23
+- Attempting vercel deployment via github.
+
 ### Working tag: working-2024.10.13
 - Mongo and Atlas API seem to be able to create dbs on the fly. Will use this to refactor user-list.js which currently expects a pre-allocated db because of the past constraints.
 - Started tagging working versions with the date to relate them back to the readme.
