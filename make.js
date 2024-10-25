@@ -36,7 +36,7 @@ var _env = undefined;
 */
 
 // Names of valid environments with definition property files defined
-var validEnvs = ['localnet','localhost','localatlas', '127'];
+var validEnvs = ['localnet','localhost','localatlas', '127', 'vercel'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'list.html', 'index.html', 'todo.css', 'welcome.html'];
