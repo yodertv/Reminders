@@ -73,12 +73,6 @@ GOOGLE_CLIENT_SECRET = <googleClientSecret>
 GOOGLE_CLIENT_ID = <googleClientId>
 LOG_LEVEL = {fatal|error|warn|info|debug|trace}
 ```
-Zeit supports a ```secret``` command to add and name secrets. Then set environment variables to refernce a secret as follows.
-```
-$ now secrets add my-secret "my value"
-$ now -e MY_SECRET=@my-secret
-```
-
 The MONGO variables depend on the userDbName in build_props.
 The GOOGLE variables are always required at run-time. They are only used when NODE_ENV=production.
 NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
