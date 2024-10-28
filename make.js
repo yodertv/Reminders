@@ -237,6 +237,10 @@ function prep(env){
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
+    _shell.mkdir('-p', API_PATH);
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
+
     // Stamp it with the build manifest.
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
