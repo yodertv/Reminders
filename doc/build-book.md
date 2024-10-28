@@ -13,7 +13,7 @@ Build Book
 
 ## Build and deploy to Zeit using now
 
-Build for zeit:
+Build for vercel:
 ```
 % ./make.js --silent install zeit
 ```
