@@ -8,7 +8,7 @@
     "url": "https://github.com/yodertv/Reminders"
   },
   "scripts": {
-    "start": "node ./todoServer.js"
+    "start": "node todoServer.js"
   },
   "dependencies": {
     "angular": "1.5.8",
