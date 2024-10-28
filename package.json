@@ -34,7 +34,7 @@
     "shelljs": "0.3.0"
   },
   "#1_comment": "Environment independent build variables.",
-  "build_dir": "./api",
+  "build_dir": "./build",
   "lib_dir": "./lib",
   "src_dir": "./src"
 }

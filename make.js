@@ -18,6 +18,7 @@ var _pkg = require('./package.json');
 
 var DIST_PATH = _pkg.build_dir;
 var DIST_STATIC = DIST_PATH + '/static';
+var API_PATH = DIST_PATH + '/api';
 var SRC_PATH = _pkg.src_dir;
 var LIB_PATH = _pkg.lib_dir;
 var build_manifest = "";
@@ -70,26 +71,26 @@ var VER_FILES = [
 	DIST_STATIC + '/' + 'index.html',
 	DIST_STATIC + '/' + 'welcome.html',
 	DIST_STATIC + '/' + 'list.html',
-	DIST_PATH + '/' + 'todoServer.js'
+	API_PATH + '/' + 'todoServer.js'
 ];
 
 // Files into which to bake the @NODEURL@
-var URL_FILES = [DIST_STATIC + '/' + 'TodoServices.js', DIST_PATH + '/' + 'todoServer.js'];
+var URL_FILES = [DIST_STATIC + '/' + 'TodoServices.js', API_PATH + '/' + 'todoServer.js'];
 
 // Files into which to bake the @APIPATH@
 var API_FILES = [
 	DIST_STATIC + '/' + 'TodoServices.js',
-	DIST_PATH + '/' + 'todoServer.js'
+	API_PATH + '/' + 'todoServer.js'
 ];
 
 // Files into which to bake the @LOGDATE@
-var LOG_FILES = [DIST_PATH + '/' + "todoServer.js"];
+var LOG_FILES = [API_PATH + '/' + "todoServer.js"];
 
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
 
 // Files into which to bake the @USERDBNAME@
-var USERDB_FILES = [DIST_PATH + '/' + "todoServer.js"];
+var USERDB_FILES = [API_PATH + '/' + "todoServer.js"];
 
 _shell.config.fatal = false;
 
@@ -240,7 +241,7 @@ function prep(env){
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
-	// My Prep is to copy the distribution files to the DIST_PATH and DIST_STATIC.
+	// My Prep is to copy the distribution files to the API_PATH and DIST_STATIC.
 
     _shell.cp(SRC_FILES, DIST_STATIC); 
 	var err = _shell.error();
@@ -250,7 +251,7 @@ function prep(env){
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
-    _shell.cp(SRV_FILES, DIST_PATH); 
+    _shell.cp(SRV_FILES, API_PATH);
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
