@@ -54,11 +54,7 @@ Deploy your build to zeit using now
 > Deployment complete!
 ```
 
-Each now deployment get's it's own unique URL. This project needs to know its own application URL and so do the google API's for authentication. So we use the ```now alias``` command to point a common name to the unique instance.
-
-```
-% now alias set https://reminders-kevovklwel.now.sh reminders
-```
+Each Vercel deployment get's it's own unique URL. This project needs to know its own application URL and so do the google API's for authentication. So we use the Vercel.com Domain settings tab command to point a common name to the unique instance.
 
 Keep the app from being frozen offline by using the scale command.
 ```
