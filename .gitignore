@@ -1,5 +1,6 @@
 # Build directory. Everything here is generated from source
 build
+api
 # Log from the webserver
 log
 # SSL keys
