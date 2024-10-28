@@ -1,1 +1,15 @@
-{}
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "todoServer.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/todoServer.js"
+    }
+  ]
+}
