@@ -219,18 +219,6 @@ passport.use(new GoogleStrategy({
 }
 
 const app = express();
-/*
-express.logger.token('user', function(req, res)
-  { 
-    if (req.user == undefined) return ('undefined')
-    else return req.user.email; 
-  });
-
-// configure Express
-app.configure(function() {
-*/
-// At INFO level or higher surpress logging the static file server by using it before the logger
-if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/static'))};
 
 app.use(bunyanMiddleware(
   { headerName: 'X-Request-Id'
@@ -250,16 +238,6 @@ app.use(bunyanMiddleware(
   }
 }));
 
-// While tracing cause static files to be logged by using the static server after the logger middleware.
-if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/static')) };
-
-/*
-if (logDate) { // date in logger output?
-  app.use(express.logger(':date [:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
-} else {
-  app.use(express.logger('[:user@:remote-addr]:method :url :status :res[content-length] :response-time ms'));
-}
-*/
 app.use(cookieParser());
 //app.use(express.methodOverride());  
 
