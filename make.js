@@ -17,7 +17,7 @@ var _pkg = require('./package.json');
 */
 
 var DIST_PATH = _pkg.build_dir;
-var DIST_STATIC = DIST_PATH + '/static';
+var DIST_STATIC = DIST_PATH + '/public';
 var API_PATH = DIST_PATH + '/api';
 var SRC_PATH = _pkg.src_dir;
 var LIB_PATH = _pkg.lib_dir;
