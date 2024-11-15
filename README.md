@@ -2,7 +2,7 @@ Reminders
 =========
 
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
-Hosted by Zeit, Google APIs, and mLab.
+Hosted by Vercel, Google APIs, and Atlas.
 
 This cloud hosted [Reminders App](https://reminders.now.sh) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
 
@@ -66,7 +66,9 @@ Try out [Reminders App](https://reminders.now.sh).
 ## History
 
 ### Working tag: working-2024.10.23
+- Developed a pattern with vercel-test. Applying it in Todos now.
 - Attempting vercel deployment via github.
+- Now attempting vercel dev locally.
 
 ### Working tag: working-2024.10.13
 - Mongo and Atlas API seem to be able to create dbs on the fly. Will use this to refactor user-list.js which currently expects a pre-allocated db because of the past constraints.

@@ -11,6 +11,7 @@ var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged
 var os = require("os");
 var url = require("url");
 var http = require("http");
+const path = require('path');
 const mongojs = require("mongojs");
 const express = require("express");
 const cookieParser = require('cookie-parser')
@@ -220,6 +221,9 @@ passport.use(new GoogleStrategy({
 
 const app = express();
 
+// At INFO level or higher surpress logging the static file server by using it before the logger
+// if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/public'))};
+ 
 app.use(bunyanMiddleware(
   { headerName: 'X-Request-Id'
   , propertyName: 'reqId'
@@ -238,8 +242,11 @@ app.use(bunyanMiddleware(
   }
 }));
 
-app.use(cookieParser());
-//app.use(express.methodOverride());  
+// While tracing cause static files to be logged by using the static server after the logger middleware.
+// if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/public')) };app.use(cookieParser());
+
+// Serve static files from the "static" directory
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(cookieSession(
   { name: 'cookie-session'

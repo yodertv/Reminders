@@ -36,5 +36,7 @@
   "#1_comment": "Environment independent build variables.",
   "build_dir": "./build",
   "lib_dir": "./lib",
-  "src_dir": "./src"
+  "src_dir": "./src",
+  "api_dir": "./api",
+  "static_dir": "./static"
 }
