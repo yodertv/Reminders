@@ -221,8 +221,12 @@ passport.use(new GoogleStrategy({
 
 const app = express();
 
-// At INFO level or higher surpress logging the static file server by using it before the logger
-// if (log.level() >= bunyan.INFO) { app.use(express.static(__dirname + '/public'))};
+// Export the app
+module.exports = app;
+
+// At INFO level or higher surpress logging the static file server by using it before the logger.
+// Serve static files from the "static" directory.
+if (log.level() >= bunyan.INFO) { app.use(express.static(path.join(__dirname, '../public'))) };
  
 app.use(bunyanMiddleware(
   { headerName: 'X-Request-Id'
@@ -243,10 +247,9 @@ app.use(bunyanMiddleware(
 }));
 
 // While tracing cause static files to be logged by using the static server after the logger middleware.
-// if (log.level() < bunyan.INFO) { app.use(express.static(__dirname + '/public')) };app.use(cookieParser());
+if (log.level() < bunyan.INFO) { app.use(express.static(path.join(__dirname, '../public'))) };
 
-// Serve static files from the "static" directory
-app.use(express.static(path.join(__dirname, '../public')));
+//app.use(cookieParser());
 
 app.use(cookieSession(
   { name: 'cookie-session'
