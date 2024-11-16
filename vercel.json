@@ -1,4 +1,6 @@
 {
+	"buildCommand": "node ./make.js install vercel",
+	"outputDirectory": "build",
 	"routes": [
 		{ "src": "/(.*)", "dest": "/api/todoServer.js" }
 	]

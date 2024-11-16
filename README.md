@@ -65,6 +65,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Working tag: 2024.11.16
+- Working on vercel dev local.
+
 ### Working tag: working-2024.10.23
 - Developed a pattern with vercel-test. Applying it in Todos now.
 - Attempting vercel deployment via github.
