@@ -784,7 +784,8 @@ app.all('*', function(req, res) {
   res.redirect("/#welcome");
 });
 
-http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
+// This is replaced by main.js and vercel's serverless deployment.
+// http.createServer(app).listen(process.env.PORT || parseInt(port, 10));
 
 log.info(nodeDesc + " running on " + os.hostname() + ":" + port + ". Node environment = " + nodeEnv + "." );
 log.info("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );

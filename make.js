@@ -62,7 +62,7 @@ for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
 };
 
 // Build files to copy to root directory.
-var BLD_FILES = ['package.json', 'vercel.json'];
+var BLD_FILES = ['package.json', 'vercel.json', 'src/main.js'];
 
 // Files into which to bake the @VERSION@
 var VER_FILES = [

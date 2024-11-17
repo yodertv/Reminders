@@ -1,11 +1,11 @@
 {
-	"buildCommand": "node ./make.js install vercel",
+	"buildCommand": "node ./make.js install localnet",
 	"outputDirectory": "build",
 	"builds": [
     { "src": "build/api/*.js", "use": "@vercel/node" },
     { "src": "build/public/**/*", "use": "@vercel/static" }
 	],
 	"routes": [
-		{ "src": "/(.*)", "dest": "/api/todoServer.js" }
+		{ "src": "/(.*)", "dest": "./api/todoServer.js" }
 	]
 }
