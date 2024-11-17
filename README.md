@@ -68,6 +68,7 @@ Try out [Reminders App](https://reminders.now.sh).
 ### Working tag: 2024.11.16
 - Working on vercel dev local. Code is building through vercel locally and online.
 - Working to make a package that exports the express app so that it can be called by vercel's serverless function hook.
+- Good to know: build and functions declarations in vercel.json are not compatible. A deployment must use one or the other. See https://vercel.link/functions-and-builds.
 
 ### Working tag: working-2024.10.23
 - Developed a pattern with vercel-test. Applying it in Todos now.
