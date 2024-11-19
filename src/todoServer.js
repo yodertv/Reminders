@@ -579,7 +579,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   }
 });
 
-app.del(apiPath + '*', ensureAuth401, function(req, res) {
+app.delete(apiPath + '*', ensureAuth401, function(req, res) {
   // Delete list (collection) using mongojs.
   // Form of DEL request http://127.0.0.1/apiPath/Reminders
 
