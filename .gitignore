@@ -14,3 +14,5 @@ README.html
 .vercel
 .env.local
 *.local
+.env*.local
+depoyments
