@@ -8,7 +8,7 @@
     "url": "https://github.com/yodertv/Reminders"
   },
   "scripts": {
-    "build": "./make.js --silent install vercel && vercel build"
+    "build": "./make.js --silent install localhost"
   },
   "dependencies": {
     "angular": "1.5.8",
