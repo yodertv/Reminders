@@ -65,6 +65,10 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Factor out static express server 2024.11.22
+- Routing questions. How to run with node using the same code and build base.
+- Working idea is to route static stuff specifically in vercel.json. Under node express.static runs in the main module.
+
 ### Working tag: 2024.11.16
 - Working on vercel dev local. Code is building through vercel locally and online.
 - Working to make a package that exports the express app so that it can be called by vercel's serverless function hook.

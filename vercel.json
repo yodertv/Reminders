@@ -4,9 +4,21 @@
 	"outputDirectory": "build",
 	"builds": [
     { "src": "build/api/todoServer.js", "use": "@vercel/node" },
+    { "src": "build/api/static.js", "use": "@vercel/node" },
     { "src": "build/public/index.html", "use": "@vercel/static" }
 	],
 	"routes": [
+		{ "src": "/css/(.*)", "dest": "/build/api/static.js" },
+		{ "src": "/fonts/(.*)", "dest": "/build/api/static.js" },
+		{ "src": "/img/(.*)", "dest": "/build/api/static.js" },
+		{ "src": "/js/(.*)", "dest": "/build/api/static.js" },
+		{ "src": "/index.html", "dest": "/build/api/static.js" },
+		{ "src": "/list.html", "dest": "/build/api/static.js" },
+		{ "src": "/todo.css", "dest": "/build/api/static.js" },
+		{ "src": "/todo.html", "dest": "/build/api/static.js" },
+		{ "src": "/todo.js", "dest": "/build/api/static.js" },
+		{ "src": "/TodoServices.js", "dest": "/build/api/static.js" },
+		{ "src": "/welcome.html", "dest": "/build/api/static.js" },
 		{ "src": "/(.*)", "dest": "/build/api/todoServer.js" }
 	]
 }
