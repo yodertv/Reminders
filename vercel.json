@@ -1,6 +1,6 @@
 {
 	"installCommand": "npm install",
-	"buildCommand": "node ./make.js install vercel",
+  "buildCommand": "npm run build",
 	"outputDirectory": "build",
 	"builds": [
     { "src": "build/api/todoServer.js", "use": "@vercel/node" },
