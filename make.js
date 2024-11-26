@@ -32,12 +32,13 @@ var _env = undefined;
 * 2) Add <environment name> to the validEnvs array below.
 * 3) Edit the values as needed in the new build file,
 * 4) Create new install commmands as required.
+* 5) Make .env.<environment name> file for run-time variables.
 *
 *  To add new src files - Edit the SRC_FILE array.
 */
 
 // Names of valid environments with definition property files defined
-var validEnvs = ['localnet','localhost','localatlas', '127', 'vercel'];
+var validEnvs = ['localnet','localhost', '127', 'vercel'];
 
 // Client source and lib files to copy to static directory
 var SRC_FILES_NAMES = ['TodoServices.js', 'todo.html', 'todo.js', 'list.html', 'index.html', 'todo.css', 'welcome.html'];
@@ -83,14 +84,8 @@ var API_FILES = [
 	API_PATH + '/' + 'todoServer.js'
 ];
 
-// Files into which to bake the @LOGDATE@
-var LOG_FILES = [API_PATH + '/' + "todoServer.js"];
-
 // Files into which to bake the @ANGULARROOT@
 var ANG_FILES = [DIST_STATIC + '/' + "index.html"];
-
-// Files into which to bake the @USERDBNAME@
-var USERDB_FILES = [API_PATH + '/' + "todoServer.js"];
 
 _shell.config.fatal = false;
 
@@ -245,6 +240,11 @@ function prep(env){
     var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
+    // Install the dotenv file.
+    _shell.cp(".env." + _env, DIST_PATH + "/.env"); 
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
+
 	// My Prep is to copy the distribution files to the API_PATH and DIST_STATIC.
 
     _shell.cp(SRC_FILES, DIST_STATIC); 
@@ -277,17 +277,10 @@ function prep(env){
 		_shell.sed('-i', /@APIPATH@/g, _props.apiPath, API_FILES[i]);	
 	};
 
-	for (var i 	= LOG_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', /@LOGDATE@/g, _props.logDate, LOG_FILES[i]);	
-	};
-
 	for (var i 	= ANG_FILES.length - 1; i >= 0; i--) {
 		_shell.sed('-i', /@ANGULARROOT@/g, _props.angularRoot, ANG_FILES[i]);	
 	};
 
-	for (var i 	= USERDB_FILES.length - 1; i >= 0; i--) {
-		_shell.sed('-i', /@USERDBNAME@/g, _props.userDbName, USERDB_FILES[i]);	
-	};
 }
 
 function build(env){

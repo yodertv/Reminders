@@ -1,16 +1,10 @@
 {
 	"#0_comment" : "Build poperties for localhost deployment and testing.",
-	
-	"name" : "127.0.0.1",
-	"ENV" : "DEV",
-
-	"#1_comment" : "Should server log date?",
-	"logDate" : "true",
+	"name" : "127",
 
 	"#2_comment" : "Deployment details. Local area network node address. Works with Google Auth",
 	"nodeURL" : "http://127.0.0.1:8080/",
 	"apiPath" : "api/todos/",
-	"angularRoot" : "js/",
-	"userDbName" : "mongodb://localhost:27017/users"
+	"angularRoot" : "js/"
 }
 

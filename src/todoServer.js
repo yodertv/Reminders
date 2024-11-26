@@ -1,12 +1,14 @@
 /* Fully working Todo demonstration application using mongo, angular, and express. */
 
+'use strict';
+
 // Build properties used by todoServer.js
 var nodeDesc = "Todo Server v@VERSION@";
 var nodeURL = "@NODEURL@";        // URL of the deployed server.
 var apiPath = '/' + "@APIPATH@";  // The path to the XHR API
-var logDate = @LOGDATE@;          // true or false. E.g. On jitsu date is logged for us.
 
-'use strict';
+//require('dotenv').config({ path: process.env.BUILD_ENV, debug: true });
+require('dotenv').config({ debug: true });
 
 var os = require("os");
 var url = require("url");
@@ -45,7 +47,7 @@ var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 var userOptions = {
-  'dbUrl' : '@USERDBNAME@',
+  'dbUrl' : process.env.MONGO_USER_DB_NAME,
   'collectionName' : 'userList',
   'nodeEnv' : nodeEnv
 }

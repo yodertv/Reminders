@@ -65,6 +65,11 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Clean up build processs 2024.11.25
+- Review and refactor all build and environment variables.
+- Move MONGO_USER_DB_NAME from build_props to env var.
+- Make supports dotenv by copying ```./.env.<build environment> to ./build/.env``` the default source for the dotenv package.
+
 ### Factor out static express server 2024.11.22
 - Routing questions. How to run with node using the same code and build base.
 - Working idea is to route static stuff specifically in vercel.json. Under node express.static runs in the main module.

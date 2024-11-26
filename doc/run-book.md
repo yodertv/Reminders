@@ -67,14 +67,16 @@ mod-mongo-aws-east-1a:PRIMARY>
 These are required for security credentials in production and ignored when in dev assuming test auth and credential free db.
 ```
 NODE_ENV = {production|dev}
+MONGO_USER_DB_NAME = <UserDataBaseStore>
 MONGO_USER = <dbUserName>
 MONGO_USER_SECRET = <dbUserSecret>
 GOOGLE_CLIENT_SECRET = <googleClientSecret>
 GOOGLE_CLIENT_ID = <googleClientId>
 LOG_LEVEL = {fatal|error|warn|info|debug|trace}
 ```
-The MONGO variables depend on the userDbName in build_props.
-The GOOGLE variables are always required at run-time. They are only used when NODE_ENV=production.
+The MONGO variables apply to the MONGO_USER_DB_NAME.
+The MONGO_USER_DB_NAME is the database for the user index collection, userList, which relates each user with the name of their mongo db name of the users Todo's. Each user has a db for their reminders. New users will be allocated new DBs on the same database server as MONGO_USER_DB_NAME.
+The GOOGLE api variables are used for OAuth when NODE_ENV=production.
 NODE_ENV=production only works in 127.0.0.1 and cloud deployment.
 LOG_LEVEL is the level from bunyan logger to log at and above.
 

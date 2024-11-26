@@ -5,61 +5,21 @@ Build Book
 - Install node.
 - Install npm.
 - Clone yodertv/Reminders from Github.
-- Resolve dependancies by ```npm update```.
-- Check client-side dependancies
+- Resolve dependancies by ```npm install```.
+- Check client-side dependancies.
 - Make the deployment you want.
-- Install the node deployment tools for the target hosting service
-- Deploy and enjoy.
+- Run with any node environment or deploy to vercel.
+- Enjoy.
 
-## Build and deploy to Zeit using now
+## Build and deploy
 
-Build for vercel:
+Build
 ```
-% ./make.js --silent install zeit
-```
-
-Deploy your build to zeit using now
-```
-% cd build; now ; cd ..
-> Deploying ~/src/Todos/build
-> Warning! Requested node version 5.1.0 is not available 7.7.3
-> Using Node.js 7.7.3 (default)
-> Ready! https://reminders-kevovklwel.now.sh (copied to clipboard) [2s]
-> You are on the OSS plan. Your code will be made public.
-> Upload [====================] 100% 0.0s
-> Sync complete (2.6kB) [7s] 
-> Initializing…
-> Building
-> ▲ npm install
->  ‣ passport@0.2.1
->  ‣ passport-local@1.0.0
->  ‣ passport-google-oauth@0.1.5
->  ‣ mongojs@2.4.0
->  ‣ bootstrap@3.3.6
->  ‣ angular@1.5.8
->  ‣ angular-resource@1.5.8
->  ‣ angular-route@1.5.8
->  ‣ cookie-session@1.2.0
-> ✓ Installed 59 modules [3s]
-> ▲ npm start
-> > Reminders@0.5.5 start /home/nowuser/src
-> > node ./todoServer.js
-> the options [authMechanism] is not supported
-> Todo Server v0.5.5
-> Running on hsevx4wagfbjhjvg1g5sde5h:80
-> Node environment = PROD
-> User store = ds043972.mongolab.com:43972/users[userList]
-> Use https://reminders.now.sh
-> CTRL + C to shutdown
-> Deployment complete!
+npm install
+npm run build <build environment>
 ```
 
 Each Vercel deployment get's it's own unique URL. This project needs to know its own application URL and so do the google API's for authentication. So we use the Vercel.com Domain settings tab command to point a common name to the unique instance.
-
-Keep the app from being frozen offline by using the scale command.
-```
-now scale reminders.now.sh 1
-```
 
 In the browser try out [Reminders App](https://reminders.now.sh).
 
@@ -67,6 +27,7 @@ In the browser try out [Reminders App](https://reminders.now.sh).
 - choose a new {name}.
 - change make.js and add the new target {name}.
 - create a build_props.{name}.json file by coping an existing one.
+- check environment variables and put into .env.{name}.
 
 ```
 /**
