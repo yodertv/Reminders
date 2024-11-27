@@ -1,24 +1,25 @@
 {
+	"version": 2,
 	"installCommand": "npm install",
   "buildCommand": "npm run build",
-	"outputDirectory": "build",
+  "outputDirectory": "build",
 	"builds": [
-    { "src": "build/api/todoServer.js", "use": "@vercel/node" },
-    { "src": "build/api/static.js", "use": "@vercel/node" },
-    { "src": "build/public/index.html", "use": "@vercel/static" }
+    { "src": "/api/todoServer.js", "use": "@vercel/node" },
+    { "src": "/api/static.js", "use": "@vercel/node" },
+    { "src": "/public/index.html", "use": "@vercel/static" }
 	],
 	"routes": [
-		{ "src": "/css/(.*)", "dest": "/build/api/static.js" },
-		{ "src": "/fonts/(.*)", "dest": "/build/api/static.js" },
-		{ "src": "/img/(.*)", "dest": "/build/api/static.js" },
-		{ "src": "/js/(.*)", "dest": "/build/api/static.js" },
-		{ "src": "/index.html", "dest": "/build/api/static.js" },
-		{ "src": "/list.html", "dest": "/build/api/static.js" },
-		{ "src": "/todo.css", "dest": "/build/api/static.js" },
-		{ "src": "/todo.html", "dest": "/build/api/static.js" },
-		{ "src": "/todo.js", "dest": "/build/api/static.js" },
-		{ "src": "/TodoServices.js", "dest": "/build/api/static.js" },
-		{ "src": "/welcome.html", "dest": "/build/api/static.js" },
-		{ "src": "/(.*)", "dest": "/build/api/todoServer.js" }
+		{ "src": "/css/(.*)", "dest": "/api/static.js" },
+		{ "src": "/fonts/(.*)", "dest": "/api/static.js" },
+		{ "src": "/img/(.*)", "dest": "/api/static.js" },
+		{ "src": "/js/(.*)", "dest": "/api/static.js" },
+		{ "src": "/index.html", "dest": "/api/static.js" },
+		{ "src": "/list.html", "dest": "/api/static.js" },
+		{ "src": "/todo.css", "dest": "/api/static.js" },
+		{ "src": "/todo.html", "dest": "/api/static.js" },
+		{ "src": "/todo.js", "dest": "/api/static.js" },
+		{ "src": "/TodoServices.js", "dest": "/api/static.js" },
+		{ "src": "/welcome.html", "dest": "/api/static.js" },
+		{ "src": "/(.*)", "dest": "/api/todoServer.js" }
 	]
 }

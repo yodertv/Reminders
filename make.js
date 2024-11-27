@@ -245,6 +245,11 @@ function prep(env){
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
+	// Install .vercel to satisfy vercel dev.
+	_shell.cp('-R', ".vercel", DIST_PATH); 
+	var err = _shell.error();
+	if (!err===null) { console.log(err) }
+
 	// My Prep is to copy the distribution files to the API_PATH and DIST_STATIC.
 
     _shell.cp(SRC_FILES, DIST_STATIC); 

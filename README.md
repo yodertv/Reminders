@@ -65,6 +65,11 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Run vercel in build directory 2024.11.26
+- Fixed build and route declarations.
+- Updated run-book.
+- Learned the vercel dev reads the .env file I deploy in build. Only needed for main.js.
+
 ### Clean up build processs 2024.11.25
 - Review and refactor all build and environment variables.
 - Move MONGO_USER_DB_NAME from build_props to env var.

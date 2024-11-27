@@ -7,9 +7,6 @@ var nodeDesc = "Todo Server v@VERSION@";
 var nodeURL = "@NODEURL@";        // URL of the deployed server.
 var apiPath = '/' + "@APIPATH@";  // The path to the XHR API
 
-//require('dotenv').config({ path: process.env.BUILD_ENV, debug: true });
-require('dotenv').config({ debug: true });
-
 var os = require("os");
 var url = require("url");
 var http = require("http");

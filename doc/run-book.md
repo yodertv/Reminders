@@ -3,7 +3,7 @@ Run-book
 
 ## build the project:
 ```
-% ./make.js --silent install localhost
+% npm run build <build environment>
 ```	
 
 ## deploy community mongodb locally:
@@ -25,9 +25,14 @@ Start mongo db:
 % mongorestore --uri="mongodb+srv://cluster0.4swbu.mongodb.net/" --username=yodertv ./dump
 ```
 
+## Run Todo server on vercel dev:
+```
+% vercel dev --cwd build -l $PORT | bunyan --output oneline &
+```
+
 ## Run Todo server on localhost:
 ```
-% cd ./build ; node ./todoServer.js & cd ..
+% cd ./build ; node main.js | bunyan --output oneline & ; cd ..
 ```
 
 ## Connect to local deployment:
@@ -35,7 +40,7 @@ http://localhost:8080/
 
 ## Connect to mongod with repl interface:
 ```
-% mongo
+% mongosh
 ```
 
 ## Create new DBs to be assigned to users:
