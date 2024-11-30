@@ -3,11 +3,16 @@
 	"installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-	"builds": [
-    { "src": "/api/todoServer.js", "use": "@vercel/node" },
-    { "src": "/api/static.js", "use": "@vercel/node" },
-    { "src": "/public/index.html", "use": "@vercel/static" }
-	],
+  "functions": {
+    "api/todoServer.js": {
+      "memory": 1024,
+      "maxDuration": 25
+    },
+    "api/static.js": {
+      "memory": 1024,
+      "maxDuration": 5
+    }
+  },
 	"routes": [
 		{ "src": "/css/(.*)", "dest": "/api/static.js" },
 		{ "src": "/fonts/(.*)", "dest": "/api/static.js" },

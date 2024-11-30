@@ -70,6 +70,8 @@ mod-mongo-aws-east-1a:PRIMARY>
 
 ## Environment Variables and Secrets
 These are required for security credentials in production and ignored when in dev assuming test auth and credential free db.
+Use vercel dashboard for IaaS deployments environment variables.
+Use .env for vercel dev and main.js.
 ```
 NODE_ENV = {production|dev}
 MONGO_USER_DB_NAME = <UserDataBaseStore>

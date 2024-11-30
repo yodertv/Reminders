@@ -17,10 +17,11 @@ var _pkg = require('./package.json');
 */
 
 var DIST_PATH = _pkg.build_dir;
-var DIST_STATIC = DIST_PATH + '/public';
-var API_PATH = DIST_PATH + '/api';
+var DIST_STATIC = DIST_PATH + _pkg.static_dir;
+var API_PATH = DIST_PATH + _pkg.api_dir;
 var SRC_PATH = _pkg.src_dir;
 var LIB_PATH = _pkg.lib_dir;
+var build_manifest_file = DIST_PATH + "build_manifest.txt";
 var build_manifest = "";
 var _props = undefined;
 var _validCmd = false;
@@ -61,9 +62,6 @@ var SRV_FILES = [];
 for (var i = 0; i < SRV_FILES_NAMES.length; i++) {
  	SRV_FILES.push(SRC_PATH + '/' + SRV_FILES_NAMES[i]);
 };
-
-// Build files to copy to root directory.
-var BLD_FILES = ['package.json', 'vercel.json', 'src/main.js'];
 
 // Files into which to bake the @VERSION@
 var VER_FILES = [
@@ -162,7 +160,6 @@ function initEnv(env){
 
 		var prop_file_name = "./build_props." + _env + ".json";
 		_props = require(prop_file_name);
-		BLD_FILES.push(prop_file_name);
 
 		var git_log = _shell.exec('git log --graph --oneline --decorate --all -n 10', {'silent':'true'});
 		var git_status = _shell.exec('git status', {'silent':'true'});
@@ -197,9 +194,8 @@ function clean(){
         console.log('\n Cleaning output files...');
     }
 	_validCmd = true; 				// No initEnv here because environment is irrelevent to cleaning.
-    _shell.rm('-rf', DIST_PATH);
+    _shell.rm('-rf', DIST_STATIC, API_PATH, build_manifest_file, ".env");
 }
-
 
 function prep(env){
 	initEnv(env);
@@ -237,16 +233,10 @@ function prep(env){
 	if (!err===null) { console.log(err) }
 
     // Stamp it with the build manifest.
-    var build_manifest_file = DIST_PATH + '/' + "build_manifest.txt";
     build_manifest.to(build_manifest_file);
 
     // Install the dotenv file.
-    _shell.cp(".env." + _env, DIST_PATH + "/.env"); 
-	var err = _shell.error();
-	if (!err===null) { console.log(err) }
-
-	// Install .vercel to satisfy vercel dev.
-	_shell.cp('-R', ".vercel", DIST_PATH); 
+    _shell.cp("-f", ".env." + _env, DIST_PATH + ".env"); 
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 
@@ -261,10 +251,6 @@ function prep(env){
 	if (!err===null) { console.log(err) }
 
     _shell.cp(SRV_FILES, API_PATH);
-	var err = _shell.error();
-	if (!err===null) { console.log(err) }
-
-    _shell.cp(BLD_FILES, DIST_PATH); 
 	var err = _shell.error();
 	if (!err===null) { console.log(err) }
 

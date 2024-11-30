@@ -65,6 +65,10 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Returning to build and deploy issues 2024.11.29
+- Now vercel dev is running my build command!?
+- Restructured the build with DIST_PATH="".
+
 ### Run vercel in build directory 2024.11.26
 - Fixed build and route declarations.
 - Updated run-book.

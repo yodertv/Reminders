@@ -1,6 +1,7 @@
 # Build directory. Everything here is generated from source
 build
 api
+public
 # Log from the webserver
 log
 # SSL keys
@@ -12,7 +13,7 @@ node_modules
 doc/*.html
 README.html
 .vercel
-.env.local
 *.local
-.env*.local
+.env*
 depoyments
+build_manifest.txt
