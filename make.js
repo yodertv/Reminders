@@ -151,7 +151,8 @@ function initEnv(env){
 	if (!_props) { // Only initialize once.
 
 		_validCmd = true;
-		_env = env || 'localhost';
+		_env = env || process.env.BUILD_ENV,
+		_env = _env || 'localhost';
 
 		if (validEnvs.indexOf(_env) == -1) { // No such environment
 			console.log('\n  No such environment, %s.', _env);
