@@ -2,29 +2,13 @@
 	"version": 2,
 	"installCommand": "npm install",
   "buildCommand": "npm run build",
-  "outputDirectory": "build",
   "functions": {
     "api/todoServer.js": {
       "memory": 1024,
       "maxDuration": 25
-    },
-    "api/static.js": {
-      "memory": 1024,
-      "maxDuration": 5
     }
   },
-	"routes": [
-		{ "src": "/css/(.*)", "dest": "/api/static.js" },
-		{ "src": "/fonts/(.*)", "dest": "/api/static.js" },
-		{ "src": "/img/(.*)", "dest": "/api/static.js" },
-		{ "src": "/js/(.*)", "dest": "/api/static.js" },
-		{ "src": "/index.html", "dest": "/api/static.js" },
-		{ "src": "/list.html", "dest": "/api/static.js" },
-		{ "src": "/todo.css", "dest": "/api/static.js" },
-		{ "src": "/todo.html", "dest": "/api/static.js" },
-		{ "src": "/todo.js", "dest": "/api/static.js" },
-		{ "src": "/TodoServices.js", "dest": "/api/static.js" },
-		{ "src": "/welcome.html", "dest": "/api/static.js" },
-		{ "src": "/(.*)", "dest": "/api/todoServer.js" }
+	"rewrites": [
+		{ "source": "/:path*", "destination": "/api/todoServer" }
 	]
 }

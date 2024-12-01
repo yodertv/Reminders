@@ -65,6 +65,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Use vercel-test pattern to remove static api from Todo - 2024.11.29.
+- 
+
 ### Returning to build and deploy issues 2024.11.29
 - Now vercel dev is running my build command!?
 - Restructured the build with DIST_PATH="".
