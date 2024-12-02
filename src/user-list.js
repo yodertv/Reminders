@@ -91,7 +91,7 @@ exports.findByEmail = function(email) {
   return null;
 }
 
-exports.loadUserList = function (options) {
+exports.loadUserList = async function (options) {
 
   // Get user list objects from options.collectionName of options.dbUrl DB. Using mongojs api and the options
   // specifying the dbUrl and collectionName. 
@@ -110,18 +110,25 @@ exports.loadUserList = function (options) {
        return err;
     });
   }
-  
-  userDb.collection(userCol).find( function( err, myDocs ){
-    if (err != null) {
-      log.fatal(err, "loadUserList: Failed to load user list.");
-      throw err;
-    }
-    else {
-      exports.ul = myDocs;
-      exports.logUserList();
-    }
-  });
-};
+  try {
+    const docs = await new Promise((resolve, reject) => {
+      userDb.collection(userCol).find( function( err, myDocs ) {
+        if (err != null) {
+          log.error(err, "loadUserList: Failed to load user list.");
+          reject(err);
+        } else {
+          exports.ul = myDocs;
+          exports.logUserList();
+          resolve(myDocs);
+        }
+      });
+    });
+  } catch (err) {
+    throw new Error('loadUserList failed.');
+  } finally {
+    userDb.close();
+  }
+}
 
 var updateUser = function (userToUpdate) {
   // Stores (replaces) user object in the named collection of the DB identified by the dbURL option. 
