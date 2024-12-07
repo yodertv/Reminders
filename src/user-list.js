@@ -25,20 +25,28 @@ function makeDbName(email) {
 }
 
 exports.openDB = function(dbName, log, msg) {
-  var protoString = dbName.split("//")[0] + "//";
-  var hostString = dbName.split("//")[1];
+  if (dbName === undefined) {
+    var err = new Error("dbName can not be undefined" + msg);
+    log.error("openDB() " + msg + err);
+    const dbs = new mongojs(""); // Intentionally broken to create a return value of type mongjs.
+    dbs.emit('error', err);
+    return dbs;
+  } else {
+    var protoString = dbName.split("//")[0] + "//";
+    var hostString = dbName.split("//")[1];
 
-  // If we have a MONGO_USER environment variable, assume authenticated connection and rewrite the url.
-  var dbUrl = process.env.MONGO_USER ? protoString  + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + hostString : dbName;
+    // If we have a MONGO_USER environment variable, assume authenticated connection and rewrite the url.
+    var dbUrl = process.env.MONGO_USER ? protoString  + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + hostString : dbName;
 
-  log.info("openDB() " + dbName + " " + msg);
-  log.trace("openDB() with credentials " + dbUrl + " " + msg);
-  const dbs = new mongojs(dbUrl);
-  dbs.on('error',function(err) {
-    log.error('openDB() Error:' + dbUrl + " " + msg + ", error:" + err);
-    return err;
-  });
-  return dbs
+    log.info("openDB() " + dbName + " " + msg);
+    log.trace("openDB() with credentials " + dbUrl + " " + msg);
+    const dbs = new mongojs(dbUrl);
+    dbs.on('error',function(err) {
+      log.error('openDB() Error:' + dbUrl + " " + msg + ", error:" + err);
+      return dbs;
+    });
+    return dbs;
+  };
 }
 
 exports.logUserList = function () {
@@ -75,6 +83,7 @@ exports.assignDb = function (email) {
   return (dbUser);
 }
 
+/*
 exports.findByEmail = function(email) {
   // Search the in memory user list for a pointer to the user's record. Return null for not found.
   if (exports.ul === null ) { // exports.ul is loaded asynchronously so it may still be null.
@@ -89,6 +98,33 @@ exports.findByEmail = function(email) {
   }
   log.trace("findByEmail: Not found", email, exports.ul);
   return null;
+}
+*/
+
+// Database call to find by email in the user list
+exports.findByEmail = async function(email) {
+  if (userDb == undefined) {
+    userDb = exports.openDB(dbUrl, log, "via findByEmail.");
+    userDb.on('error',function(err) {
+       return err;
+    });
+  }
+  try {
+    const doc = await new Promise((resolve, reject) => {
+      userDb.userList.findOne({ email: email }, (err, user) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(doc);
+        }
+      });
+    });
+    return doc;
+  } catch (err) {
+    throw new Error('Database fetch failed');
+  } finally {
+    db.close();
+  }
 }
 
 exports.loadUserList = async function (options) {

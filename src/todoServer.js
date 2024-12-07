@@ -111,10 +111,17 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser( async function(user, done) {
   user.views = (user.views || 0) + 1; // Yes, counting views here.
   log.trace({user}, "Deserializing user:");
-  var dbUser = userList.findByEmail(user.email)
+  // var dbUser = userList.findByEmail(user.email)
+  var dbUser = {};
+  try {
+    dbUser = await findUserByEmail(user.email);
+    log.trace(user);
+  } catch (error) {
+    log.error('findUserByEmail error:', JSON.stringify(error));
+  }
   if (!dbUser) {
     return done("dbUser not found", user);
   } else {
@@ -375,7 +382,7 @@ app.get(apiPath, ensureAuth401, function(req, res) {
 
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, "via GET archiveList");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET archiveList ");
     dbs[dbName].on('error',function(err) {
        return err;
     });
@@ -417,7 +424,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
 
   // The client may start with an object action, so open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_Object_Action");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via DB_Object_Action ");
     dbs[dbName].on('error',function(err) {
         return err;
     });
@@ -548,15 +555,15 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   var dbPart = uri.slice(apiPath.length); // Remove apiPath
   var collectionName = dbPart.slice(dbPart.lastIndexOf('/') + 1); // Get collection name from URI
   
+  req.log.trace('GET_DOCS: dbPart=%s collectionName=%s, isAuthenticated? %s, user=%s.', dbPart, collectionName, req.isAuthenticated(), JSON.stringify(req.user));
+
   // The client may start with reading the documents from the collection. Open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_FIND");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET_DOCS ");
     dbs[dbName].on('error',function(err) {
         return err;
     });
   }
-
-  req.log.trace('GET_DOCS: dbPart=%s collectionName=%s', dbPart, collectionName);
 
   if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
     var msg = "GET_DOCS: Invalid Path";
@@ -592,7 +599,7 @@ app.delete(apiPath + '*', ensureAuth401, function(req, res) {
 
   // The client may start with deleting a collection. Open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_DROP_COLLECTION");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via DB_DROP_COLLECTION ");
     dbs[dbName].on('error',function(err) {
         return err;
     });
@@ -634,7 +641,7 @@ app.put(apiPath + '*', ensureAuth401, function(req, res) {
 
   // The client may start with storing a collection. Open db here.
     if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, "via DB_REPLACE_COLLECTION");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via DB_REPLACE_COLLECTION ");
     dbs[dbName].on('error',function(err) {
        return err;
     });
@@ -753,7 +760,7 @@ app.post(apiPath + '*', ensureAuth401, function(req, response) {
         else {
           // The client may start with posting a new item. Open db here.
           if (dbs[dbName] == undefined) {
-            dbs[dbName] = userList.openDB(req.user.db, req.log, "via via DB_POST_DOC");
+            dbs[dbName] = userList.openDB(req.user.db, req.log, " via via DB_POST_DOC ");
             dbs[dbName].on('error',function(err) {
               return err;
             });
