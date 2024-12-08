@@ -13,7 +13,7 @@ var userauths = 0;
 var userDb = undefined;
 var userCol = undefined;
 var dbServerPath = undefined
-var dbUrl = undefined;
+var userDbUrl = undefined;
 var nodeEnv = undefined;
 
 exports.ul = undefined;
@@ -104,28 +104,43 @@ exports.findByEmail = function(email) {
 // Database call to find by email in the user list
 exports.findByEmail = async function(email) {
   if (userDb == undefined) {
-    userDb = exports.openDB(dbUrl, log, "via findByEmail.");
+    userDb = exports.openDB(userDbUrl, log, " via findByEmail.");
     userDb.on('error',function(err) {
        return err;
     });
   }
   try {
-    const doc = await new Promise((resolve, reject) => {
+    const user = await new Promise((resolve, reject) => {
       userDb.userList.findOne({ email: email }, (err, user) => {
         if (err) {
           reject(err);
         } else {
-          resolve(doc);
+          resolve(user);
         }
       });
     });
-    return doc;
+    return user;
   } catch (err) {
-    // throw new Error('Database fetch failed');
-    log.trace( "findByEmail:", {"email" : email, "dbServerPath" : dbUrl } )
+    log.trace( "findByEmail:", {"email" : email, "dbServerPath" : userDbUrl } )
+    throw err;
   } finally {
-    userDb.close();
+   // userDb.close();
   }
+}
+
+// Initialize the userDb options from options.
+exports.initUserDbOptions = function (options) {
+  userDbUrl = options.dbUrl;
+  nodeEnv = options.nodeEnv;
+  dbServerPath = userDbUrl.substring(0, userDbUrl.lastIndexOf('/'));
+  userCol = options.collectionName;
+  log.trace( "initUserDbOptions():", {
+    "opts" : options,
+    "userDbUrl" : userDbUrl,
+    "nodEnv" : nodeEnv,
+    "dbServerPath" : dbServerPath,
+    "userCol" : userCol
+  });
 }
 
 exports.loadUserList = async function (options) {
