@@ -26,8 +26,8 @@ function makeDbName(email) {
 
 exports.openDB = function(dbName, log, msg) {
   if (dbName === undefined) {
-    var err = new Error("dbName can not be undefined" + msg);
-    log.error("openDB() " + msg + err);
+    var err = new Error("In openDB(), dbName can not be undefined" + msg);
+    log.error("openDB()" + msg + err);
     const dbs = new mongojs(""); // Intentionally broken to create a return value of type mongjs.
     dbs.emit('error', err);
     return dbs;
@@ -121,9 +121,10 @@ exports.findByEmail = async function(email) {
     });
     return doc;
   } catch (err) {
-    throw new Error('Database fetch failed');
+    // throw new Error('Database fetch failed');
+    log.trace( "findByEmail:", {"email" : email, "dbServerPath" : dbUrl } )
   } finally {
-    db.close();
+    userDb.close();
   }
 }
 
