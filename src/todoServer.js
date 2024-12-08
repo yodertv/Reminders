@@ -49,7 +49,7 @@ var userOptions = {
   'nodeEnv' : nodeEnv
 }
 
-userList.loadUserList(userOptions);
+userList.initUserDbOptions(userOptions);
 
 var dbs = [] // Array of db connections
 var match = nodeURL.search('[0-9]{4}/$');
@@ -114,20 +114,18 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser( async function(user, done) {
   user.views = (user.views || 0) + 1; // Yes, counting views here.
   log.trace({user}, "Deserializing user:");
-  // var dbUser = userList.findByEmail(user.email)
   var dbUser = {};
   try {
-    dbUser = await findUserByEmail(user.email);
-    log.trace(user);
+    dbUser = await userList.findByEmail(user.email);
+    // dbUser.views = user.views ; // Update view count.
+    log.trace({dbUser}, "Found user:");
+    done(null, dbUser);
   } catch (error) {
-    log.error('findUserByEmail error:', JSON.stringify(error));
+    log.error('findByEmail error in deserializeUser():', JSON.stringify(error));
+    return done(error, dbUser);
+  } finally {
+    log.trace("In Finally{} of deserializeUser()");
   }
-  if (!dbUser) {
-    return done("dbUser not found", user);
-  } else {
-    dbUser.views = user.views ; // Update view count in the user list.
-  }
-  done(null, dbUser);
 });
 
 if (!nodeProd) {
@@ -280,8 +278,8 @@ if (!nodeProd) { // Never use this route in production.
   app.post('/auth/local', bodyParser(),
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
-      req.log.trace(req.user);
-      setTimeout(listSessions,1000); // Print sessions in one sec.
+      req.log.trace("/auth/local: ", req.user);
+      // setTimeout(listSessions,1000); // Print sessions in one sec.
       res.redirect('/#list/:Reminders');
     }
   );
@@ -324,6 +322,7 @@ app.get('/logout', ensureAuthRedirect, function(req, res){
 app.get('/account', function(req, res){
   var userObj = {};
   if (req.isAuthenticated()) {
+    req.log.trace("/account: ", JSON.stringify(req.user));
     userObj = { email : req.user.email, db : req.user.db, env : nodeEnv, views : req.user.views } ;
     var dbUser = userList.findByEmail(req.user.email);
     if (dbUser != null) { 
@@ -797,10 +796,12 @@ log.info(nodeDesc + " running on " + os.hostname() + ":" + port + ". Node enviro
 log.info("User store = " + userOptions.dbUrl + "[" + userOptions.collectionName +"]" );
 log.info("Use URL " + nodeURL.slice(0, nodeURL.length-1) + ". CTRL + C to shutdown." );
 
+/*
 if (log.level() < bunyan.INFO) {
   log.trace("Turing on periodic output of server state.");
   interval_example(); // Turn this on to observe the session table leak.
 }
+*/
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
