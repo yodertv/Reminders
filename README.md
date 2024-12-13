@@ -67,8 +67,8 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ### Use vercel-test pattern to make findByEmail() acsychronous.
 - Working on branch master.
-- Deserialize user doesn't break.
-- (90199f7) Made /auth/local via passport.use(new LocalStrategy()) async so it will work with the async findByEmail() under vercel dev.
+- (90199f7) Deserialize user doesn't break.
+- Made /auth/local via passport.use(new LocalStrategy()) async so it will work with the async findByEmail() under vercel dev.
 
 ### Use vercel-test pattern to handle initialization errors in todoServer.js api - 2024.12.01.
 - Return a handler with an error message if any initialization conditions fail.
