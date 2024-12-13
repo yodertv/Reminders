@@ -103,6 +103,7 @@ exports.findByEmail = function(email) {
 
 // Database call to find by email in the user list
 exports.findByEmail = async function(email) {
+  log.trace({ "email" : email, "dbServerPath" : userDbUrl }, "findByEmail:" )
   if (userDb == undefined) {
     userDb = exports.openDB(userDbUrl, log, " via findByEmail.");
     userDb.on('error',function(err) {
@@ -111,17 +112,20 @@ exports.findByEmail = async function(email) {
   }
   try {
     const user = await new Promise((resolve, reject) => {
-      userDb.userList.findOne({ email: email }, (err, user) => {
+      userDb.userList.findOne({ "email": email }, (err, user) => {
+        log.trace("findOneUser() error: " + JSON.stringify(err) + " user: " + JSON.stringify(user));
         if (err) {
+          log.trace({"error" : err }, "findByEmail err")
           reject(err);
         } else {
           resolve(user);
         }
       });
     });
+    log.trace({"user" : user}, "findByEmail!")
     return user;
   } catch (err) {
-    log.trace( "findByEmail:", {"email" : email, "dbServerPath" : userDbUrl } )
+    log.error({"email" : email, "dbServerPath" : userDbUrl, "err:" : err }, "findByEmail Error:")
     throw err;
   } finally {
    // userDb.close();
@@ -140,7 +144,7 @@ exports.initUserDbOptions = function (options) {
     "nodEnv" : nodeEnv,
     "dbServerPath" : dbServerPath,
     "userCol" : userCol
-  });
+  }, "initUserDbOptions");
 }
 
 exports.loadUserList = async function (options) {

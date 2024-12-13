@@ -91,6 +91,15 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+function canonicalizeEmail(email) {
+  if (typeof email !== 'string') {
+    throw new Error('Invalid input: email must be a string');
+  }
+
+  // Convert the email to lowercase and trim whitespace
+  return email.trim().toLowerCase();
+}
+
 function safelyParseJSON (json, reviver) {
   var parsed
   try {
@@ -137,44 +146,57 @@ if (!nodeProd) {
 //   Todo: Validate email address structure.
 
 passport.use(new LocalStrategy(
-  function(email, password, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // Find the user by bob.  If we don't find bob or the password is not correct, 
-      // set the user to `false` to indicate failure and set a flash message.  Otherwise, return the
-      // authenticated `user` made from only the email address.
-      if (!isValidEmail(email)) { 
-        log.error({"email" : email, "pwd" : password}, "Invalid email.");
-        return done(null, false, { message: 'Invalid email.' }); 
-      }
-      findByUsername('bob', function(err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Unknown user ' + 'bob' }); }
-        if (user.password != password) { return done(null, false, { message: 'Invalid password.' }); }
-      });
-      // Now search the userList by email for the user's account, if not found, call assignDb.
-      var dbUser = userList.findByEmail(email);
-      if (!dbUser) { // Not found
+  async function(emailRaw, password, done) {
+    // Find the user by bob.  If we don't find bob or the password is not correct,
+    // set the user to `false` to indicate failure and set a flash message.  Otherwise, return the
+    // authenticated `user` made from only the email address.
+    log.trace({ "emailRaw" : emailRaw }, "Enter LocalStrategy with:")
+
+    if (!isValidEmail(emailRaw)) {
+      log.error({"email" : emailRaw, "pwd" : password}, "Invalid email.");
+      return done(null, false, { message: 'Invalid email.' });
+    }
+    const email = canonicalizeEmail(emailRaw);
+
+    findByUsername('bob', function(err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false, { message: 'Unknown user ' + 'bob' }); }
+      if (user.password != password) { return done(null, false, { message: 'Invalid password.' }); }
+    });
+
+    // Now search the userList by email for the user's account, if not found, call assignDb.
+    var dbUser;
+    try {
+      log.trace({ "email" : email }, "Enter try with:");
+      dbUser = await userList.findByEmail(email);
+      dbUser.env = nodeEnv;
+      log.trace("findByEmail results: " + JSON.stringify(dbUser));
+      // Todo: Consider counting and remembering logins here.
+      done(null, dbUser);
+    } catch (err) {
+      log.error({ "error" : JSON.stringify(err) }, 'findByEmail error in LocalStrategy():');
+      // if error is because this email isn't found if (!dbUser) { // Not found
+      // Todo: Determine how to check.
+      if (true) {
         dbUser = userList.assignDb(email);
         if (!dbUser) { // Unable to assignDb. This is fatal for the client.
           var brokenUser = {};
           brokenUser.email = user.email;
           brokenUser.db = 'Sorry, assignDb failed.'; // a hack to return the error message to the client.
-          log.error('assignDb failed for ' + user.email );
+          log.error('assignDb failed for ', { "email" : email }, 'in LocalStrategy.');
           return done(null, brokenUser); // assignDb failed.
         } else {  // Just assigned.
           dbUser.views = 0;
-          log.trace("assigned dbUser:", dbUser)
+          dbUser.env = nodeEnv;
+          log.trace("Local Auth assigned dbUser:", { "dbUser" : dbUser });
+          return done(null, dbUser);
         }
-      } else { // Resolved from userList.
-        log.trace("found dbUser:", dbUser)
+      } else { // Database error.
+        return done(error, dbUser);
       };
-    dbUser.env = nodeEnv;
-    // Consider counting and remembering logins here.
-    log.trace({"user" : dbUser }, "Local Auth");
-    return done(null, dbUser);
-    });
+    } finally {
+      log.trace("In Finally{} of LocalStrategy()");
+    }
   }));
 } else {
 // Use the GoogleStrategy within Passport.
