@@ -147,45 +147,6 @@ exports.initUserDbOptions = function (options) {
   }, "initUserDbOptions");
 }
 
-exports.loadUserList = async function (options) {
-
-  // Get user list objects from options.collectionName of options.dbUrl DB. Using mongojs api and the options
-  // specifying the dbUrl and collectionName. 
-
-  dbUrl = options.dbUrl;
-  nodeEnv = options.nodeEnv;
-  dbServerPath = dbUrl.substring(0, dbUrl.lastIndexOf('/'));
-
-  log.trace( "loadUserList:", {"opts" : options, "dbServerPath" : dbServerPath } )
-
-  userCol = options.collectionName;
-
-  if (userDb == undefined) {
-    userDb = exports.openDB(dbUrl, log, "via loadUserList");
-    userDb.on('error',function(err) {
-       return err;
-    });
-  }
-  try {
-    const docs = await new Promise((resolve, reject) => {
-      userDb.collection(userCol).find( function( err, myDocs ) {
-        if (err != null) {
-          log.error(err, "loadUserList: Failed to load user list.");
-          reject(err);
-        } else {
-          exports.ul = myDocs;
-          exports.logUserList();
-          resolve(myDocs);
-        }
-      });
-    });
-  } catch (err) {
-    throw new Error('loadUserList failed.');
-  } finally {
-    userDb.close();
-  }
-}
-
 var updateUser = function (userToUpdate) {
   // Stores (replaces) user object in the named collection of the DB identified by the dbURL option. 
   // Assume user db is opened for use by loadUserList.
