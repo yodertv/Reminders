@@ -586,7 +586,7 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     });
   }
 
-  if ( dbPart != collectionName || reqUrl.query != null ) { // This excludes resource names that are paths or URLs with query strings.
+  if ( dbPart != collectionName ) { // This excludes resource names that are paths or URLs with query strings.
     var msg = "GET_DOCS: Invalid Path";
     req.log.error(msg);
     res.writeHead(422, "Unprocessable Entity", {'Content-Type': 'text/html'});

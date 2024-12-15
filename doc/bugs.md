@@ -1,7 +1,7 @@
 Reminders Bug List
 ==================
 
-##Open Bugs -- Next: (Bug#58)
+##Open Bugs -- Next: (Bug#59)
 
 ###(Bug#57) -- Mystery 10sec delay in loading new user as seen here:
 ```
@@ -209,7 +209,23 @@ DB_GETCOLLECTIONNAMES_ERR: MongoError: server ds045907-a.mongolab.com:45907 rece
 
 ##Closed Bugs
 
-###(Bug#55) -- Race condition on start-up: First authentication processed before userlist is read.
+###(Bug#58) -- Vercel dev adds query string.
+Closed on 12.14.24 by removing the check for a clean url.
+It looks like this in node and below the same client call has the ?path... query string. The code tests for this to avoid garbage queries.
+```
+01:07:06.180Z  WARN todo: request socket closed GET /api/todos/Reminders, 200 OK 49.744875ms, req.ip=::1
+```
+```
+00:45:47.666Z TRACE todo: GET_DOCS: dbPart=Reminders collectionName=Reminders, isAuthenticated? true, user={"_id":"5f75378e529724d45a4877ae","email":"bob@example.com","db":"mongodb://localhost:27017/bobstodos"}.
+00:45:47.666Z  INFO todo: openDB() mongodb://localhost:27017/bobstodos  via GET_DOCS
+00:45:47.666Z TRACE todo: openDB() with credentials mongodb://localhost:27017/bobstodos  via GET_DOCS
+00:45:47.666Z ERROR todo: GET_DOCS: Invalid Path
+00:45:47.667Z TRACE todo: In Finally{} of deserializeUser()
+00:45:47.668Z  INFO todo: request finish 422 Unprocessable Entity 21.4395ms, user=bob@example.com
+00:45:47.668Z  WARN todo: request socket closed GET /api/todos/Reminders?path=api%2Ftodos%2FReminders, 422 Unprocessable Entity 21.520625ms, req.ip=::1
+```
+
+###(Bug#55) -- Race condition on start-up: First authentication processed before use rlist is read.
 Closed on 
 ```
 01/08 08:49 AM  npm start
