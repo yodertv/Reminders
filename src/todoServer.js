@@ -565,7 +565,7 @@ app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){
   }
 });
 
-app.get(apiPath + '*', ensureAuth401, function(req, res) {      
+app.get(apiPath + '*', ensureAuth401, async function(req, res) {
   // Get all documents from a specified collection
   // Form of URL: http://host/apiPath/CollectionName
   // todo: Check against actual collections and reply with not found
@@ -578,14 +578,6 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
   
   req.log.trace('GET_DOCS: dbPart=%s collectionName=%s, isAuthenticated? %s, user=%s.', dbPart, collectionName, req.isAuthenticated(), JSON.stringify(req.user));
 
-  // The client may start with reading the documents from the collection. Open db here.
-  if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET_DOCS ");
-    dbs[dbName].on('error',function(err) {
-        return err;
-    });
-  }
-
   if ( dbPart != collectionName ) { // This excludes resource names that are paths or URLs with query strings.
     var msg = "GET_DOCS: Invalid Path";
     req.log.error(msg);
@@ -593,16 +585,34 @@ app.get(apiPath + '*', ensureAuth401, function(req, res) {
     res.end(msg);
   }
   else {
-    dbs[dbName].collection(collectionName).find( function( err, myDocs ){
-      if (err != null) {
-        req.log.error("DB_FIND_ERR:" + err);
-      }
-      else {
-        res.writeHead(200, "OK-FIND", {'Content-Type': 'text/html'});
-        res.write(JSON.stringify(myDocs));
-        res.end();  
-      }
-    });
+    // The client may start with reading the documents from the collection. Open db here.
+    if (dbs[dbName] == undefined) {
+      dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET_DOCS ");
+      dbs[dbName].on('error',function(err) {
+          return err;
+      });
+    }
+    try {
+      await new Promise((resolve, reject) => {
+        dbs[dbName].collection(collectionName).find( function( err, myDocs ) {
+          if (err) {
+            req.log.error("DB_FIND_ERR:" + err);
+            reject(err);
+          } else {
+            req.log.trace('GET_DOCS: Result=%s.', JSON.stringify(myDocs));
+            res.writeHead(200, {
+              'Content-Type': 'text/html',
+              'X-Custom-Status-Message': 'OK-FIND'
+            });
+            res.write(JSON.stringify(myDocs));
+            res.end();
+            resolve(myDocs);
+          }
+        });
+      });
+    } catch (err) {
+      throw new Error('Database fetch failed');
+    }
   }
 });
 
