@@ -390,8 +390,8 @@ app.get('/list/:*', ensureAuthRedirect, function(req, res) {
 'query':  {method:'GET', isArray:true},
 'remove': {method:'DELETE'},
 'delete': {method:'DELETE'} }; */
-app.get(apiPath, ensureAuth401, function(req, res) {
-  // Get archiveList: no collection name in URI, so get all the collection names.
+app.get(apiPath, ensureAuth401, async function(req, res) {
+  // GET_COLLECTIONS: no collection name in URI, so get all the collection names.
   // Form of request: http://127.0.0.1/apiPath/
 
   var reqUrl = url.parse(req.url, true); // true parses the query string.
@@ -401,27 +401,36 @@ app.get(apiPath, ensureAuth401, function(req, res) {
   // Use authentication when MONGO_USER has a value.
   var dbUrl = process.env.MONGO_USER ? process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + dbName : dbName;
 
+  req.log.trace('Entering GET_COLLECTIONS: isAuthenticated? %s, user=%s.', req.isAuthenticated(), JSON.stringify(req.user));
+
   // The client may start with reading the collection names. Open db here.
   if (dbs[dbName] == undefined) {
-    dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET archiveList ");
+    dbs[dbName] = userList.openDB(req.user.db, req.log, " via GET_COLLECTIONS ");
     dbs[dbName].on('error',function(err) {
        return err;
     });
   }
-
-  dbs[dbName].getCollectionNames( function( err, myColls ){
-    if (err != null) {
-        req.log.error("DB_GETCOLLECTIONNAMES_ERR:" + err);
-        res.writeHead(500, "DB_GETCOLLECTIONNAME_ERR", {'Content-Type': 'text/html'});
-        res.end(err.toString());
-    }
-    else {
-      req.log.trace({"myColls" : myColls}, "GET COLLECTIONS:");
-      res.writeHead(200, "OK", {'Content-Type': 'text/html'});
-      res.write(JSON.stringify(myColls))
-      res.end();
-    }
-  })
+  try {
+    await new Promise((resolve, reject) => {
+      dbs[dbName].getCollectionNames( function( err, myColls ){
+        if (err) {
+          req.log.error("GET_COLLECTIONS_ERR:" + err);
+          reject(err);
+        } else {
+          req.log.trace({"myColls" : myColls}, "GET_COLLECTIONS:");
+          res.writeHead(200, {
+            'Content-Type': 'text/html',
+            'X-Custom-Status-Message': 'OK-GET_COLLECTIONS'
+          });
+          res.write(JSON.stringify(myColls))
+          res.end();
+          resolve(myColls);
+        }
+      });
+    });
+  } catch (err) {
+    throw new Error('Database collection fetch failed');
+  }
 });
 
 app.all(apiPath + '*/[A-Fa-f0-9]{24}$', ensureAuth401, function(req, response){

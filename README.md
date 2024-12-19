@@ -65,6 +65,11 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Use vercel-test pattern to make GET_DOCS acsychronous.
+- Reported and fixed (Bug#58).
+- Made GET_DOCS block for find() results.
+- Working on GET_COLLECTIONS...
+
 ### Use vercel-test pattern to make findByEmail() acsychronous.
 - Working on branch master.
 - (90199f7) Deserialize user doesn't break.
