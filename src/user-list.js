@@ -39,7 +39,6 @@ exports.openDB = function(dbName, log, msg) {
     var dbUrl = process.env.MONGO_USER ? protoString  + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + hostString : dbName;
 
     log.info("openDB() " + dbName + " " + msg);
-    log.trace("openDB() with credentials " + dbUrl + " " + msg);
     const dbs = new mongojs(dbUrl);
     dbs.on('error',function(err) {
       log.error('openDB() Error:' + dbUrl + " " + msg + ", error:" + err);

@@ -66,9 +66,14 @@ Try out [Reminders App](https://reminders.now.sh).
 ## History
 
 ### Use vercel-test pattern to make GET_DOCS acsychronous.
+- Remove leeking credential trace statement.
+- Set dbUrl for vercel prod deployment.
+
+### Use vercel-test pattern to make GET_DOCS acsychronous.
 - Reported and fixed (Bug#58).
 - Made GET_DOCS block for find() results.
-- Working on GET_COLLECTIONS...
+- Made GET_COLLECTIONS block for getCollections().
+- Vercel dev working for rough smoke testing.
 
 ### Use vercel-test pattern to make findByEmail() acsychronous.
 - Working on branch master.
