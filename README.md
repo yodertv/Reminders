@@ -65,6 +65,9 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## History
 
+### Remove last reference to stateful .ul.
+- Working fully on vercel using local auth.
+
 ### Use vercel-test pattern to make GET_DOCS acsychronous.
 - Remove leeking credential trace statement.
 - Set dbUrl for vercel prod deployment.

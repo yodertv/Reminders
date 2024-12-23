@@ -16,7 +16,7 @@ var dbServerPath = undefined
 var userDbUrl = undefined;
 var nodeEnv = undefined;
 
-exports.ul = undefined;
+// exports.ul = undefined;
 exports.userauths = userauths;
 
 function makeDbName(email) {
@@ -38,7 +38,7 @@ exports.openDB = function(dbName, log, msg) {
     // If we have a MONGO_USER environment variable, assume authenticated connection and rewrite the url.
     var dbUrl = process.env.MONGO_USER ? protoString  + process.env.MONGO_USER + ":" + process.env.MONGO_USER_SECRET + "@" + hostString : dbName;
 
-    log.info("openDB() " + dbName + " " + msg);
+    log.info("openDB() " + dbName + msg);
     const dbs = new mongojs(dbUrl);
     dbs.on('error',function(err) {
       log.error('openDB() Error:' + dbUrl + " " + msg + ", error:" + err);
@@ -78,7 +78,6 @@ exports.assignDb = function (email) {
   dbUser.email = email;
   dbUser.db = dbServerPath + "/" + makeDbName(email);
   createUser(dbUser); // Create user in the user database.
-  exports.ul.push(dbUser) // Push the user into the memory user list.
   return (dbUser);
 }
 
