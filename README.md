@@ -2,14 +2,14 @@ Reminders
 =========
 
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
-Hosted by Vercel, Google APIs, and Atlas.
+Hosted by Vercel, Google APIs, and [Atlas](https://cloud.mongodb.com).
 
-This cloud hosted [Reminders App](https://reminders.now.sh) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
+This cloud hosted [Reminders App](https://reminders-ashen.vercel.app) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
 
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
 ## Demo
-Try out [Reminders App](https://reminders.now.sh).
+Try out [Reminders App](https://reminders-ashen.vercel.app).
 
 ## Docs
 [Reminders App Documentation](https://github.com/yodertv/Reminders/tree/master/doc) has simple notes for bugs, build, test and run.
@@ -36,7 +36,7 @@ Try out [Reminders App](https://reminders.now.sh).
 
 ## Deployments
 - All deployment knowledge is in make.js and build_props_files.
-- Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Zeit.
+- Property files to produce builds that can be hosted on localhost, localnet, 127.0.0.1, and Vercel.
 - Mongodb can be hosted on localhost, localnet, and mLab.
 
 ## Dependancies
@@ -64,6 +64,9 @@ Try out [Reminders App](https://reminders.now.sh).
 - Add a print feature.
 
 ## History
+
+### Refresh docs and publish.
+- Updated welcome.html for Vercel deployment.
 
 ### Remove last reference to stateful .ul.
 - Working fully on vercel using local auth.
