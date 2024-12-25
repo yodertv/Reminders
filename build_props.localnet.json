@@ -3,7 +3,7 @@
 	"name" : "localnet",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "http://Michaels-MacBook-Air.local:8080/",
+	"nodeURL" : "http://Mikes-Air.local:8080/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "js/"
 }

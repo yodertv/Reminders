@@ -49,7 +49,14 @@ var userOptions = {
   'nodeEnv' : nodeEnv
 }
 
-userList.initUserDbOptions(userOptions);
+// Handle initialization errors
+if (!userOptions.dbUrl) {
+  const errorMsg = "MONGO_USER_DB_NAME environment variable not found.";
+  log.error(errorMsg);
+  throw new Error(errorMsg);
+} else {
+  userList.initUserDbOptions(userOptions);
+};
 
 var dbs = [] // Array of db connections
 var match = nodeURL.search('[0-9]{4}/$');
