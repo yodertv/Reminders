@@ -67,6 +67,7 @@ Try out [Reminders App](https://reminders-ashen.vercel.app).
 
 ### Refresh docs and publish.
 - Updated welcome.html for Vercel deployment.
+- Deprecated db creation. No longer needed. Mongo Atlas allows the app to create a new DB via the api.
 
 ### Remove last reference to stateful .ul.
 - Working fully on vercel using local auth.

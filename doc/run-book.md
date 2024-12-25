@@ -27,12 +27,12 @@ Start mongo db:
 
 ## Run Todo server on vercel dev:
 ```
-% vercel dev --cwd build -l $PORT | bunyan --output oneline &
+% vercel dev -l $PORT | bunyan --output oneline &
 ```
 
 ## Run Todo server on localhost:
 ```
-% cd ./build ; node main.js | bunyan --output oneline & ; cd ..
+% node main.js | bunyan --output oneline
 ```
 
 ## Connect to local deployment:
@@ -41,31 +41,6 @@ http://localhost:8080/
 ## Connect to mongod with repl interface:
 ```
 % mongosh
-```
-
-## Create new DBs to be assigned to users:
-- Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db. Note the mongo connection string. Looks something like: ```ds047057.mongolab.com:47057/frankstodos```
-- Create the user in the DB for authentication. Must be the same user and password of every db.
-- Test the auth by connecting like:
-```
-% mongo -u <user> -p <password> ds043972.mongolab.com:43972/users
-MongoDB shell version: 3.0.1
-connecting to: ds043972.mongolab.com:43972/users
-mod-mongo-aws-east-1a:PRIMARY> 
-```
-
-- Connect to the user database and insert the new db into the userList collection as follows:
-```
-mod-mongo-aws-east-1a:PRIMARY> db.userList.insert({"email" : "UNASSIGNED_DB", "db" : "ds049467.mongolab.com:49467/bobstodos"})
-WriteResult({ "nInserted" : 1 })
-mod-mongo-aws-east-1a:PRIMARY>
-```
-
-- Restart the todoServer so it reads the updated user table.
-```
-% now
-% now alias rm reminders
-% now alias set https://reminders-kevovklwel.now.sh reminders
 ```
 
 ## Environment Variables and Secrets
@@ -115,4 +90,29 @@ If you get the google auth button when NODE_ENV isn't production, check that you
     8    yoderm01@gmail.com        mongodb://localhost:27017/yoderm01                 0
     9    bob@example.com           mongodb://localhost:27017/bobstodos                0
     10   test@example.com          mongodb://localhost:27017/test-todo                0
+```
+
+## Deprecated: Create new DBs to be assigned to users:
+- Use the admin interface of your hosting provider or clonedb or mongodump and mongorestore to create or copy an empty db. Note the mongo connection string. Looks something like: ```ds047057.mongolab.com:47057/frankstodos```
+- Create the user in the DB for authentication. Must be the same user and password of every db.
+- Test the auth by connecting like:
+```
+% mongo -u <user> -p <password> ds043972.mongolab.com:43972/users
+MongoDB shell version: 3.0.1
+connecting to: ds043972.mongolab.com:43972/users
+mod-mongo-aws-east-1a:PRIMARY> 
+```
+
+- Connect to the user database and insert the new db into the userList collection as follows:
+```
+mod-mongo-aws-east-1a:PRIMARY> db.userList.insert({"email" : "UNASSIGNED_DB", "db" : "ds049467.mongolab.com:49467/bobstodos"})
+WriteResult({ "nInserted" : 1 })
+mod-mongo-aws-east-1a:PRIMARY>
+```
+
+- Restart the todoServer so it reads the updated user table.
+```
+% now
+% now alias rm reminders
+% now alias set https://reminders-kevovklwel.now.sh reminders
 ```
