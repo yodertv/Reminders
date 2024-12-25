@@ -1,10 +1,10 @@
 Reminders
 =========
 
-Credit to Angular, Bootstrap, Express, Glyphicons, Node, Mongodb, and Passport.
-Hosted by Vercel, Google APIs, and [Atlas](https://cloud.mongodb.com).
+Credit to Angular, Bootstrap, Express, Glyphicons, Node, MongoDB, and Passport.
+Hosted by Vercel, Google APIs, and [MongoDB Atlas](https://cloud.mongodb.com).
 
-This cloud hosted [Reminders App](https://reminders-ashen.vercel.app) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
+This SaaS [Reminders App](https://reminders-ashen.vercel.app) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
 
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
