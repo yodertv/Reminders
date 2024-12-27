@@ -215,42 +215,41 @@ passport.use(new GoogleStrategy({
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: nodeURL + "auth/google/callback"
   },
-  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      log.trace("GoogleStrategy", profile);
-      
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
-
-      // Here's where we can detect a new user. They won't be found in the user list below
-
-      var user = userList.findByEmail(profile._json.email, function(err, dbUser) {
-        if (err) { return done(err); }
-        if (!dbUser) { // Not found
-          var newUser = userList.assignDb(profile._json.email);
-          if (!newUser) { // Unable to assign DB.
-              var brokenUser = {};
-              brokenUser.email = profile._json.email;
-              brokenUser.db = 'Sorry, no available databases.'; // A hack to return the error message to the client.
-              log.error('Sorry, no available databases for user ' + profile._json.email );
-              return ( brokenUser );
-            }
-            return ( newUser ); // Just assigned.
-          }
-          return ( dbUser ); // Previously assinged.
-      });
-
-      user.env = nodeEnv;
-      user.views = 0;
-      log.trace({"user" : user }, "Google Auth");
-      return done(null, user);
-    });
-  }
-));    
-}
+  async function(accessToken, refreshToken, profile, done) {
+    log.trace({ "profile" : profile }, "Enter GoogleStrategy with:");
+    const email = profile._json.email
+    var dbUser;
+    try {
+      log.trace({ "profile" : profile }, "Enter GoogleStrategy try with:");
+      dbUser = await userList.findByEmail(email);
+      dbUser.env = nodeEnv;
+      log.trace("GoogleStrategy findByEmail results: " + JSON.stringify(dbUser));
+      // Todo: Consider counting and remembering logins here.
+      done(null, dbUser);
+    } catch (err) {
+      log.error({ "error" : JSON.stringify(err) }, 'findByEmail error in LocalStrategy():');
+      if (true) {
+        dbUser = userList.assignDb(email);
+        if (!dbUser) { // Unable to assignDb. This is fatal for the client.
+          var brokenUser = {};
+          brokenUser.email = user.email;
+          brokenUser.db = 'Sorry, assignDb failed.'; // a hack to return the error message to the client.
+          log.error('assignDb failed for ', { "email" : email }, 'in LocalStrategy.');
+          return done(null, brokenUser); // assignDb failed.
+        } else {  // Just assigned.
+          dbUser.views = 0;
+          dbUser.env = nodeEnv;
+          log.trace("Google Auth assigned dbUser:", { "dbUser" : dbUser });
+          return done(null, dbUser);
+        }
+      } else { // Database error.
+        return done(error, dbUser);
+      };
+    } finally {
+      log.trace("In Finally{} of GoogleStrategy()");
+    }
+  }));
+};
 
 const app = express();
 
@@ -308,7 +307,6 @@ if (!nodeProd) { // Never use this route in production.
     passport.authenticate('local', { failureRedirect: '/#authfailed' }),
     function(req, res) {
       req.log.trace("/auth/local: ", req.user);
-      // setTimeout(listSessions,1000); // Print sessions in one sec.
       res.redirect('/#list/:Reminders');
     }
   );
@@ -337,7 +335,6 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
     req.log.trace(req.user.email);
-    setTimeout(listSessions,1000); // Print sessions in one sec.
     res.redirect('/#list/:Reminders'); 
 });
 
