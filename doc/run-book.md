@@ -64,9 +64,9 @@ LOG_LEVEL is the level from bunyan logger to log at and above.
 
 ## Testing google auth on localhost
 
-At your identity provider, [google](http://console.cloud.google.com/) in my case, create a client_id and client_secret to allow passport to use the GoogleStrategy with passport.
+At your identity provider, [google](http://console.cloud.google.com/) in my case, create a client_id and client_secret to allow passport to use the GoogleStrategy with passport. Add callbackURL to Authorized redirect URIs in Google API Console.
 
-Use build_prop.localhost.json and set the NODE_ENV to production to test google auth on locally.
+Use build_prop.localhost.json and set the NODE_ENV to production to test google auth locally.
 If you get the google auth button when NODE_ENV isn't production, check that you are using the correct url for your deployment.
 
 ```
