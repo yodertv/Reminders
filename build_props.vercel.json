@@ -3,7 +3,7 @@
 	"name" : "vercel",
 
 	"#3_comment" : "Deployment details.",
-	"nodeURL" : "https://reminders.vercel.app/",
+	"nodeURL" : "https://reminders.yodercode.com/",
 	"apiPath" : "api/todos/",
 	"angularRoot" : "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/"
 }

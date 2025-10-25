@@ -9,7 +9,7 @@ This SaaS [Reminders App](https://reminders.vercel.app) manages a user defined s
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
 ## Demo
-Try out [Reminders App](https://reminders.vercel.app).
+Try out [Reminders App](https://reminders.yodercode.com).
 
 ## Docs
 [Reminders App Documentation](https://github.com/yodertv/Reminders/tree/master/doc) has simple notes for bugs, build, test and run.

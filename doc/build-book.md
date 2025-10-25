@@ -11,6 +11,9 @@ Build Book
 - Run with any node environment or deploy to vercel.
 - Enjoy.
 
+## Configure OAuth 2.0 Client IDs
+https://console.cloud.google.com
+
 ## Build and deploy
 
 Build
@@ -21,7 +24,7 @@ npm run build <build environment>
 
 Each Vercel deployment get's it's own unique URL. This project needs to know its own application URL and so do the google API's for authentication. So we use the Vercel.com Domain settings tab command to point a common name to the unique instance.
 
-In the browser try out [Reminders App](https://reminders-ashen.vercel.app).
+In the browser try out [Reminders App](https://reminders.yodercode.com).
 
 ## Add a new target
 - choose a new {name}.
