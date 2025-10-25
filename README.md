@@ -4,7 +4,7 @@ Reminders
 Credit to Angular, Bootstrap, Express, Glyphicons, Node, MongoDB, and Passport.
 Hosted by Vercel, Google APIs, and [MongoDB Atlas](https://cloud.mongodb.com).
 
-This SaaS [Reminders App](https://reminders.yodercode.com) manages a user defined set of task lists. I use it instead of the weekly paper task lists that I used to keep. This will likely be more interesting as an example of a fully working cloud hosted three tier application with make scripts and deployment instructions written entirely in Java Script and HTML.
+This simple [Reminders App](https://reminders.yodercode.com) manages a user defined set of task lists. It can be used instead of paper. More interesting as an example of a fully working cloud hosted, OAuth authenticated, three tier application with build and deployment instructions. The development history shows a journey across PaaS services over time as a hobbiest. Developed in Java Script and HTML.
 
 ![alt text](./lib/img/RemindersApp.png "Reminder App")
 
@@ -64,6 +64,10 @@ Try out [Reminders App](https://reminders.yodercode.com).
 - Add a print feature.
 
 ## History
+
+### Host Reminders at yodercode.com 2025.10.25.
+- Added OAuth client URLs for reminders.yodercode.com.
+- Turned off build triggers in between GitHub and Vercel. Use comandline when you want a build. Update documentation at will.
 
 ### Refresh docs and publish.
 - Updated welcome.html for Vercel deployment.
